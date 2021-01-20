@@ -434,7 +434,7 @@ body.sticky .sidebar-toggle {
 
 .markdown-section p.tip,
 .markdown-section tr:nth-child(2n) {
-	background-color: var(--codeBackgroudColor)
+	background-color: var(--codeBackgroundColor)
 }
 
 .markdown-section p.tip {
@@ -837,16 +837,20 @@ body {
     margin: 0 2px;
     padding: 3px 5px;
     white-space: pre-wrap;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .markdown-section code,
 .markdown-section pre {
-	background-color: var(--codeBackgroudColor);
+	background-color: var(--codeBackgroundColor);
 	font-family: var(--codeFontFamily);
 }
 
 .markdown-section pre {
+	border-color: hsla(0, 0%, 100%, 0.25);
+	border-style: groove;
+	border-width: 1px;
+	border-radius: 8px;
 	-moz-osx-font-smoothing: initial;
 	-webkit-font-smoothing: initial;
 	line-height: 1.5rem;
@@ -861,7 +865,8 @@ body {
 .token.comment,
 .token.doctype,
 .token.prolog {
-	color: #8e908c
+	color: hsl(0, 0%, 50%);
+	font-style: italic
 }
 
 .token.namespace {
@@ -870,61 +875,64 @@ body {
 
 .token.boolean,
 .token.number {
-	color: #c76b29
+	color: hsl(71, 45%, 45%)
 }
 
 .token.punctuation {
-	color: #525252
+	color: var(--codeTextColor)
 }
 
 .token.property {
-	color: #c08b30
+	color: hsl(191, 45%, 45%);
+	font-weight: bold;
 }
 
 .token.tag {
-	color: #2973b7
+	color: hsl(241, 45%, 45%)
 }
 
 .token.string {
-	color: var(--accent)
+	color: hsl(131, 45%, 45%)
 }
 
 .token.selector {
-	color: #6679cc
+	color: hsl(131, 45%, 45%)
 }
 
 .token.attr-name {
-	color: #2973b7
+	color: hsl(191, 45%, 45%)
 }
 
 .language-css .token.string,
 .style .token.string,
 .token.entity,
 .token.url {
-	color: #22a2c9
+	color: hsl(131, 45%, 45%)
 }
 
 .token.attr-value,
 .token.control,
 .token.directive,
 .token.unit {
-	color: var(--accent)
+	color: hsl(191, 45%, 45%);
+	font-weight: bold
 }
 
 .token.function,
 .token.keyword {
-	color: #e96900
+	color: hsl(191, 45%, 45%);
+	font-weight: bold
 }
 
 .token.atrule,
 .token.regex,
 .token.statement {
-	color: #22a2c9
+	color: hsl(131, 45%, 45%)
 }
 
 .token.placeholder,
 .token.variable {
-	color: #3d8fd1
+	color: hsl(311, 45%, 45%)
 }
 
 .token.deleted {
@@ -946,7 +954,7 @@ body {
 }
 
 .token.important {
-	color: #c94922
+	color: hsl(11, 45%, 45%)
 }
 
 .token.entity {
@@ -956,7 +964,7 @@ body {
 .markdown-section pre>code {
 	-moz-osx-font-smoothing: initial;
 	-webkit-font-smoothing: initial;
-	background-color: var(--codeBackgroudColor);
+	background-color: var(--codeBackgroundColor);
 	border-radius: 2px;
 	color: var(--codeTextColor);
 	display: block;
