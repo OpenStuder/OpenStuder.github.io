@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 2134 1067" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g id="ArtBoard1" transform="matrix(1,0,0,0.5,0,0)">
+    <g id="Logo" transform="matrix(1,0,0,0.5,0,0)">
         <rect x="0" y="0" width="2133.33" height="2133.33" style="fill:none;"/>
-        <g transform="matrix(0.317637,0,0,0.635275,283.146,2232.37)">
+        <g transform="matrix(0.282344,0,0,0.564689,370.204,2102.85)">
             <g>
                 <g transform="matrix(0.396825,-6.07709e-16,-6.07709e-16,-0.396825,-730.4,-110.29)">
                     <path d="M4873,8242C3790,8120 2749,7212 1754,5523C1694,5422 1585,5238 1512,5114C1366,4867 1248,4661 1110,4410C1014,4234 675,3606 640,3538L619,3497L2494,3497L2629,3788C2913,4396 3226,5017 3410,5334C3778,5971 4119,6380 4488,6627C4853,6872 5228,6933 5612,6809C5810,6745 6057,6603 6274,6429C6546,6210 6701,6050 6944,5738L7084,5560L7534,5557C7782,5556 8076,5558 8187,5562L8389,5570L8286,5749C8074,6118 7866,6424 7633,6710C7588,6764 7514,6857 7467,6914C7376,7029 6968,7437 6825,7556C6716,7648 6532,7780 6402,7860C6097,8049 5798,8166 5481,8221C5330,8247 5017,8258 4873,8242Z" style="fill:rgb(1,66,137);fill-rule:nonzero;"/>
