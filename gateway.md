@@ -57,7 +57,8 @@ If you want to build the *debug* version of the software instead of the *release
 
 If you desire to install the gateway software on the very same host it was build on, you can build the target **install**.
 
-*Note that you should first build the software in order to ensure that the build process is run by your user and not the root user.*
+> [!NOTE]
+> You should first build the software in order to ensure that the build process is run by your user and not the root user.
 
 ```
 > sudo cmake --build build --target install
