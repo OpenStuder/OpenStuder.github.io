@@ -41,7 +41,8 @@
           textColor: 'hsl(211, 50%, 80%)',
           coverBackground: 'linear-gradient(to bottom, hsl(211, 99%, 20%) 0%,hsl(211, 50%, 8%) 100%)',
           codeBackgroundColor: 'hsl(211, 10%, 12%)',
-          codeTextColor: 'hsl(0, 0%, 75%)'
+          codeTextColor: 'hsl(0, 0%, 75%)',
+          highlightColor: 'hsl(0, 0%, 75%)'
         },
         light: {
           accent: 'hsl(211, 99%, 27%)',
@@ -49,7 +50,8 @@
           textColor: 'hsl(211, 50%, 20%)',
           coverBackground: 'linear-gradient(to bottom, hsl(211, 99%, 27%) 0%,hsl(211, 99%, 95%) 100%)',
           codeBackgroundColor: 'hsl(211, 25%, 12%)',
-          codeTextColor: 'hsl(0, 0%, 75%)'
+          codeTextColor: 'hsl(0, 0%, 75%)',
+          highlightColor: 'hsl(0, 0%, 75%)'
         },
       },
       flexibleAlerts: {
@@ -76,5 +78,15 @@
   
   <!-- Plugins -->
   <script src="https://unpkg.com/docsify-plugin-flexible-alerts"></script>
+  
+  <script src="//unpkg.com/mermaid/dist/mermaid.js"></script>
+  <script src="//unpkg.com/docsify-mermaid@latest/dist/docsify-mermaid.js"></script>
+  <script>mermaid.initialize({ 
+      startOnLoad: true,
+      darkMode: true,
+      theme: 'base', 
+      themeVariables: { primaryColor: 'hsl(131, 45%, 45%)', lineColor: 'hsl(211, 50%, 50%)', primaryTextColor: 'hsl(211, 25%, 25%)', textColor: 'hsl(211, 50%, 50%)' }
+    });
+  </script>
 </body>
 </html>
