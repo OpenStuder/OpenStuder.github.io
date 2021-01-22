@@ -195,34 +195,102 @@ defaultAccessLevel = Basic
  
 ## sigwctl
 
-> TODO
+Some tasks related to the OpenStuder gateway functionality can be automated by using the `sigwctl` command line tool.
+
+The tool includes an integrated help function: 
+
+- `sigwctl help` shows an overview of available commands.
+- `sigwctl help <command>` shows information about *command*.
 
 ### User management
 
-These commands can be used to manage user accounts and their respective access level.
+The command line tool can be used to manage user accounts and their respective access level.
 
 > [!Note]
 > User accounts are only relevant if security is enabled in the gateway daemon configuration file.
 
-#### `sigwctl user list`
+#### sigwctl user list
 
-> TODO
+Lists all existing users with their respective access level.
 
-#### `sigwctl user add <user>`
+```
+> sigwctl user list
+User accounts in "/etc/openstuder/users.txt":
+	admin: Expert
+	john.doe: Basic
+```
 
-> TODO
+#### sigwctl user add *\<user>*
 
-#### `sigwctl user pw <user>`
+Adds a new user.
 
-> TODO
+The tool will interactively ask the password for the new user and his access level.
 
-#### `sigwctl user al <user>`
+> [!TIP]
+> You might need to use the command with **sudo** to gain write access to the configuration folder.
 
-> TODO
+```
+> sudo sigwctl user add donald.duck
+Enter password for user "donald.duck":
+Repeat password:
+Choose access level:
+  0 -> None
+  1 -> Basic
+  2 -> Installer
+  3 -> Expert
+  4 -> Qualified service personnel
+Your choice: 3
+User "donald.duck" added with access level "Expert".
+```
 
-#### `sigwctl user rm <user>`
+#### sigwctl user pw *\<user>*
 
-> TODO
+Changes the password of an existing user.
+
+The tool will interactively ask the password.
+
+> [!TIP]
+> You might need to use the command with **sudo** to gain write access to the configuration folder.
+
+```
+> sudo sigwctl user pw donald.duck
+Enter password for user "donald.duck":
+Repeat password:
+Changed password for user "donald.duck".
+```
+
+#### sigwctl user al *\<user>*
+
+Changes the access level of an existing user.
+
+The tool will interactively ask the access level.
+
+> [!TIP]
+> You might need to use the command with **sudo** to gain write access to the configuration folder.
+
+```
+> sudo sigwctl user al donald.duck
+Choose access level:
+0 -> None
+1 -> Basic
+2 -> Installer
+3 -> Expert
+4 -> Qualified service personnel
+Your choice: 1
+Changed password for user to "Basic".
+```
+
+#### sigwctl user rm *\<user>*
+
+Removes the user.
+
+> [!TIP]
+> You might need to use the command with **sudo** to gain write access to the configuration folder.
+
+```
+sudo sigwctl user rm donald.duck
+Removed user "donald.duck".
+```
 
 ## Build or develop
 
