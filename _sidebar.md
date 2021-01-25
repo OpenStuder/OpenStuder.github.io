@@ -1,2 +1,3 @@
 - [Introduction](README.md#Introduction)
 - [Gateway](gateway.md)
+- [WebSocket protocol](websocket.md)

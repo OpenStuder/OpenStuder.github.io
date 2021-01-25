@@ -1031,35 +1031,29 @@ pre:after {
 	visibility: hidden
 }
 
-/* .tooltip {
-	position: relative;
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	border-radius: 4px;
 }
 
-.tooltip .tooltiptext {
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0.3s linear 1s, opacity 0.3s linear 1s;
-	-webkit-transition: visibility 0.3s linear 1s, opacity 0.3s linear 1s;
-	-o-transition: visibility 0.3s linear 1s, opacity 0.3s linear 1s;
-	-moz-transition: visibility 0.3s linear 1s, opacity 0.3s linear 1s;
-	visibility: hidden;
-	background-color: black;
-	color: #fff;
-	text-align: center;
-	border-radius: 6px;
-	padding: 5px 5px;
-	position: absolute;
-	z-index: 21;
-	bottom: 100%;
-	left: 50%;
-	margin-left: -105px;
+::-webkit-scrollbar-track {
+	border-radius: 4px;
+	background: hsla(0, 0%, 50%, 0.25);
 }
 
-.tooltip:hover .tooltiptext {
-	visibility: visible;
-	opacity: 1;
+::-webkit-scrollbar-corner {
+	background: hsla(0, 0%, 50%, 0.25);
 }
 
-.tooltip .tooltiptext:hover {
-	visibility: hidden;
-} */
+::-webkit-scrollbar-thumb {
+	width: 8px;
+	border-radius: 4px;
+	background: var(--accent);
+	opacity: 0.5;
+}
+
+html {
+	scrollbar-color: var(--accent) hsla(0, 0%, 50%, 0.25);
+	scrollbar-width: thin;
+}
