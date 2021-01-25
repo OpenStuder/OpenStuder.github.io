@@ -469,7 +469,7 @@ class SIWebSocketTestConnection {
 	private io_: HTMLCollectionOf<HTMLDivElement> = null;
 
 	private editTextarea_: HTMLTextAreaElement = null;
-	private editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:[a-z0-9A-Z_.]+\\n)*\\n$');
+	private editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:[a-z0-9A-Z_.,]+\\n)*\\n$');
 	private sendButton_: HTMLButtonElement = null;
 
 	private log_: HTMLUListElement = null;
