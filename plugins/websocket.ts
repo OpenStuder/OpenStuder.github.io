@@ -8,7 +8,8 @@ const websocketTestHtml = `
 		position: fixed;
 		bottom: 0;
 		right: 0;
-		width: 750px;
+		width: 75%;
+		max-width: 1200px;
 		padding: 12px 32px;
 		color: var(--background);
 		background: var(--accent);
@@ -130,8 +131,8 @@ const websocketTestHtml = `
 		font-family: Roboto Mono, Monaco, courier, monospace;
 		font-size: .8rem;
 		border: none;
-		color: var(--codeTextColor);
-		background: var(--codeBackgroundColor);
+		color: var(--accent);
+		background: var(--background);
 		border-radius: 6px;
 		padding: 4px 12px;
 	}
@@ -165,8 +166,8 @@ const websocketTestHtml = `
 		font-family: Roboto Mono, Monaco, courier, monospace;
 		font-size: .7rem;
 		border: none;
-		color: var(--codeTextColor);
-		background: var(--codeBackgroundColor);
+		color: var(--accent);
+		background: var(--background);
 		border-radius: 6px;
 		padding: 8px 24px;
 		margin: 0 2px;
@@ -177,11 +178,11 @@ const websocketTestHtml = `
 	}
 	
 	#websocket ul.log li {
+		white-space: pre;
 		list-style: none;
 		padding: 4px 4px 4px 8px;
-		color: var(--codeTextColor);
-		border-top: 1px solid hsla(0, 0%, 100%, 0.05);
-		border-bottom: 1px solid hsla(0, 0%, 0%, 0.05);
+		color: black;
+		border: 1px solid hsla(0, 0%, 50%, 0.5);
 		background: hsla(0, 0%, 100%, 0.03);
 		margin-top: 8px;
 		overflow-y: hidden;
@@ -190,18 +191,18 @@ const websocketTestHtml = `
 	}
 	
 	#websocket ul.log li.request {
-		margin-right: 60%;
-		border-right: 3px solid hsl(0, 0%, 60%);
+		margin-right: 20%;
+		background: hsla(0, 0%, 60%, 0.75);
 	}
 	
 	#websocket ul.log li.response {
-		margin-left: calc(40% - 3px);
-		border-left: 3px solid hsl(131, 45%, 45%);
+		margin-left: 20%;
+		background: hsla(131, 45%, 45%, 0.75);
 	}
 	
 	#websocket ul.log li.error {
-		margin-left: calc(40% - 3px);
-		border-left: 3px solid hsl(11, 45%, 45%);
+		margin-left: 20%	;
+		background: hsla(11, 45%, 45%, 0.75);
 	}
 </style>
 <div id="websocket">
@@ -395,12 +396,29 @@ class SIWebSocketTestConnection {
 
 	private onWebSocketMessage = (messageEvent: MessageEvent) => {
 		const entry = document.createElement('li');
-		if (messageEvent.data.startsWith('ERROR')) {
+		if (messageEvent.data.startsWith('ERROR\n')) {
 			entry.className = 'error';
+		} else if (messageEvent.data.includes('status:')) {
+			if (messageEvent.data.includes('status:Success\n')) {
+				entry.className = 'response';
+			} else {
+				entry.className = 'error';
+			}
 		} else {
 			entry.className = 'response';
 		}
-		entry.innerText = messageEvent.data;
+		if (messageEvent.data.startsWith('DESCRIPTION\n')) {
+			const parts = messageEvent.data.split('\n\n');
+			if (parts.length == 2 && parts[1]) {
+				entry.innerText = parts[0] + '\n\n';
+				const json = JSON.parse(parts[1]);
+				entry.innerText += JSON.stringify(json, null, '  ');
+			} else {
+				entry.innerText = messageEvent.data;
+			}
+		} else {
+			entry.innerText = messageEvent.data;
+		}
 		this.log_.insertAdjacentElement('beforeend', entry);
 		if (this.followLogCheckbox_.checked) {
 			this.log_.scrollTop = this.log_.scrollHeight;
