@@ -1,0 +1,258 @@
+<style>
+
+    h3.ws-api-doc {
+        color: var(--textColor);
+    }
+
+    div.ws-api-doc {
+        margin: 16px 0px;
+        width: 100%;
+        border: 2px solid var(--accent);
+        border-radius: 4px;
+        background: var(--accentBackground);
+    }
+
+    div.ws-api-doc button.accordion-toggle {
+        padding: 4px;
+        margin: 6px;
+        border: none;
+        border-radius: 3px;
+        font-size: 100%;
+        font-weight: bold;
+        color: white;
+        background: var(--accent);
+    }
+
+    div.ws-api-doc button.accordion-toggle:after {
+        width: 100%;
+        text-align: right;
+    }
+
+    div.ws-api-doc div {
+        font-size: 90%;
+        padding: 0;
+        border-top: 1px solid var(--accent);
+    }
+
+    div.ws-api-doc h6,
+    div.ws-api-doc p,
+    div.ws-api-doc table {
+        margin: 0;
+        padding: 12px 16px;
+    }
+
+    div.ws-api-doc p.near {
+        padding: 2px 16px;
+    }
+
+    div.ws-api-doc ul {
+        margin: -8px 24px;
+    }
+
+    div.ws-api-doc h6 {
+        border-top: 1px solid var(--accent);
+        color: var(--accent);
+        font-size: 100%;
+        padding-top: 8px;
+        padding-bottom: 0px;
+    }
+
+    div.ws-api-doc table,
+    div.ws-api-doc tr,
+    div.ws-api-doc th,
+    div.ws-api-doc td {
+        text-align: left;
+        border: none;
+        background-color: transparent !important;
+    }
+
+    div.ws-api-doc th {
+        border-bottom: 1px solid var(--textColor);
+        font-weight: normal;
+        font-style: italic;
+    }
+
+    div.ws-api-doc input,
+    div.ws-api-doc select {
+        outline:none;
+        -webkit-appearance: none;
+        font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
+        font-size: 15px;
+        border: 1px solid var(--accent);
+        color: var(--textColor);
+        background: var(--aceentBackground);
+        border-radius: 12px;
+        padding: 4px 12px;
+    }
+
+    div.ws-api-doc input[type=number] {
+        width: 80px;
+    }
+
+    div.ws-api-doc input[type=checkbox] {
+        display: none;
+    }
+
+    div.ws-api-doc pre {
+        border: none;
+        margin: 0 24px;
+        padding: 0;
+        background: none;
+    }
+
+    div.ws-api-doc code {
+        margin: 0;
+        padding:0;
+        background: none;
+    }
+</style>
+
+<!-- <h2>Introduction</h2>
+
+<h2>Message format</h2> -->
+
+<h2>Messages</h2>
+
+<h3 class="ws-api-doc">User authorization</h3>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">AUTHORIZE</button>
+    <div class="accordion-content" hidden>
+        <p>
+            This message has to be send as the very first to the gateway after a WebSocket connection has been established.<br/>
+            It serves basically two purposes:
+        </p>
+        <ul>
+            <li>Negotiate the protocol version and</li>
+            <li>optionally authorize an user.</li>
+        </ul>
+        <p>
+            If no user credentials - <em>username</em> and <em>password</em> are passed and user authorization is enabled on the gateway, the user is is authorized as guest.
+            <br/>
+            If user authorization is
+            disabled on the gateway, username and password are not required at all and will be ignored even if provided.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>preview value</th>
+            </tr>
+            <tr>
+                <td>user</td>
+                <td>string</td>
+                <td><strong>Username used to authorize</strong>. <br/>
+                    Optional. If not provided, the connection will be granted guest access level if guest access is enabled on the gateway.<br/></td>
+                <td>
+                    <input type="text" placeholder="no username" data-ws-header="user"></input>
+                </td>
+            </tr>
+            <tr>
+                <td>password</td>
+                <td>string</td>
+                <td><strong>Password used to authorize</strong>. <br/>
+                    Optional. If not provided, the connection will be granted guest access level if guest access is enabled on the gateway.
+                </td>
+                <td><input type="text" placeholder="no password" data-ws-header="password"></input></td>
+            </tr>
+            <tr>
+                <td>version</td>
+                <td>number</td>
+                <td><strong>Version of the protocol requested by the client</strong>. <br/>
+                    Optional. If not provided, the protocol version is determined by the gateway.
+                </td>
+                <td>
+                    <select data-ws-header="version">
+                        <option value="">-</option>
+                        <option value="1">Version 1</option>
+                    </select></td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <h6>request</h6>
+        <pre data-ws-try><code data-ws-preview="AUTHORIZE"></code></pre>
+        <h6>responses</h6>
+        <p class="near"><em>On success:</em></p>
+        <pre><code>AUTHORIZED
+access_level:&lt;ACCESS LEVEL&gt;
+version:&lt;VERSION&gt;
+ </code></pre>
+        <p class="near"><strong>&lt;ACCESS LEVEL&gt</strong> is the access level given to the user. Possible values are <em>Basic</em>, <em>Installer</em>, <em>Expert</em> or <em>SQP</em>.</p>
+        <p class="near"><strong>&lt;VERSION&gt;</strong> is the version of the protocol used. Currently only version <em>1</em> is supported.</p>
+        <p class="near"><br/><em>On error:</em></p>
+        <pre><code>ERROR
+reason:&lt;REASON&gt;
+ </code></pre>
+        <p class="near"><strong>&lt;REASON&gt;</strong> is a textual representation of the error occurred. Can be either <em>authorization failed</em>, <em>invalid frame</em> or <em>invalid state</em>.</p>
+        <br/>
+    </div>
+</div>
+
+<h3 class="ws-api-doc">Device enumeration</h3>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">ENUMERATE</button>
+    <div class="accordion-content" hidden>
+        <p>Triggers a device enumeration on the gateway.<br/>The gateway basically scans every configured and functional device access driver for new devices and devices that have been gone.</p>
+        <h6>headers</h6>
+        <p><em>No headers</em></p>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <h6>request</h6>
+        <pre data-ws-try><code data-ws-preview="ENUMERATE"></code></pre>
+        <h6>responses</h6>
+        <pre><code>ENUMERATED
+device_count:&lt;DEVICE COUNT&gt;
+status:&lt;STATUS&gt;
+ </code></pre>
+        <p class="near"><strong>&lt;DEVICE COUNT&gt</strong>: The number of devices that are present on all device access drivers.</p>
+        <p class="near"><strong>&lt;STATUS&gt;</strong>: Status of the enumeration operation. <em>Success</em> on success or an appropriate error status.</p>
+        <p class="near"><br/><em>If request was invalid or if not authorized:</em></p>
+        <pre><code>ERROR
+reason:&lt;REASON&gt;
+ </code></pre>
+        <p class="near"><strong>&lt;REASON&gt;</strong> is a textual representation of the error occurred. Can be either <em>authorization required</em> or <em>invalid frame</em>.</p>
+        <br/>
+    </div>
+</div>
+
+<!--
+<h3 class="ws-api-doc">Discovery</h3>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">DESCRIBE</button>
+    <div class="accordion-content" hidden>
+    </div>
+</div>
+
+<h3 class="ws-api-doc">Property access</h3>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">READ PROPERTY</button>
+    <div class="accordion-content" hidden>
+    </div>
+</div>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">WRITE PROPERTY</button>
+    <div class="accordion-content" hidden>
+    </div>
+</div>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">SUBSCRIBE PROPERTY</button>
+    <div class="accordion-content" hidden>
+    </div>
+</div>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">UNSUBSCRIBE PROPERTY</button>
+    <div class="accordion-content" hidden>
+    </div>
+</div>
+-->
+
+<div style="height:60vh"></div>

@@ -6,5 +6,5 @@
   
 - Developer
     - [Client libraries](clientlibs.md)
-    - [WebSocket protocol](websocket.md)
+    - [WebSocket protocol](websocket.html)
     - [Driver development](driverdev.md)

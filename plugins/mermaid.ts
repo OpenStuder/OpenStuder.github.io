@@ -18,7 +18,6 @@ mermaid.initialize({
 
 function mermaidPlugin(hook: any) {
     hook.afterEach(function (html, next) {
-        console.log(html);
         const htmlElement = document.createElement('div');
         htmlElement.innerHTML = html;
 

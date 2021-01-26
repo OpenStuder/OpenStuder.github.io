@@ -15,7 +15,6 @@ mermaid.initialize({
 });
 function mermaidPlugin(hook) {
     hook.afterEach(function (html, next) {
-        console.log(html);
         var htmlElement = document.createElement('div');
         htmlElement.innerHTML = html;
         htmlElement.querySelectorAll('pre[data-lang=mermaid]').forEach(function (element) {

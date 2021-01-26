@@ -240,7 +240,7 @@ class SIWebSocketTestConnection {
 		this.docsifyWM_ = docsifyWM;
 
 		hook.doneEach(() => {
-			if (docsifyWM.route.path == '/websocket') {
+			if (docsifyWM.route.path.startsWith('/websocket')) {
 				document.body.insertAdjacentHTML('beforeend', websocketTestHtml);
 
 				this.hostInput_ = document.getElementById('websocket.ctrl.host') as HTMLInputElement;
@@ -274,7 +274,7 @@ class SIWebSocketTestConnection {
 				}
 				this.followLogCheckbox_.onchange = this.onFollowLogCheckboxChanged;
 
-				const requests = document.querySelectorAll('pre[data-lang=wsreq]');
+				const requests = document.querySelectorAll('pre[data-ws-try]');
 				for (let i = 0; i < requests.length; ++i) {
 					const editButton = document.createElement('button') as HTMLButtonElement;
 					editButton.title = "Copy to edit field.";
@@ -374,12 +374,12 @@ class SIWebSocketTestConnection {
 	};
 
 	private onTestCopyButtonClicked = (event: MouseEvent) => {
-		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.firstElementChild.innerHTML;
+		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
 		this.onTxChanged(null);
 	}
 
 	private onTestSendButtonClicked = (event: MouseEvent) => {
-		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.firstElementChild.innerHTML;
+		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
 		this.onTxChanged(null);
 		this.onSendButtonClicked(null);
 	}
@@ -480,6 +480,33 @@ class SIWebSocketTestConnection {
 }
 
 function docsifyPlugin(hook: any, vm: any) {
+	hook.doneEach(() => {
+		document.querySelectorAll<HTMLDivElement>('.ws-api-doc').forEach((docElement: HTMLDivElement) => {
+			const preview = docElement.querySelector<HTMLElement>('code[data-ws-preview]');
+			if (preview) {
+				const headers = docElement.querySelectorAll<HTMLElement>('[data-ws-header]');
+
+				const renderPreview = () => {
+					let msg = preview.dataset.wsPreview + '\n';
+					headers.forEach((headerElement: HTMLElement) => {
+						const value = (headerElement as HTMLInputElement).value;
+						if (value) {
+							msg += headerElement.dataset.wsHeader + ':' + value + '\n';
+						}
+					});
+					msg += '\n';
+					preview.innerText = msg;
+				};
+
+				headers.forEach((element: HTMLElement) => {
+					element.onchange = renderPreview;
+				});
+
+				renderPreview();
+			}
+		});
+	});
+
 	(window as any).testWS = new SIWebSocketTestConnection(hook, vm);
 }
 

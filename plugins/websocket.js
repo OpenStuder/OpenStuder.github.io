@@ -40,11 +40,11 @@ var SIWebSocketTestConnection = /** @class */ (function () {
             _this.sendButton_.disabled = !_this.editVerifyRegex_.test(_this.editTextarea_.value);
         };
         this.onTestCopyButtonClicked = function (event) {
-            _this.editTextarea_.value = event.target.parentElement.parentElement.firstElementChild.innerHTML;
+            _this.editTextarea_.value = event.target.parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
             _this.onTxChanged(null);
         };
         this.onTestSendButtonClicked = function (event) {
-            _this.editTextarea_.value = event.target.parentElement.parentElement.firstElementChild.innerHTML;
+            _this.editTextarea_.value = event.target.parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
             _this.onTxChanged(null);
             _this.onSendButtonClicked(null);
         };
@@ -122,7 +122,7 @@ var SIWebSocketTestConnection = /** @class */ (function () {
         this.testButtons_ = [];
         this.docsifyWM_ = docsifyWM;
         hook.doneEach(function () {
-            if (docsifyWM.route.path == '/websocket') {
+            if (docsifyWM.route.path.startsWith('/websocket')) {
                 document.body.insertAdjacentHTML('beforeend', websocketTestHtml);
                 _this.hostInput_ = document.getElementById('websocket.ctrl.host');
                 var host = SIWebSocketTestConnection.getCookie('host');
@@ -151,7 +151,7 @@ var SIWebSocketTestConnection = /** @class */ (function () {
                     _this.followLogCheckbox_.checked = logFollows == 'true';
                 }
                 _this.followLogCheckbox_.onchange = _this.onFollowLogCheckboxChanged;
-                var requests = document.querySelectorAll('pre[data-lang=wsreq]');
+                var requests = document.querySelectorAll('pre[data-ws-try]');
                 for (var i = 0; i < requests.length; ++i) {
                     var editButton = document.createElement('button');
                     editButton.title = "Copy to edit field.";
@@ -218,6 +218,29 @@ var SIWebSocketTestConnection = /** @class */ (function () {
     return SIWebSocketTestConnection;
 }());
 function docsifyPlugin(hook, vm) {
+    hook.doneEach(function () {
+        document.querySelectorAll('.ws-api-doc').forEach(function (docElement) {
+            var preview = docElement.querySelector('code[data-ws-preview]');
+            if (preview) {
+                var headers_1 = docElement.querySelectorAll('[data-ws-header]');
+                var renderPreview_1 = function () {
+                    var msg = preview.dataset.wsPreview + '\n';
+                    headers_1.forEach(function (headerElement) {
+                        var value = headerElement.value;
+                        if (value) {
+                            msg += headerElement.dataset.wsHeader + ':' + value + '\n';
+                        }
+                    });
+                    msg += '\n';
+                    preview.innerText = msg;
+                };
+                headers_1.forEach(function (element) {
+                    element.onchange = renderPreview_1;
+                });
+                renderPreview_1();
+            }
+        });
+    });
     window.testWS = new SIWebSocketTestConnection(hook, vm);
 }
 var docsify = window.$docsify || {};
