@@ -11,12 +11,12 @@ const websocketTestHtml = `
 		width: 75%;
 		max-width: 1200px;
 		padding: 12px 32px;
-		color: var(--background);
-		background: var(--accent);
+		color: var(--textColor);
+		background: var(--accentBackground);
 		font-size: 16px;
 		border-top-left-radius: 12px;
-		border-left: 1px solid hsla(0, 0%, 100%, 0.25);
-		border-top: 1px solid hsla(0, 0%, 100%, 0.25);
+		border-left: 1px solid var(--accent);
+		border-top: 1px solid var(--accent);
 	}
 	
 	div#websocket div {
@@ -44,6 +44,7 @@ const websocketTestHtml = `
 	}
 	
 	#websocket b {
+	color: var(--accent);
 		font-size: 18px;
 	}
 	
@@ -59,9 +60,9 @@ const websocketTestHtml = `
 		-webkit-appearance: none;
 		font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
 		font-size: 15px;
-		border: 1px solid var(--background);
-		color: var(--background);
-		background: var(--accent);
+		border: 1px solid var(--accent);
+		color: var(--textColor);
+		background: var(--accentBackground);
 		border-radius: 12px;
 		padding: 4px 12px;
 	}
@@ -76,9 +77,9 @@ const websocketTestHtml = `
 	
 	#websocket input[type=checkbox] + label i {
 		background: none;
-		border: 1px solid var(--background);
+		border: 1px solid var(--accent);
 		border-radius: 5px;
-		color: var(--background);
+		color: var(--accent);
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
@@ -86,8 +87,8 @@ const websocketTestHtml = `
 	}
 	
 	#websocket input[type=checkbox]:checked + label i {
-		background: var(--background);
-		color: var(--accent);
+		background: var(--accent);
+		color: var(--accentBackground);
 	}
 	
 	#websocket button {
@@ -96,8 +97,8 @@ const websocketTestHtml = `
 		font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
 		font-size: 15px;
 		border: none;
-		color: var(--accent);
-		background: var(--background);
+		color: var(--accentBackground);
+		background: var(--accent);
 		border-radius: 12px;
 		padding: 4px 12px;
 	}
@@ -105,14 +106,14 @@ const websocketTestHtml = `
 	#websocket button[type=submit],
 	#websocket button[type=reset]{
 		background: none;
-		color: var(--background);
+		color: var(--accent);
 		padding: 0;
 	}
 	
 	#websocket button:hover, 
 	.websocket-copy-button:hover,
 	.websocket-send-button:hover {
-		filter: brightness(200%);
+		filter: brightness(150%);
 	}
 	
 	#websocket button:disabled,
@@ -131,8 +132,9 @@ const websocketTestHtml = `
 		font-family: Roboto Mono, Monaco, courier, monospace;
 		font-size: .8rem;
 		border: none;
-		color: var(--accent);
+		color: var(--textColor);
 		background: var(--background);
+		border: 1px solid var(--textColor);
 		border-radius: 6px;
 		padding: 4px 12px;
 	}
@@ -165,9 +167,10 @@ const websocketTestHtml = `
 		height: 40vh;
 		font-family: Roboto Mono, Monaco, courier, monospace;
 		font-size: .7rem;
-		border: none;
+		border: 2px solid var(--background);
 		color: var(--accent);
 		background: var(--background);
+		border: 1px solid var(--textColor);
 		border-radius: 6px;
 		padding: 8px 24px;
 		margin: 0 2px;
@@ -181,28 +184,32 @@ const websocketTestHtml = `
 		white-space: pre;
 		list-style: none;
 		padding: 4px 4px 4px 8px;
-		color: black;
-		border: 1px solid hsla(0, 0%, 50%, 0.5);
+		color: var(--backgroundHighContrast);
+		border: 1px solid var(--textBackground);
 		background: hsla(0, 0%, 100%, 0.03);
 		margin-top: 8px;
 		overflow-y: hidden;
 		overflow-x: auto;
 		border-radius: 8px;
+		margin-left: 20%;
+		background: var(--textColor);
 	}
 	
 	#websocket ul.log li.request {
 		margin-right: 20%;
-		background: hsla(0, 0%, 60%, 0.75);
+		margin-left: 0;
+		background: var(--accent);
+		border-color: var(--accentBackground);
 	}
 	
 	#websocket ul.log li.response {
-		margin-left: 20%;
-		background: hsla(131, 45%, 45%, 0.75);
+		background: var(--secondary);
+		border-color: var(--secondaryBackground);
 	}
 	
 	#websocket ul.log li.error {
-		margin-left: 20%	;
-		background: hsla(11, 45%, 45%, 0.75);
+		background: var(--warn);
+		border-color: var(--warnBackground);
 	}
 </style>
 <div id="websocket">
@@ -404,6 +411,8 @@ class SIWebSocketTestConnection {
 			} else {
 				entry.className = 'error';
 			}
+		} else if (messageEvent.data.startsWith('PROPERTY UPDATE\n') || messageEvent.data.startsWith('DEVICE MESSAGE\n')) {
+			entry.className = '';
 		} else {
 			entry.className = 'response';
 		}

@@ -1,5 +1,4 @@
 <style>
-
     h3.ws-api-doc {
         color: var(--textColor);
     }
@@ -7,20 +6,41 @@
     div.ws-api-doc {
         margin: 16px 0px;
         width: 100%;
-        border: 2px solid var(--accent);
+        border: 2px solid var(--textColor);
         border-radius: 4px;
+        background: var(--textBackground);
+    }
+    div.ws-api-doc.request {
+        border-color: var(--accent);
         background: var(--accentBackground);
+    }
+    div.ws-api-doc.response {
+        border-color: var(--secondary);
+        background: var(--secondaryBackground);
+    }
+    div.ws-api-doc.error {
+        border-color: var(--warn);
+        background: var(--warnBackground);
     }
 
     div.ws-api-doc button.accordion-toggle {
-        padding: 4px;
+        padding: 6px;
         margin: 6px;
         border: none;
         border-radius: 3px;
         font-size: 100%;
         font-weight: bold;
-        color: white;
+        color: var(--backgroundHighContrast);
+        background: var(--textColor);
+    }
+    div.ws-api-doc.request button.accordion-toggle {
         background: var(--accent);
+    }
+    div.ws-api-doc.response button.accordion-toggle {
+        background: var(--secondary);
+    }
+    div.ws-api-doc.error button.accordion-toggle {
+        background: var(--warn);
     }
 
     div.ws-api-doc button.accordion-toggle:after {
@@ -31,7 +51,16 @@
     div.ws-api-doc div {
         font-size: 90%;
         padding: 0;
-        border-top: 1px solid var(--accent);
+        border-top: 2px solid var(--textColor);
+    }
+    div.ws-api-doc.request div {
+        border-color: var(--accent);
+    }
+    div.ws-api-doc.response div {
+        border-color: var(--secondary);
+    }
+    div.ws-api-doc.error div {
+        border-color: var(--warn);
     }
 
     div.ws-api-doc h6,
@@ -50,11 +79,23 @@
     }
 
     div.ws-api-doc h6 {
-        border-top: 1px solid var(--accent);
-        color: var(--accent);
+        border-top: 1px solid var(--textColor);
+        color: var(--textColor);
         font-size: 100%;
         padding-top: 8px;
         padding-bottom: 0px;
+    }
+    div.ws-api-doc.request h6 {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+    div.ws-api-doc.response h6 {
+        border-color: var(--secondary);
+        color: var(--secondary);
+    }
+    div.ws-api-doc.error h6 {
+        border-color: var(--warn);
+        color: var(--warn);
     }
 
     div.ws-api-doc table,
@@ -78,9 +119,9 @@
         -webkit-appearance: none;
         font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
         font-size: 15px;
-        border: 1px solid var(--accent);
+        border: 1px solid var(--textColor);
         color: var(--textColor);
-        background: var(--aceentBackground);
+        background: transparent;
         border-radius: 12px;
         padding: 4px 12px;
     }
@@ -113,9 +154,44 @@
 
 <h2>Messages</h2>
 
+<h3 class="ws-api-doc">Error</h3>
+
+<div class="ws-api-doc error">
+    <button class="accordion-toggle">ERROR</button>
+    <div class="accordion-content" hidden>
+        <p>
+            TODO
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>access_level</td>
+                <td>string</td>
+                <td><strong>TODO</strong>. <br/>
+                    TODO.
+                </td>
+            </tr>
+            <tr>
+                <td>version</td>
+                <td>number</td>
+                <td><strong>TODO</strong>. <br/>
+                    TODO.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+    </div>
+</div>
+
 <h3 class="ws-api-doc">User authorization</h3>
 
-<div class="ws-api-doc">
+<div class="ws-api-doc request">
     <button class="accordion-toggle">AUTHORIZE</button>
     <div class="accordion-content" hidden>
         <p>
@@ -188,6 +264,39 @@ reason:&lt;REASON&gt;
  </code></pre>
         <p class="near"><strong>&lt;REASON&gt;</strong> is a textual representation of the error occurred. Can be either <em>authorization failed</em>, <em>invalid frame</em> or <em>invalid state</em>.</p>
         <br/>
+    </div>
+</div>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">AUTHORIZED</button>
+    <div class="accordion-content" hidden>
+        <p>
+            TODO
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>access_level</td>
+                <td>string</td>
+                <td><strong>TODO</strong>. <br/>
+                    TODO.
+                </td>
+            </tr>
+            <tr>
+                <td>version</td>
+                <td>number</td>
+                <td><strong>TODO</strong>. <br/>
+                    TODO.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
     </div>
 </div>
 
