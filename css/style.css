@@ -758,7 +758,7 @@ body {
 .markdown-section h3,
 .markdown-section h4,
 .markdown-section strong {
-	color: var(--textColor);
+	color: var(--accent);
 	font-weight: 600
 }
 
@@ -766,6 +766,10 @@ body {
 	color: var(--accent);
 	font-weight: 600;
 	text-decoration: none;
+}
+
+.markdown-section a:hover {
+	text-decoration: underline;
 }
 
 .markdown-section h1 {

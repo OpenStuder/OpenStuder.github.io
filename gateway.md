@@ -1,24 +1,49 @@
 ## Introduction
 
-The OpenStuder gateway is the link from the IT world to a Studer Innotec installation. Using a bus converter unit like the [XCom-485i](https://www.studer-innotec.com/en/accessoires/variotrack-series/communication-module-xcom-485i-7397), the devices on the Studer [CAN](https://en.wikipedia.org/wiki/CAN_bus) bus can be accessed using a simple message-based protocol over [WebSockets](https://en.wikipedia.org/wiki/WebSocket) or optionally via a custom [Bluetooth LE](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy) profile.
+The OpenStuder gateway is the link from the IT world to a Studer Innotec installation. Using a bus converter unit like the 
+[XCom-485i](https://www.studer-innotec.com/en/accessoires/variotrack-series/communication-module-xcom-485i-7397), the devices on the Studer [CAN](https://en.wikipedia.org/wiki/CAN_bus) bus can be 
+accessed using a simple message-based protocol on top of [WebSockets](https://en.wikipedia.org/wiki/WebSocket) or optionally via a proprietary 
+[Bluetooth LE](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy) profile.
 
 ![](images/Gateway-Structure.svg)
 
-Studer Innotec devices are traditionally connected via a proprietary protocol which uses CAN as MAC layer. A direct access to the CAN bus is not possible due to security restrictions enforced by Studer Innotec. Even if access would be possible, it is much easier to find an USB to RS485 converter that can be connected to a Linux box like for example the [Raspberry Pi](https://www.raspberrypi.org) then it is to connect directly to a CAN bus.
+Studer Innotec devices are traditionally connected via a proprietary protocol which uses CAN as MAC layer. Direct access to the CAN bus is not possible due to security restrictions enforced by Studer
+Innotec. Even if access would be possible, it is much easier to find a USB to RS485 converter that can be connected to a Linux box like for example the [Raspberry Pi](https://www.raspberrypi.org) than
+a direct connection to a CAN bus.
 
 > [!Note]
-> The gateway uses plugins (called device access drivers) to access the different devices and busses. This allows a gateway to connect to multiple bus converters at the same time and makes it possible to add support for new devices and bus converters without any modification of the gateway software itself.
+> The gateway uses plugins (called device access drivers) to access devices and busses. This allows a gateway to connect to multiple bus converters at the same time and makes it possible to add
+> support for new devices and bus converters without any modification of the gateway software itself.
 
-The device access protocol provided by the Gateway is based on WebSockets - this enables a simple access from either web sites using the Browsers's Javascript API or any application as there are WebSocket client libraries available for almost all programming languages and platforms.
+The device access protocol provided by the Gateway is based on WebSockets - this enables simple access from either websites using the Browsers's Javascript WebSocket API or any application as there 
+are WebSocket client libraries available for almost all programming languages and platforms. We provide client implementations for popular languages like Python, Javascript and Typescript.
 
+### Gateway software design
 
-### Pluggable design
+The gateway software consists of a service (daemon) called **sigatewayd** which will connect to the configured Studer Innotec devices and provide access to them via a WebSocket or Bluetooth based API.
+The daemon accesses the devices through so called **device access drivers**. These are essentially plugins for each individual device series or each different bus converter, and they allow to access
+the data in a uniform way. 
 
-> TODO
+Additionally, **sigatewayd** can be configured to log selected properties at configurable intervals and this data can be queried via the WebSocket of Bluetooth API too. Plugins called 
+**storage drivers** are used to persist and query the log data. This enables to use different storage backends and allows to adapt the gateway to different use cases and platforms. The default 
+storage driver saves the data into a SQLite database on the filesystem.
+
+The gateway can optionally authorize users when connecting. In order to support different authorization schemes and allow extensibility, this functionality is implemented using plugins called 
+**authorize drivers**. The default driver reads the user list, and their access rights from a text file located in the configuration folder.
+
+![](images/Gateway-Architecture.svg)
+
+The fact that access to devices (or busses), data log storage and authorization is implemented using plugins has several advantages:
+
+- The gateway can be configured very flexibly and adapted to all possible environments and constraints.
+- Storage drivers allow to save the log data either locally or on a remote server.
+- The gateway is extensible, new device drivers, new storage drivers and new authorization mechanisms can be added at any time.
 
 #### Device access driver
 
-> TODO
+A device **access driver** abstracts a Studer Innotec installation by communicating with all connected devices using a bus converter. Typically, one or multiple 
+[XCom-485i](https://www.studer-innotec.com/en/accessoires/variotrack-series/communication-module-xcom-485i-7397) bus converters will be used to access installed devices. Support for other bus 
+converters and devices might will be added in a future release of the software.
 
 #### Storage driver
 
@@ -41,17 +66,19 @@ The configuration of the gateway is divided in two separate configuration files:
 - `/etc/openstuder/sigatewayd.conf`: This file contains the general configuration of the gateway daemon itself.
 - `/etc/openstuder/drivers.conf`: This file lists the device access drivers to instantiate and their configuration.
 
-If security is enabled, a third file `/etc/openstuder/users.txt` contains the list of users along with their password hashes and configured access level. You will have to use the `sigwctl user` CLI command to add, list, modify and delete user accounts in that file. 
+If security is enabled, a third file `/etc/openstuder/users.txt` contains the list of users along with their password hashes and configured access level. You will have to use the `sigwctl user` CLI 
+command to add, list, modify and delete user accounts in that file. 
 
 ### Gateway configuration `/etc/openstuder/sigatewayd.conf`
 
 #### Gateway section
 
-The `Gateway` section contains general settings for the OpenStuder gateway daemon.
+The `[Gateway]` section contains general settings for the OpenStuder gateway daemon.
 
 ##### driverSearchPaths
 
-Space-separated list of paths where the gateway daemon is searching for **device access**, **storage** and **authorize** plugins. Note that the plugins folders are searched in the order they are in the list.
+Space-separated list of paths where the gateway daemon is searching for **device access**, **storage** and **authorize** plugins. Note that the plugins folders are searched in the order they appear 
+in that list.
 
 **Optional**, default value is `/var/lib/openstuder/drivers`.
 
@@ -73,63 +100,74 @@ In this example, the gateway searches inside the folder `/home/john/.drivers` fo
 
 #### Storage section
 
-> TODO
+In the `[Storage]` section, you can configure the storage driver to use and will provide all configuration parameters for that driver. The parameter `driver` specifies the name of the storage driver
+to load, all other parameters in this section are passed to the storage driver plugin during initialization.
 
 ##### driver
 
-> TODO
+Storage driver to use (log storage).
+
+**Optional**, defaults to `SQLite`.
 
 ##### Driver specific settings
 
-> TODO
-
-***SQLite driver***
-
-> TODO
+All other parameters inside the `[Storage]` section - except the `driver` parameter - are passed to the storage driver during initialization. 
+See the respective storage driver documentation for supported configuration parameters.
 
 ##### Example
 
 ```ini
 [Storage]
 driver = SQLite
-file = /var/lib/studergateway/storage.sqlite
+file = /home/john/.storage.sqlite
 ```
 
-> TODO
+Here we are using the `SQLite` storage driver, and the file is saved as `.storage.sqlite` in user `john`s home folder.
 
 #### WebSocket section
 
-> TODO
+The `[WebSocket]` section contains all settings for the WebSocket API.
 
-##### `enabled`
+##### enabled
 
-> TODO
+If true, the WebSocket API is enabled, if false the WebSocket API is not active and all other settings in this section are not relevant.
 
-##### `port`
+**Optional**, default value is `true`.
 
-> TODO
+##### port
+
+TCP port the WebSocket server is listening to.
+
+**Optional**, defaults to `1987`.
 
 ##### Example
 
 ```ini
 [WebSocket]
 enabled = true
-port = 1987
+port = 8080
 ```
 
-> TODO
+In this example, the WebSocket API is enabled and is listening on port 8080.
 
 #### Bluetooth section
 
-> TODO
+The `[Bluetooth]` section contains all settings for the Bluetooth LE API.
 
-##### `enabled`
+> [!ATTENTION]
+> The Bluetooth LE API is still experimental and subject to change. No client libraries are provided yet.
 
-> TODO
+##### enabled
 
-##### `name`
+If true, the Bluetooth LE API is enabled, if false the API is not active and all other settings in this section are not relevant.
 
-> TODO
+**Optional**, default value is `false`.
+
+##### name
+
+Name displayed during Bluetooth LE discovery.
+
+**Optional**, defaults to `StuderGW`.
 
 ##### Example
 
@@ -139,55 +177,67 @@ enabled = true
 name = A303
 ```
 
-> TODO
+In this example configuration, the Bluetooth LE API is enabled and the device shows itself with the name `A303`.
 
-#### Security section
+#### Authorize section
 
-> TODO
+The `[Authorize]` section contains all settings related to user authorization and user's access levels.
 
-##### `enabled`
+##### enabled
 
-> TODO
+If true, clients can send user credentials (username and password) to authorize and allow user-specific access rights.
+If false, credentials are ignored and all client connections will have the access level configured as `guestAccessLevel`.
 
-##### `allowGuest`
+**Optional**, defaults to `false`.
 
-> TODO
+##### driver
 
-##### `defaultAccessLevel`
+Authorize driver to use.
 
-> TODO
+The `Internal` authorize driver uses a text file located in the configuration folder which can be manipulated using the `sigwctl` command.
+
+**Optional**, defaults to `Internal`. 
+
+##### `guestAccessLevel`
+
+If authorization is disabled (`enabled = false`), every connection is considered as a guest connection and thus this access level is granted to every incoming client connection.
+
+If authorization is enabled (`enabled = true`), this access level is granted to clients which do not provide user credentials (username and password). 
+Set this to 'None' to disallow guest connections.
+
+Valid values are:
+
+- `None`: No access at all.
+- `Basic`: Basic access level.
+- `Installer`: Access level for installers.
+- `Expert`: Access to almost all properties.
+- `QSP`: Access to all properties for qualified service personnel, prefer not to use as this potentially can harm your installation.
+
+**Optional**, defaults to `Basic`.
+
+##### Driver specific settings
+
+All other parameters inside the `[Authorize]` section - except the `enabled`, the `driver` and the `guestAccessLevel` parameter - are passed to the authorize driver during initialization.
+See the respective authorize driver documentation for supported configuration parameters.
 
 ##### Example
 
 ```ini
-[Security]
-enabled = true
-allowGuest = true
-defaultAccessLevel = Basic
+[Authorize]
+required = true
+driver = Internal
+guestAccessLevel = Expert
 ```
 
-> TODO
+
 
 ### Device access driver configuration `/etc/openstuder/drivers.conf`
-
-> TODO
-
-#### General
-
-> TODO
-
-#### Supported drivers
-
-> TODO
-
-##### XCom485i
 
 > TODO
 
 #### Example
 
 > TODO
-
 
 ## Start and stop daemon
 
