@@ -246,12 +246,63 @@ const websocketTestHtml = `
 </div>
 `;
 
+const websocketProblemHtml = `
+<!--suppress CssUnresolvedCustomProperty -->
+<style>
+	div#websocket {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		align-items: center;
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		padding: 12px 32px;
+		color: var(--warnBackground);
+		background: var(--warn);
+		font-size: 16px;
+		border-top-left-radius: 12px;
+		border-left: 1px solid var(--warnBackground);
+		border-top: 1px solid var(--warnBackground);
+	}
+	
+	div#websocket div {
+		padding: 8px;
+	}
+	
+	div#websocket button {
+		outline:none;
+		-webkit-appearance: none;
+		font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
+		border: none;
+		color: var(--warn);
+		background: var(--warnBackground);
+		border-radius: 12px;
+		padding: 4px 12px;
+	}
+</style>
+<div id="websocket">
+    <div>
+   		<i class="material-icons">error</i>
+		<span>
+        	<b>WebSocket connection testing not available on using HTTPS!</b>
+    	</span>
+    	<button onclick="window.location = 'http:'; window.location.reload();">Fix...</button>
+    </div>
+</div>
+`
+
 class SIWebSocketTestConnection {
 	constructor(hook: any, docsifyWM: any) {
 		this.docsifyWM_ = docsifyWM;
 
 		hook.doneEach(() => {
 			if (docsifyWM.route.path.indexOf('/websocket') == 0) {
+				if (window.location.protocol == 'https:') {
+					document.body.insertAdjacentHTML('beforeend', websocketProblemHtml);
+					return;
+				}
+
 				document.body.insertAdjacentHTML('beforeend', websocketTestHtml);
 
 				this.hostInput_ = document.getElementById('websocket.ctrl.host') as HTMLInputElement;
