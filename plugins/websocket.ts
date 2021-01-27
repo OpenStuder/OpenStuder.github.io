@@ -9,14 +9,15 @@ const websocketTestHtml = `
 		bottom: 0;
 		right: 0;
 		width: 75%;
+		min-width: 800px;
 		max-width: 1200px;
 		padding: 12px 32px;
 		color: var(--textColor);
-		background: var(--accentBackground);
+		background: var(--textBackground);
 		font-size: 16px;
 		border-top-left-radius: 12px;
-		border-left: 1px solid var(--accent);
-		border-top: 1px solid var(--accent);
+		border-left: 1px solid var(--textColor);
+		border-top: 1px solid var(--textColor);
 	}
 	
 	div#websocket div {
@@ -44,7 +45,7 @@ const websocketTestHtml = `
 	}
 	
 	#websocket b {
-	color: var(--accent);
+	color: var(--textColor);
 		font-size: 18px;
 	}
 	
@@ -60,9 +61,9 @@ const websocketTestHtml = `
 		-webkit-appearance: none;
 		font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
 		font-size: 15px;
-		border: 1px solid var(--accent);
+		border: 1px solid var(--textColor);
 		color: var(--textColor);
-		background: var(--accentBackground);
+		background: var(--textBackground);
 		border-radius: 12px;
 		padding: 4px 12px;
 	}
@@ -77,9 +78,9 @@ const websocketTestHtml = `
 	
 	#websocket input[type=checkbox] + label i {
 		background: none;
-		border: 1px solid var(--accent);
+		border: 1px solid var(--textColor);
 		border-radius: 5px;
-		color: var(--accent);
+		color: var(--textColor);
 		-webkit-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
@@ -87,8 +88,8 @@ const websocketTestHtml = `
 	}
 	
 	#websocket input[type=checkbox]:checked + label i {
-		background: var(--accent);
-		color: var(--accentBackground);
+		background: var(--textColor);
+		color: var(--textBackground);
 	}
 	
 	#websocket button {
@@ -97,8 +98,8 @@ const websocketTestHtml = `
 		font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
 		font-size: 15px;
 		border: none;
-		color: var(--accentBackground);
-		background: var(--accent);
+		color: var(--textBackground);
+		background: var(--textColor);
 		border-radius: 12px;
 		padding: 4px 12px;
 	}
@@ -106,7 +107,7 @@ const websocketTestHtml = `
 	#websocket button[type=submit],
 	#websocket button[type=reset]{
 		background: none;
-		color: var(--accent);
+		color: var(--textColor);
 		padding: 0;
 	}
 	
@@ -131,7 +132,6 @@ const websocketTestHtml = `
 		-webkit-appearance: none;
 		font-family: Roboto Mono, Monaco, courier, monospace;
 		font-size: .8rem;
-		border: none;
 		color: var(--textColor);
 		background: var(--background);
 		border: 1px solid var(--textColor);
@@ -146,7 +146,7 @@ const websocketTestHtml = `
 		outline:none;
 		-webkit-appearance: none;
 		border: none;
-		color: var(--accent);
+		color: var(--accentBackground);
 		background: none;
 	}
 	
@@ -157,8 +157,13 @@ const websocketTestHtml = `
 		outline:none;
 		-webkit-appearance: none;
 		border: none;
-		color: var(--accent);
+		color: var(--accentBackground);
 		background: none;
+	}
+	
+	.websocket-copy-button:hover,
+	.websocket-send-button:hover {
+		color: white;
 	}
 	
 	#websocket ul.log {
@@ -167,7 +172,6 @@ const websocketTestHtml = `
 		height: 40vh;
 		font-family: Roboto Mono, Monaco, courier, monospace;
 		font-size: .7rem;
-		border: 2px solid var(--background);
 		color: var(--accent);
 		background: var(--background);
 		border: 1px solid var(--textColor);
@@ -184,32 +188,32 @@ const websocketTestHtml = `
 		white-space: pre;
 		list-style: none;
 		padding: 4px 4px 4px 8px;
-		color: var(--backgroundHighContrast);
-		border: 1px solid var(--textBackground);
+		color: var(--textHighContrast);
+		border: 1px solid var(--textColor);
 		background: hsla(0, 0%, 100%, 0.03);
 		margin-top: 8px;
 		overflow-y: hidden;
 		overflow-x: auto;
 		border-radius: 8px;
 		margin-left: 20%;
-		background: var(--textColor);
+		background: var(--textBackground);
 	}
 	
 	#websocket ul.log li.request {
 		margin-right: 20%;
 		margin-left: 0;
-		background: var(--accent);
-		border-color: var(--accentBackground);
+		background: var(--accentBackground);
+		border-color: var(--accent);
 	}
 	
 	#websocket ul.log li.response {
-		background: var(--secondary);
-		border-color: var(--secondaryBackground);
+		background: var(--secondaryBackground);
+		border-color: var(--secondary);
 	}
 	
 	#websocket ul.log li.error {
-		background: var(--warn);
-		border-color: var(--warnBackground);
+		background: var(--warnBackground);
+		border-color: var(--warn);
 	}
 </style>
 <div id="websocket">
@@ -247,7 +251,7 @@ class SIWebSocketTestConnection {
 		this.docsifyWM_ = docsifyWM;
 
 		hook.doneEach(() => {
-			if (docsifyWM.route.path.startsWith('/websocket')) {
+			if (docsifyWM.route.path.indexOf('/websocket') == 0) {
 				document.body.insertAdjacentHTML('beforeend', websocketTestHtml);
 
 				this.hostInput_ = document.getElementById('websocket.ctrl.host') as HTMLInputElement;
@@ -496,12 +500,39 @@ function docsifyPlugin(hook: any, vm: any) {
 				const headers = docElement.querySelectorAll<HTMLElement>('[data-ws-header]');
 
 				const renderPreview = () => {
-					let msg = preview.dataset.wsPreview + '\n';
+					let msg = String(preview.dataset.wsPreview) + '\n';
 					headers.forEach((headerElement: HTMLElement) => {
-						const value = (headerElement as HTMLInputElement).value;
-						if (value) {
-							msg += headerElement.dataset.wsHeader + ':' + value + '\n';
+						if (headerElement.tagName.toLowerCase() == 'input') {
+							const element = headerElement as HTMLInputElement;
+							const value = element.value;
+							console.log(element.dataset);
+							if (value || 'wsRequired' in element.dataset) {
+								msg += headerElement.dataset.wsHeader + ':' + value + '\n';
+							}
+						} else if (headerElement.tagName.toLowerCase() == 'select') {
+							const element = headerElement as HTMLSelectElement;
+							if (element.multiple) {
+								const options = element.options;
+								let flags = '';
+								for (let i = 0; i < options.length; ++i) {
+									if (options[i].selected) {
+										flags += options[i].value + ',';
+									}
+								}
+								if (flags[flags.length - 1] == ',') {
+									flags = flags.slice(0, flags.length - 1);
+								}
+								if (flags || 'wsRequired' in element.dataset) {
+									msg += headerElement.dataset.wsHeader + ':' + flags;
+								}
+							} else {
+								const value = element.value;
+								if (value || 'wsRequired' in element.dataset) {
+									msg += headerElement.dataset.wsHeader + ':' + value + '\n';
+								}
+							}
 						}
+
 					});
 					msg += '\n';
 					preview.innerText = msg;
@@ -509,6 +540,7 @@ function docsifyPlugin(hook: any, vm: any) {
 
 				headers.forEach((element: HTMLElement) => {
 					element.onchange = renderPreview;
+					element.onkeyup = renderPreview;
 				});
 
 				renderPreview();

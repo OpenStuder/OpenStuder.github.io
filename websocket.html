@@ -1,23 +1,27 @@
+<!--suppress CssUnresolvedCustomProperty -->
 <style>
     h3.ws-api-doc {
         color: var(--textColor);
     }
 
     div.ws-api-doc {
-        margin: 16px 0px;
+        margin: 24px 0;
         width: 100%;
         border: 2px solid var(--textColor);
         border-radius: 4px;
         background: var(--textBackground);
     }
+
     div.ws-api-doc.request {
         border-color: var(--accent);
         background: var(--accentBackground);
     }
+
     div.ws-api-doc.response {
         border-color: var(--secondary);
         background: var(--secondaryBackground);
     }
+
     div.ws-api-doc.error {
         border-color: var(--warn);
         background: var(--warnBackground);
@@ -33,66 +37,63 @@
         color: var(--backgroundHighContrast);
         background: var(--textColor);
     }
+
     div.ws-api-doc.request button.accordion-toggle {
         background: var(--accent);
     }
+
     div.ws-api-doc.response button.accordion-toggle {
         background: var(--secondary);
     }
+
     div.ws-api-doc.error button.accordion-toggle {
         background: var(--warn);
     }
 
-    div.ws-api-doc button.accordion-toggle:after {
-        width: 100%;
-        text-align: right;
-    }
-
     div.ws-api-doc div {
-        font-size: 90%;
+        font-size: 100%;
         padding: 0;
         border-top: 2px solid var(--textColor);
     }
+
     div.ws-api-doc.request div {
         border-color: var(--accent);
     }
+
     div.ws-api-doc.response div {
         border-color: var(--secondary);
     }
+
     div.ws-api-doc.error div {
         border-color: var(--warn);
     }
 
-    div.ws-api-doc h6,
-    div.ws-api-doc p,
-    div.ws-api-doc table {
+    div.ws-api-doc p {
         margin: 0;
-        padding: 12px 16px;
-    }
-
-    div.ws-api-doc p.near {
-        padding: 2px 16px;
+        padding: 16px 32px;
     }
 
     div.ws-api-doc ul {
-        margin: -8px 24px;
+        margin: -8px 48px;
     }
 
     div.ws-api-doc h6 {
+        margin: 0;
         border-top: 1px solid var(--textColor);
         color: var(--textColor);
-        font-size: 100%;
-        padding-top: 8px;
-        padding-bottom: 0px;
+        padding: 8px 16px 0;
     }
+
     div.ws-api-doc.request h6 {
         border-color: var(--accent);
         color: var(--accent);
     }
+
     div.ws-api-doc.response h6 {
         border-color: var(--secondary);
         color: var(--secondary);
     }
+
     div.ws-api-doc.error h6 {
         border-color: var(--warn);
         color: var(--warn);
@@ -107,6 +108,12 @@
         background-color: transparent !important;
     }
 
+    div.ws-api-doc table {
+        display: table;
+        width: calc(100% - 64px);
+        margin: 16px auto;
+    }
+
     div.ws-api-doc th {
         border-bottom: 1px solid var(--textColor);
         font-weight: normal;
@@ -115,7 +122,7 @@
 
     div.ws-api-doc input,
     div.ws-api-doc select {
-        outline:none;
+        outline: none;
         -webkit-appearance: none;
         font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
         font-size: 15px;
@@ -136,77 +143,142 @@
 
     div.ws-api-doc pre {
         border: none;
-        margin: 0 24px;
-        padding: 0;
-        background: none;
+        border-radius: 0;
+        margin: 0 0;
+        padding: 20px;
+        background: var(--textColor);
+    }
+    div.ws-api-doc.request pre {
+        background: var(--accent);
+    }
+    div.ws-api-doc.response pre {
+        background: var(--secondary);
+    }
+    div.ws-api-doc.error pre {
+        background: var(--warn);
     }
 
     div.ws-api-doc code {
-        margin: 0;
-        padding:0;
+        font-size: 12px;
+        color: var(--backgroundHighContrast);
         background: none;
+        margin: 0;
+        padding: 0;
+    }
+    div.ws-api-doc.request code {
+        font-size: 15px;
+    }
+
+    div.ws-api-doc.request strong {
+        color: var(--accent);
+    }
+
+    strong.request {
+        color: var(--accent) !important;
+    }
+
+    div.ws-api-doc.response strong {
+        color: var(--secondary);
+    }
+
+    strong.response {
+        color: var(--secondary) !important;
+    }
+
+    div.ws-api-doc strong {
+        color: var(--textColor);
+    }
+
+    strong.indication {
+        color: var(--textColor);
+    }
+
+    div.ws-api-doc.error strong {
+        color: var(--warn);
+    }
+
+    strong.error {
+        color: var(--warn) !important;
     }
 </style>
 
-<!-- <h2>Introduction</h2>
+<h2>Introduction</h2>
 
-<h2>Message format</h2> -->
+<p>
+    The OpenStuder WebSocket protocol is a message (frame) based protocol, with messages modelled on HTTP. A message consists of a command, a set of optional headers and an optional body and is text
+    based to simplify development and debugging. All data is encoded as <strong>UTF-8</strong>.
+</p>
+<p>
+    The main goals driving the design were simplicity and interoperability. It was designed to be a lightweight protocol that is easy to implement on the client side in a wide range of languages.
+</p>
+
+<h2>Message format</h2>
+
+<p>
+    The client and server will communicate using messages sent over the WebSocket. A message's structure looks like:
+</p>
+
+<pre><code>COMMAND
+header1:value1
+header2:value2
+
+body
+</code></pre>
+
+<p>
+    The frame starts with a command string terminated by a line feed (\n). Following the command are zero or more header entries in <strong>&lt;key&gt;:&lt;value&gt;</strong> format. Each header
+    entry is terminated by an line feed (\n). A blank line (i.e. an extra line feed) indicates the end of the headers section and the beginning of the optional body. The body takes the remaining
+    space of the message (until message end).
+</p>
+<p>
+    All commands and header names referenced in this document are <strong>case sensitive</strong>.
+</p>
 
 <h2>Messages</h2>
 
-<h3 class="ws-api-doc">Error</h3>
+<p>
+    All messages that can be exchanged with the OpenStuder gateway WebSocket API are defined in the following sections.
+</p>
+<p>Four types of frames exists and are differentiated using colors:</p>
 
-<div class="ws-api-doc error">
-    <button class="accordion-toggle">ERROR</button>
-    <div class="accordion-content" hidden>
-        <p>
-            TODO
-        </p>
-        <h6>headers</h6>
-        <table>
-            <tr>
-                <th>key</th>
-                <th>data type</th>
-                <th>description</th>
-            </tr>
-            <tr>
-                <td>access_level</td>
-                <td>string</td>
-                <td><strong>TODO</strong>. <br/>
-                    TODO.
-                </td>
-            </tr>
-            <tr>
-                <td>version</td>
-                <td>number</td>
-                <td><strong>TODO</strong>. <br/>
-                    TODO.
-                </td>
-            </tr>
-        </table>
-        <h6>body</h6>
-        <p><em>No body</em></p>
-    </div>
+<ul>
+    <li><strong>Request messages</strong> send from the client to the gateway.</li>
+    <li><strong class="response">Response messages</strong> send from the gateway to the client as response to request messages.</li>
+    <li><strong class="indication">Indication messages</strong> send from the gateway to the client spontaneous, subscribed properties and device message for example.</li>
+    <li><strong class="error">Error message</strong> send from the gateway to the client on severe errors.</li>
+</ul>
+
+<div class="alert callout tip">
+    <p class="title"><span class="icon icon-tip"></span>Tip</p>
+    <p>
+        You can connect to a real gateway using the <strong>WebSocket connection</strong> at the bottom of the page and try out each messages interactively by sending them to the gateway and
+        see the gateway's response message. The <i class="material-icons">read_more</i> button at the bottom of the message documentation copies the message to the compose section and you can modify
+        the message before sending, the <i class="material-icons" style="font-size: 18px;">send</i> button sends the message directly.
+    </p>
 </div>
 
 <h3 class="ws-api-doc">User authorization</h3>
+
+<p>A client initiates the connection to the gateway by sending the <strong>AUTHORIZE</strong> message:</p>
 
 <div class="ws-api-doc request">
     <button class="accordion-toggle">AUTHORIZE</button>
     <div class="accordion-content" hidden>
         <p>
-            This message has to be send as the very first to the gateway after a WebSocket connection has been established.<br/>
+            The <strong>AUTHORIZE</strong> message has to be send as the <strong>very first</strong> by a client to the gateway after the WebSocket connection has been established. Any other message
+            will be rejected as long as
+            the authorization has not been completed.<br/>
             It serves basically two purposes:
         </p>
         <ul>
-            <li>Negotiate the protocol version and</li>
-            <li>optionally authorize an user.</li>
+            <li><strong>Negotiate the protocol version</strong> and</li>
+            <li><strong>optionally authorize</strong> a user or guest.</li>
         </ul>
         <p>
-            If no user credentials - <em>username</em> and <em>password</em> are passed and user authorization is enabled on the gateway, the user is is authorized as guest.
+            If no user credentials (<em>username</em> and <em>password</em>) are passed and user authorization is enabled on the gateway, the user is is authorized as guest. If guest access is
+            disabled in the gateway configuration the authorize request will be rejected.
             <br/>
-            If user authorization is
-            disabled on the gateway, username and password are not required at all and will be ignored even if provided.
+            If user authorization is disabled on the gateway, the credentials (<em>username</em> and <em>password</em>) are not required at all and even if they are provided, they will be ignored.
         </p>
         <h6>headers</h6>
         <table>
@@ -214,64 +286,52 @@
                 <th>key</th>
                 <th>data type</th>
                 <th>description</th>
-                <th>preview value</th>
+                <th>use value</th>
             </tr>
             <tr>
                 <td>user</td>
-                <td>string</td>
+                <td>string<br/><em>(optional)</em></td>
                 <td><strong>Username used to authorize</strong>. <br/>
-                    Optional. If not provided, the connection will be granted guest access level if guest access is enabled on the gateway.<br/></td>
+                    If not provided, the connection will be granted guest access level if guest access is enabled on the gateway.<br/></td>
                 <td>
                     <input type="text" placeholder="no username" data-ws-header="user"></input>
                 </td>
             </tr>
             <tr>
                 <td>password</td>
-                <td>string</td>
+                <td>string<br/><em>(optional)</em></td>
                 <td><strong>Password used to authorize</strong>. <br/>
-                    Optional. If not provided, the connection will be granted guest access level if guest access is enabled on the gateway.
+                    If not provided, the connection will be granted guest access level if guest access is enabled on the gateway.
                 </td>
                 <td><input type="text" placeholder="no password" data-ws-header="password"></input></td>
             </tr>
             <tr>
                 <td>version</td>
-                <td>number</td>
+                <td>number<br/><em>(optional)</em></td>
                 <td><strong>Version of the protocol requested by the client</strong>. <br/>
-                    Optional. If not provided, the protocol version is determined by the gateway.
+                    If not provided, the protocol version is determined by the gateway.
                 </td>
                 <td>
                     <select data-ws-header="version">
-                        <option value="">-</option>
+                        <option value="">no version</option>
                         <option value="1">Version 1</option>
                     </select></td>
             </tr>
         </table>
         <h6>body</h6>
         <p><em>No body</em></p>
-        <h6>request</h6>
         <pre data-ws-try><code data-ws-preview="AUTHORIZE"></code></pre>
-        <h6>responses</h6>
-        <p class="near"><em>On success:</em></p>
-        <pre><code>AUTHORIZED
-access_level:&lt;ACCESS LEVEL&gt;
-version:&lt;VERSION&gt;
- </code></pre>
-        <p class="near"><strong>&lt;ACCESS LEVEL&gt</strong> is the access level given to the user. Possible values are <em>Basic</em>, <em>Installer</em>, <em>Expert</em> or <em>SQP</em>.</p>
-        <p class="near"><strong>&lt;VERSION&gt;</strong> is the version of the protocol used. Currently only version <em>1</em> is supported.</p>
-        <p class="near"><br/><em>On error:</em></p>
-        <pre><code>ERROR
-reason:&lt;REASON&gt;
- </code></pre>
-        <p class="near"><strong>&lt;REASON&gt;</strong> is a textual representation of the error occurred. Can be either <em>authorization failed</em>, <em>invalid frame</em> or <em>invalid state</em>.</p>
-        <br/>
     </div>
 </div>
+
+<p>If the gateway accepts the connection attempt it will respond with a <strong class="response">AUTHORIZED</strong> message:</p>
 
 <div class="ws-api-doc response">
     <button class="accordion-toggle">AUTHORIZED</button>
     <div class="accordion-content" hidden>
         <p>
-            TODO
+            The <strong>AUTHORIZED</strong> message is send by the gateway as a response to the <strong class="request">AUTHORIZE</strong> message if the authentication was successful. in the case
+            of an error, the gateway responds with an <strong class="error">ERROR</strong> message instead.
         </p>
         <h6>headers</h6>
         <table>
@@ -282,86 +342,683 @@ reason:&lt;REASON&gt;
             </tr>
             <tr>
                 <td>access_level</td>
-                <td>string</td>
-                <td><strong>TODO</strong>. <br/>
-                    TODO.
+                <td>Basic,<br/>Installer,<br/>Expert,<br/>QSP</td>
+                <td><strong>Access level granted to authorized user</strong>. <br/>
+                    This access level has been granted by the gateway to the user (or guest) that was authorized using the optional credentials in the AUTHORIZE message.
                 </td>
             </tr>
             <tr>
                 <td>version</td>
                 <td>number</td>
-                <td><strong>TODO</strong>. <br/>
-                    TODO.
+                <td><strong>Protocol version</strong>. <br/>
+                    Protocol version used on the gateway's side. Currently only version 1 is supported.
                 </td>
             </tr>
         </table>
         <h6>body</h6>
         <p><em>No body</em></p>
+        <pre><code>AUTHORIZED
+access_level:Basic
+version:1
+ </code></pre>
     </div>
 </div>
 
+<p>The gateway can reject any connection attempt due to protocol version mismatch or failed authorization. The server responds back with an <strong class="error">ERROR</strong> message explaining why
+    the authorization was rejected. The connection remains open.</p>
+
 <h3 class="ws-api-doc">Device enumeration</h3>
 
-<div class="ws-api-doc">
+<p>A client can request a gateway to enumerates all connected devices by sending an <strong>ENUMERATE</strong> message.</p>
+
+<div class="ws-api-doc request">
     <button class="accordion-toggle">ENUMERATE</button>
     <div class="accordion-content" hidden>
-        <p>Triggers a device enumeration on the gateway.<br/>The gateway basically scans every configured and functional device access driver for new devices and devices that have been gone.</p>
+        <p>
+            An <strong>ENUMERATE</strong> message triggers a device enumeration on the gateway.<br/>
+            The gateway basically scans every configured and functional device access driver for new devices and removes devices that do not respond anymore.
+        </p>
         <h6>headers</h6>
         <p><em>No headers</em></p>
         <h6>body</h6>
         <p><em>No body</em></p>
-        <h6>request</h6>
         <pre data-ws-try><code data-ws-preview="ENUMERATE"></code></pre>
-        <h6>responses</h6>
-        <pre><code>ENUMERATED
-device_count:&lt;DEVICE COUNT&gt;
-status:&lt;STATUS&gt;
- </code></pre>
-        <p class="near"><strong>&lt;DEVICE COUNT&gt</strong>: The number of devices that are present on all device access drivers.</p>
-        <p class="near"><strong>&lt;STATUS&gt;</strong>: Status of the enumeration operation. <em>Success</em> on success or an appropriate error status.</p>
-        <p class="near"><br/><em>If request was invalid or if not authorized:</em></p>
-        <pre><code>ERROR
-reason:&lt;REASON&gt;
- </code></pre>
-        <p class="near"><strong>&lt;REASON&gt;</strong> is a textual representation of the error occurred. Can be either <em>authorization required</em> or <em>invalid frame</em>.</p>
-        <br/>
     </div>
 </div>
 
-<!--
-<h3 class="ws-api-doc">Discovery</h3>
+<p>If the gateway accepts the request it will respond with a <strong class="response">ENUMERATED</strong> message:</p>
 
-<div class="ws-api-doc">
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">ENUMERATED</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>ENUMERATED</strong> message is send by the gateway as a response to an <strong class="request">ENUMERATE</strong> that was accepted by the gateway. The only reason an
+            <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status of the enumeration operation</strong>. <br/>
+                    <strong>Success</strong> if the enumeration operation was successful, <strong>Error</strong> otherwise.
+                </td>
+            </tr>
+            <tr>
+                <td>device_count</td>
+                <td>number</td>
+                <td><strong>Total count of devices present</strong>. <br/>
+                    The total number of devices present on all device access drivers after the enumeration operation.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>ENUMERATED
+status:Success
+device_count:42
+ </code></pre>
+    </div>
+</div>
+
+<p>Should the <strong>ENUMERATE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+<h3 class="ws-api-doc">Discovery and description</h3>
+
+<p>A client can query the gateway to retrieve the topology or detailed information about devices and properties of the installation by sending the <strong>DESCRIBE</strong> message.</p>
+
+<div class="ws-api-doc request">
     <button class="accordion-toggle">DESCRIBE</button>
     <div class="accordion-content" hidden>
+        <p>
+            The <strong>DESCRIBE</strong> message is send to a gateway to retrieve information about the available devices and their properties. Using the optional <strong>id</strong>
+            header, the client can request information about the whole topology, a particular device access instance, a device or a property. The <strong>flags</strong> header controls the
+            level of detail of the gateway's response.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string<br/><em>(optional)</em></td>
+                <td><strong>ID of the devices access instance, the device or the property</strong>. <br/>
+                    If not present, the description is for the whole gateway, this means everything connected to the gateway.<br/>
+                    If the ID is just a string in the form <strong>&lt;device access ID&gt;</strong>, the gateway returns the description of the given device access instance.<br/>
+                    An ID in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;</strong> will result in the description of the given device.<br/>
+                    If the ID is in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>, the gateway returns the description of a single property.
+                </td>
+                <td>
+                    <input type="text" placeholder="no id" data-ws-header="id"></input>
+                </td>
+            </tr>
+            <tr>
+                <td>flags</td>
+                <td>IncludeAccessInformation|<br/>IncludeAccessDetails|<br/>IncludeDeviceDetails|<br/>IncludeDriverInformation<br/><em>(optional)</em></td>
+                <td><strong>Flags to control description format</strong>. <br/>
+                    A comma-separate list (without spaces) of each of those flags can be passed to control the output format of the description.
+                </td>
+                <td>
+                    <select data-ws-header="flags" multiple>
+                        <option value="IncludeAccessInformation">Include device access information</option>
+                        <option value="IncludeAccessDetails">Include device access details</option>
+                        <option value="IncludeDeviceDetails">Include device details</option>
+                        <option value="IncludeDriverInformation">Include driver information</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="DESCRIBE"></code></pre>
     </div>
 </div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">DESCRIPTION</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">DESCRIPTION</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>DESCRIPTION</strong> message is send by the gateway as a response to an <strong class="request">DESCRIBE</strong> that was accepted by the gateway. The only reason an
+            <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the description could be successfully generated, <strong>NoDeviceAccess</strong> if the device access does not exist, <strong>NoDevice</strong> if
+                    the device does not exist, <strong>NoProperty</strong> if the queried property does not exist or <strong>Error</strong> for all other errors. Note that if a user has no access to
+                    a property due to it's access level, the property is considered to not exist.
+
+                </td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string<br><em>(optional)</em></td>
+                <td><strong>ID of the description's element</strong>. <br/>
+                    Copy of he header <strong>id</strong> of the <strong class="request">DESCRIBE</strong> message for which this is the response from the gateway. If the header was not set on the
+                    message send to the gateway, it will not be set here either.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p>The body of the <strong>DESCRIPTION</strong> message is a JSON representation of the requested entity (device access instance, device or property).</p>
+        <!-- TODO: JSON schema -->
+        <pre><code>DESCRIPTION
+status:Success
+id:A303
+
+{
+  "devices": [
+    {
+      "id": "11",
+      "model": "Xtender XTS"
+    },
+    {
+      "id": "10",
+      "model": "Xtender multicast"
+    },
+    {
+      "id": "21",
+      "model": "VarioTrack VT-65"
+    },
+    {
+      "id": "20",
+      "model": "VarioTrack multicast"
+    },
+    {
+      "id": "61",
+      "model": "BSP"
+    }
+  ],
+  "id": "A303",
+  "parameters": {
+    "baudRate": 115200,
+    "deviceOffset": 0,
+    "port": "/dev/ttyUSB0"
+  }
+}</code></pre>
+    </div>
+</div>
+
+<p>Should the <strong>DESCRIBE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
 <h3 class="ws-api-doc">Property access</h3>
 
-<div class="ws-api-doc">
+<p>A client can query the actual value of any property by sending the <strong class="request">READ PROPERTY</strong> message.</p>
+
+<div class="ws-api-doc request">
     <button class="accordion-toggle">READ PROPERTY</button>
     <div class="accordion-content" hidden>
+        <p>
+            The <strong>READ PROPERTY</strong> message is send to a gateway to retrieve the actual value of a given property. The property is identified by the <strong>id</strong> header.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    The ID of the property to read in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="READ PROPERTY"></code></pre>
     </div>
 </div>
 
-<div class="ws-api-doc">
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY READ</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTY READ</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTY READ</strong> message is send by the gateway as a response to an <strong class="request">READ PROPERTY</strong> that was accepted by the gateway. The only reason an
+            <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the property could be successfully read, <strong>NoDeviceAccess</strong> if the device access instance does not exist, <strong>NoDevice</strong> if the
+                    device does not exist and <strong>NoProperty</strong> if the property does not exists. For all other errors, the general status <strong>Error</strong> is set.
+
+                </td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">READ PROPERTY</strong> message.
+                </td>
+            </tr>
+            <tr>
+                <td>value</td>
+                <td>number or string<br/><em>(optional)</em></td>
+                <td><strong>Value of the property</strong>. <br/>
+                    Actual value of the property. Only present if status is <strong>Success</strong>.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>PROPERTY READ
+status:Success
+id:A303.11.3023
+value:0.1575
+ </code></pre>
+    </div>
+</div>
+
+<p>Should the <strong>READ PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+<p>A client can ask the gateway to write to a property by sending the <strong class="request">WRITE PROPERTY</strong> message.</p>
+
+<div class="ws-api-doc request">
     <button class="accordion-toggle">WRITE PROPERTY</button>
     <div class="accordion-content" hidden>
+        <p>
+            The <strong>WRITE PROPERTY</strong> message is send to a gateway to change the actual value of a given property. The property is identified by the <strong>id</strong> header and the new
+            value is passed by the <strong>value</strong> header.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    The ID of the property to read in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
+                </td>
+            </tr>
+            <tr>
+                <td>value</td>
+                <td>number of string<br/><em>(optional)</em></td>
+                <td><strong>New value for the property</strong>. <br/>
+                    The value to set for the property. This header is optional as it is possible to write to properties with the data type "Signal" where there is no actual value written, the write
+                    operation rather triggers an action on the device (or bus).
+                </td>
+                <td>
+                    <input type="text" placeholder="no value" data-ws-header="value"/>
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="WRITE PROPERTY"></code></pre>
     </div>
 </div>
 
-<div class="ws-api-doc">
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY WRITTEN</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTY WRITTEN</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTY WRITTEN</strong> message is send by the gateway as a response to an <strong class="request">WRITE PROPERTY</strong> that was accepted by the gateway. The only reason
+            an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the property could be written to, <strong>NoDeviceAccess</strong> if the device access instance does not exist, <strong>NoDevice</strong> if the
+                    device does not exist and <strong>NoProperty</strong> if the property does not exists. For all other errors, the general status <strong>Error</strong> is set.
+                </td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">WRITE PROPERTY</strong> message.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>PROPERTY WRITTEN
+status:Success
+id:A303.11.1415
+ </code></pre>
+    </div>
+</div>
+
+<p>Should the <strong>WRITE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+<p>A client can subscribe to a property for changes by sending the <strong class="request">SUBSCRIBE PROPERTY</strong> message.</p>
+
+<div class="ws-api-doc request">
     <button class="accordion-toggle">SUBSCRIBE PROPERTY</button>
     <div class="accordion-content" hidden>
+        <p>
+            The <strong>SUBSCRIBE PROPERTY</strong> message is send to a gateway to subscribe to a property and receive indications whenever the property has changed. The property is identified by
+            the <strong>id</strong> header.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    The ID of the property to subscribe to in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="SUBSCRIBE PROPERTY"></code></pre>
     </div>
 </div>
 
-<div class="ws-api-doc">
-    <button class="accordion-toggle">UNSUBSCRIBE PROPERTY</button>
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY SUBSCRIBED</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTY SUBSCRIBED</button>
     <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTY SUBSCRIBED</strong> message is send by the gateway as a response to an <strong class="request">SUBSCRIBE PROPERTY</strong> that was accepted by the gateway. The only
+            reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the subscription could be added, <strong>NoProperty</strong> if the property does not exists.
+                    For any other error, the general status <strong>Error</strong> is set.
+                </td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">SUBSCRIBE PROPERTY</strong> message.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>PROPERTY SUBSCRIBED
+status:Success
+id:A303.11.3023
+ </code></pre>
     </div>
 </div>
--->
+
+<p>Should the <strong>SUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+<p>For all property subscriptions of a given client, the gateway sends a <strong class="request">PROPERTY UPDATE</strong> message when the property has changed.</p>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">PROPERTY UPDATE</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTY UPDATE</strong> message is send by the gateway to a client whenever a property the client has subscribed to has changed (or read). The property is identified by
+            the <strong>id</strong> header and the value is in the <strong>value</strong> header.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    The ID of the property that has changed (or was read) in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                </td>
+
+            </tr>
+            <tr>
+                <td>value</td>
+                <td>number of string</td>
+                <td><strong>Property value</strong>. <br/>
+                    The new value of the property.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>PROPERTY UPDATE
+id:A303.11.3023
+value:0
+ </code></pre>
+    </div>
+</div>
+
+<p>A client can unsubscribe to a property for changes by sending the <strong class="request">UNSUBSCRIBE PROPERTY</strong> message.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">UNSUBSCRIBE PROPERTY</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>UNSUBSCRIBE PROPERTY</strong> message is send to a gateway to remove a subscription to a property. The property is identified by the <strong>id</strong> header.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    The ID of the property to unsubscribe from in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="UNSUBSCRIBE PROPERTY"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY UNSUBSCRIBED</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTY UNSUBSCRIBED</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTY UNSUBSCRIBED</strong> message is send by the gateway as a response to an <strong class="request">UNSUBSCRIBE PROPERTY</strong> that was accepted by the gateway. The
+            only reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the subscription could be removed, <strong>NoProperty</strong> if the property does not exists.
+                    For any other error as for example there is no subscription present, the general status <strong>Error</strong> is set.
+                </td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">UNSUBSCRIBE PROPERTY</strong> message.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>PROPERTY UNSUBSCRIBED
+status:Success
+id:A303.11.3023
+ </code></pre>
+    </div>
+</div>
+
+<p>Should the <strong>UNSUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+<h3 class="ws-api-doc">Device messages</h3>
+
+<p>Devices can publish broadcast messages and the gateway will forwards those messages to all connected clients using the <strong class="indication">DEVICE MESSAGE</strong> message.</p>
+
+<div class="ws-api-doc">
+    <button class="accordion-toggle">DEVICE MESSAGE</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>DEVICE MESSAGE</strong> message is send by the gateway to all connected clients whenever a device has broadcast a message.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>access_id</td>
+                <td>string</td>
+                <td><strong>ID of the device access instance that received the message</strong>.
+                </td>
+
+            </tr>
+            <tr>
+                <td>device_id</td>
+                <td>string</td>
+                <td><strong>ID of the device that send the message</strong>.
+                </td>
+            </tr>
+            <tr>
+                <td>message_id</td>
+                <td>number</td>
+                <td><strong>ID of the message</strong>.
+                </td>
+            </tr>
+            <tr>
+                <td>message</td>
+                <td>string</td>
+                <td><strong>Textual representation of the message</strong>.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>DEVICE MESSAGE
+access_id:A303
+device_id:11
+message_id:210
+message:AUX2 relay deactivation
+ </code></pre>
+    </div>
+</div>
+
+<h3 class="ws-api-doc">Error</h3>
+
+If a client sends a malformed message to the gateway or the gateway is in an invalid state (mostly because of missing authorization), the gateway sends an <strong class="error">Error</strong>
+message to the client.
+
+<div class="ws-api-doc error">
+    <button class="accordion-toggle">ERROR</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>Error</strong> message is send from the gateway to the client as a response to an invalid message or when the gateway <received></received> a message in the wrong state.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>reason</td>
+                <td>string</td>
+                <td><strong>Reason for the error.</strong>. <br/>
+                    Textual representation of the error.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre><code>ERROR
+reason:authorization required
+ </code></pre>
+    </div>
+</div>
+
+<h2>EBNF</h2>
+
+The grammar of the different messages can be download from here: <a href="bnf/websocket-api-grammar.bnf">websocket-api-grammar.bnf</a>.
 
 <div style="height:60vh"></div>
