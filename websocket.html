@@ -148,12 +148,15 @@
         padding: 20px;
         background: var(--textColor);
     }
+
     div.ws-api-doc.request pre {
         background: var(--accent);
     }
+
     div.ws-api-doc.response pre {
         background: var(--secondary);
     }
+
     div.ws-api-doc.error pre {
         background: var(--warn);
     }
@@ -165,11 +168,12 @@
         margin: 0;
         padding: 0;
     }
+
     div.ws-api-doc.request code {
         font-size: 15px;
     }
 
-    div.ws-api-doc.request strong {
+    .request strong {
         color: var(--accent);
     }
 
@@ -177,7 +181,7 @@
         color: var(--accent) !important;
     }
 
-    div.ws-api-doc.response strong {
+    .response strong {
         color: var(--secondary);
     }
 
@@ -189,16 +193,47 @@
         color: var(--textColor);
     }
 
-    strong.indication {
+    strong.indication,
+    .indication strong {
         color: var(--textColor);
     }
 
-    div.ws-api-doc.error strong {
+    .error strong {
         color: var(--warn);
     }
 
     strong.error {
         color: var(--warn) !important;
+    }
+
+    span.circle {
+        color: var(--textColor);
+        border: 3px solid var(--textColor);
+        border-radius: 50%;
+        font-weight: bold;
+    }
+
+    span.circle.request,
+    .request span.circle {
+        color: var(--accent);
+        border-color: var(--accent);
+    }
+
+    span.circle.response,
+    .response span.circle {
+        color: var(--secondary);
+        border-color: var(--secondary);
+    }
+
+    span.circle.error,
+    .error span.circle {
+        color: var(--warn);
+        border-color: var(--warn);
+    }
+
+    p.center {
+        width: 100%;
+        text-align: center;
     }
 </style>
 
@@ -233,6 +268,47 @@ body
 <p>
     All commands and header names referenced in this document are <strong>case sensitive</strong>.
 </p>
+
+<h2>Behavior</h2>
+
+<p>The communication between the client and the gateway has <strong>two principal phases</strong>:</p>
+
+<img src="images/WebSocket-State01.svg"/>
+
+<h4>Unauthorized phase</h4>
+
+<p>As soon as client has established the WebSocket connection to the gateway, the connection is in the <strong>Unauthorized</strong> phase. In this phase, the gateway rejects all messages except
+    <strong>AUTHORIZE</strong> requests from the client. This phase is only left after the client has send an <strong>AUTHORIZE</strong> request to the gateway and the gateway granted access or the
+    WebSocket connection has been closed by either the client or the gateway. The gateway can close the WebSocket connection after one or more refused authorize attempts.</p>
+
+<img src="images/WebSocket-Sequence01.svg"/>
+
+<h4>Authorized phase</h4>
+
+<p>If the gateway has granted access to the client, the connection enters the <strong>Authorized</strong> phase and remains there until either of the two communication peers close the
+    connection. In this phase the client can send any request (except the AUTHORIZE request of course) at any time and the gateway responds accordingly. Additionally the gateway can send indication
+    messages at any time.</p>
+<p>The following sequence diagram shows a typical conversation between a client and the gateway in during the authorized phase:</p>
+
+<img src="images/WebSocket-Sequence02.svg"/>
+
+<p class="center request">The client sends a <strong>ENUMERATE</strong> <span class="circle">&nbsp;1&nbsp;</span> request message to the gateway. The gateway will initiate the enumeration operation.</p>
+<p class="center response">Once the enumeration operation has completed, the gateway responds with an <strong>ENUMERATED</strong> <span class="circle">&nbsp;2&nbsp;</span> message.</p>
+<p class="center request">The client sends a <strong>DESCRIBE</strong> <span class="circle">&nbsp;3&nbsp;</span> request message to the gateway. The gateway will generate a JSON representation of the
+    requested entity.</p>
+<p class="center response">The gateway responds with an <strong>DESCRIPTION</strong> <span class="circle">&nbsp;4&nbsp;</span> message which contains the description.</p>
+<p class="center request">The client subscribes now to the properties he is interested in using <strong>SUBSCRIBE PROPERTY</strong> <span class="circle">&nbsp;5&nbsp;</span> messages.
+    For simplicity the client in the sequence diagram only subscribes to one singe property.</p>
+<p class="center response">For each property subscribe request, the gateway responds with a <strong>PROPERTY SUBSCRIBED</strong> <span class="circle">&nbsp;6&nbsp;</span> message.</p>
+<p class="center indication">Every time the subscribed property changes, the gateway sends a <strong>PROPERTY UPDATE</strong> <span class="circle">&nbsp;7&nbsp;</span>,
+    <span class="circle">&nbsp;9&nbsp;</span>, <span class="circle">&nbsp;C&nbsp;</span>, <span class="circle">&nbsp;D&nbsp;</span> message to the client.</p>
+<p class="center indication">In the case a device connected to the gateway publishes a message, the message will be forwarded to all connected clients (authorized) using the <strong>DEVICE MESSAGE</strong>
+    <span class="circle">&nbsp;8&nbsp;</span> message.</p>
+<p class="center request">If a client wants to change the value of a property, he has to send a <strong>WRITE PROPERTY</strong> <span class="circle">&nbsp;A&nbsp;</span> message to tge gateway.</p>
+<p class="center response">The gateway responds to the property write request using the <strong>PROPERTY WRITTEN</strong> <span class="circle">&nbsp;B&nbsp;</span> message.</p>
+<p class="center request">The client sends an <strong>UNSUBSCRIBE PROPERTY</strong> <span class="circle">&nbsp;E&nbsp;</span> message to the gateway to stop periodic updates for the given property.</p>
+<p class="center response">The gateway acknowledges the unsubscribe request by sending a <strong>PROPERTY UNSUBSCRIBED</strong> <span class="circle">&nbsp;F&nbsp;</span> message back to the client.</p>
+<p class="center ">The client can disconnect from the gateway at any time.</p>
 
 <h2>Messages</h2>
 
@@ -992,7 +1068,9 @@ message to the client.
     <button class="accordion-toggle">ERROR</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>Error</strong> message is send from the gateway to the client as a response to an invalid message or when the gateway <received></received> a message in the wrong state.
+            The <strong>Error</strong> message is send from the gateway to the client as a response to an invalid message or when the gateway
+            <received></received>
+            a message in the wrong state.
         </p>
         <h6>headers</h6>
         <table>
@@ -1017,7 +1095,7 @@ reason:authorization required
     </div>
 </div>
 
-<h2>EBNF</h2>
+<h2>EBNF Grammar</h2>
 
 The grammar of the different messages can be download from here: <a href="bnf/websocket-api-grammar.bnf">websocket-api-grammar.bnf</a>.
 

@@ -98,8 +98,11 @@ body {
 img {
 	max-width: 100%;
 	display: block;
-		margin-left: auto;
-		margin-right: auto;
+	margin: 64px auto;
+}
+
+h1.app-name img {
+	margin: 0 auto;
 }
 
 a[disabled] {
