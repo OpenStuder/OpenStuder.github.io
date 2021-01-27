@@ -59,24 +59,16 @@ var SIWebSocketTestConnection = /** @class */ (function () {
         };
         this.onWebSocketMessage = function (messageEvent) {
             var entry = document.createElement('li');
-            if (messageEvent.data.startsWith('ERROR\n')) {
+            if (messageEvent.data.indexOf('ERROR\n') == 0) {
                 entry.className = 'error';
             }
-            else if (messageEvent.data.includes('status:')) {
-                if (messageEvent.data.includes('status:Success\n')) {
-                    entry.className = 'response';
-                }
-                else {
-                    entry.className = 'error';
-                }
-            }
-            else if (messageEvent.data.startsWith('PROPERTY UPDATE\n') || messageEvent.data.startsWith('DEVICE MESSAGE\n')) {
+            else if (messageEvent.data.indexOf('PROPERTY UPDATE\n') == 0 || messageEvent.data.indexOf('DEVICE MESSAGE\n') == 0) {
                 entry.className = '';
             }
             else {
                 entry.className = 'response';
             }
-            if (messageEvent.data.startsWith('DESCRIPTION\n')) {
+            if (messageEvent.data.indexOf('DESCRIPTION\n') == 0) {
                 var parts = messageEvent.data.split('\n\n');
                 if (parts.length == 2 && parts[1]) {
                     entry.innerText = parts[0] + '\n\n';
@@ -93,6 +85,11 @@ var SIWebSocketTestConnection = /** @class */ (function () {
             _this.log_.insertAdjacentElement('beforeend', entry);
             if (_this.followLogCheckbox_.checked) {
                 _this.log_.scrollTop = _this.log_.scrollHeight;
+            }
+            var command = messageEvent.data.split('\n')[0];
+            var exampleMessage = document.querySelector('[data-ws-example="' + command + '"]');
+            if (exampleMessage) {
+                exampleMessage.firstElementChild.innerHTML = '<code>' + messageEvent.data + '</code>';
             }
         };
         this.onWebSocketError = function (_errorEvent) { };
@@ -232,7 +229,6 @@ function docsifyPlugin(hook, vm) {
                         if (headerElement.tagName.toLowerCase() == 'input') {
                             var element = headerElement;
                             var value = element.value;
-                            console.log(element.dataset);
                             if (value || 'wsRequired' in element.dataset) {
                                 msg += headerElement.dataset.wsHeader + ':' + value + '\n';
                             }
