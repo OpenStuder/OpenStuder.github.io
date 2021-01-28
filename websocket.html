@@ -382,13 +382,13 @@ body
                 <td><input type="text" placeholder="no password" data-ws-header="password"></input></td>
             </tr>
             <tr>
-                <td>version</td>
+                <td>protocol_version</td>
                 <td>number<br/><em>(optional)</em></td>
                 <td><strong>Version of the protocol requested by the client</strong>. <br/>
                     If not provided, the protocol version is determined by the gateway.
                 </td>
                 <td>
-                    <select data-ws-header="version">
+                    <select data-ws-header="protocol_version">
                         <option value="">no version</option>
                         <option value="1">Version 1</option>
                     </select></td>
@@ -424,7 +424,7 @@ body
                 </td>
             </tr>
             <tr>
-                <td>version</td>
+                <td>protocol_version</td>
                 <td>number</td>
                 <td><strong>Protocol version</strong>. <br/>
                     Protocol version used on the gateway's side. Currently only version 1 is supported.
@@ -435,7 +435,7 @@ body
         <p><em>No body</em></p>
         <pre data-ws-example="AUTHORIZED"><code>AUTHORIZED
 access_level:Basic
-version:1
+protocol_version:1
  </code></pre>
     </div>
 </div>
