@@ -842,7 +842,7 @@ body {
 
 .markdown-section code {
 	border-radius: 2px;
-    color: var(--highlightColor);
+    color: var(--codeTextColor);
     font-size: .9rem;
     margin: 0 2px;
     padding: 3px 5px;
@@ -857,7 +857,7 @@ body {
 }
 
 .markdown-section pre {
-	border-color: hsla(0, 0%, 100%, 0.25);
+	border-color: hsla(211, 25%, 50%, 0.4);
 	border-style: groove;
 	border-width: 1px;
 	border-radius: 8px;
