@@ -761,7 +761,7 @@ body {
 .markdown-section h3,
 .markdown-section h4,
 .markdown-section strong {
-	color: var(--accent);
+	color: var(--textColor);
 	font-weight: 600
 }
 

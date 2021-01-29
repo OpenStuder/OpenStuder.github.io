@@ -3,4 +3,4 @@
 # Monitor and control your Studer Innotec devices using Open-Source software.
 
 [Studer Innotec Website](https://www.studer-innotec.com)
-[Documentation](README.md)
+[Documentation](#quick-start)

@@ -1,10 +1,10 @@
 - Introduction
-    - [Quick start](README.md)
-    - [Gateway](gateway.md)
+    - [Quick start](README.md#main)
+    - [Gateway](gateway.md#main)
 <!--    - [Drivers](drivers.md) -->
 <!--    - [Clients](clients.md) -->
   
 - Developer
 <!--    - [Client libraries](clientlibs.md) -->
-    - [WebSocket protocol](websocket.html)
+    - [WebSocket protocol](websocket.md#main)
 <!--    - [Driver development](driverdev.md)-->

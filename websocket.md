@@ -1,9 +1,5 @@
 <!--suppress CssUnresolvedCustomProperty -->
 <style>
-    h3.ws-api-doc {
-        color: var(--textColor);
-    }
-
     div.ws-api-doc {
         margin: 24px 0;
         width: 100%;
@@ -189,10 +185,6 @@
         color: var(--secondary) !important;
     }
 
-    div.ws-api-doc strong {
-        color: var(--textColor);
-    }
-
     strong.indication,
     .indication strong {
         color: var(--textColor);
@@ -237,7 +229,7 @@
     }
 </style>
 
-<h2>Introduction</h2>
+## Introduction
 
 <p>
     The OpenStuder WebSocket protocol is a message (frame) based protocol, with messages modelled on HTTP. A message consists of a command, a set of optional headers and an optional body and is text
@@ -247,7 +239,7 @@
     The main goals driving the design were simplicity and interoperability. It was designed to be a lightweight protocol that is easy to implement on the client side in a wide range of languages.
 </p>
 
-<h2>Message format</h2>
+## Message format
 
 <p>
     The client and server will communicate using messages sent over the WebSocket. A message's structure looks like:
@@ -269,13 +261,13 @@ body
     All commands and header names referenced in this document are <strong>case sensitive</strong>.
 </p>
 
-<h2>Behavior</h2>
+## Behavior
 
 <p>The communication between the client and the gateway has <strong>two principal phases</strong>:</p>
 
 <img src="images/WebSocket-State01.svg"/>
 
-<h4>Unauthorized phase</h4>
+#### Unauthorized phase
 
 <p>As soon as client has established the WebSocket connection to the gateway, the connection is in the <strong>Unauthorized</strong> phase. In this phase, the gateway rejects all messages except
     <strong>AUTHORIZE</strong> requests from the client. This phase is only left after the client has send an <strong>AUTHORIZE</strong> request to the gateway and the gateway granted access or the
@@ -283,7 +275,7 @@ body
 
 <img src="images/WebSocket-Sequence01.svg"/>
 
-<h4>Authorized phase</h4>
+#### Authorized phase
 
 <p>If the gateway has granted access to the client, the connection enters the <strong>Authorized</strong> phase and remains there until either of the two communication peers close the
     connection. In this phase the client can send any request (except the AUTHORIZE request of course) at any time and the gateway responds accordingly. Additionally the gateway can send indication
@@ -310,7 +302,7 @@ body
 <p class="center response">The gateway acknowledges the unsubscribe request by sending a <strong>PROPERTY UNSUBSCRIBED</strong> <span class="circle">&nbsp;F&nbsp;</span> message back to the client.</p>
 <p class="center ">The client can disconnect from the gateway at any time.</p>
 
-<h2>Messages</h2>
+## Messages
 
 <p>
     All messages that can be exchanged with the OpenStuder gateway WebSocket API are defined in the following sections.
@@ -333,7 +325,7 @@ body
     </p>
 </div>
 
-<h3 class="ws-api-doc">User authorization</h3>
+### User authorization
 
 <p>A client initiates the connection to the gateway by sending the <strong>AUTHORIZE</strong> message:</p>
 
@@ -443,7 +435,7 @@ protocol_version:1
 <p>The gateway can reject any connection attempt due to protocol version mismatch or failed authorization. The server responds back with an <strong class="error">ERROR</strong> message explaining why
     the authorization was rejected. The connection remains open.</p>
 
-<h3 class="ws-api-doc">Device enumeration</h3>
+### Device enumeration
 
 <p>A client can request a gateway to enumerates all connected devices by sending an <strong>ENUMERATE</strong> message.</p>
 
@@ -504,7 +496,7 @@ device_count:42
 
 <p>Should the <strong>ENUMERATE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
-<h3 class="ws-api-doc">Discovery and description</h3>
+### Discovery and description
 
 <p>A client can query the gateway to retrieve the topology or detailed information about devices and properties of the installation by sending the <strong>DESCRIBE</strong> message.</p>
 
@@ -534,7 +526,7 @@ device_count:42
                     If the ID is in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>, the gateway returns the description of a single property.
                 </td>
                 <td>
-                    <input type="text" placeholder="no id" data-ws-header="id"></input>
+                    <input type="text" placeholder="no id" data-ws-header="id"/>
                 </td>
             </tr>
             <tr>
@@ -582,7 +574,6 @@ device_count:42
                     <strong>Success</strong> if the description could be successfully generated, <strong>NoDeviceAccess</strong> if the device access does not exist, <strong>NoDevice</strong> if
                     the device does not exist, <strong>NoProperty</strong> if the queried property does not exist or <strong>Error</strong> for all other errors. Note that if a user has no access to
                     a property due to it's access level, the property is considered to not exist.
-
                 </td>
             </tr>
             <tr>
@@ -599,44 +590,35 @@ device_count:42
         <!-- TODO: JSON schema -->
         <pre data-ws-example="DESCRIPTION"><code>DESCRIPTION
 status:Success
-id:A303
-
+&nbsp;
 {
-  "devices": [
+  "instances": [
     {
-      "id": "11",
-      "model": "Xtender XTS"
-    },
-    {
-      "id": "10",
-      "model": "Xtender multicast"
-    },
-    {
-      "id": "21",
-      "model": "VarioTrack VT-65"
-    },
-    {
-      "id": "20",
-      "model": "VarioTrack multicast"
-    },
-    {
-      "id": "61",
-      "model": "BSP"
+      "devices": [
+        {
+          "id": "inv",
+          "model": "Demo inverter"
+        },
+        {
+          "id": "sol",
+          "model": "Demo MPPT"
+        },
+        {
+          "id": "bat",
+          "model": "Demo BSP"
+        }
+      ],
+      "driver": "Demo",
+      "id": "demo"
     }
-  ],
-  "id": "A303",
-  "parameters": {
-    "baudRate": 115200,
-    "deviceOffset": 0,
-    "port": "/dev/ttyUSB0"
-  }
+  ]
 }</code></pre>
     </div>
 </div>
 
 <p>Should the <strong>DESCRIBE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
-<h3 class="ws-api-doc">Property access</h3>
+### Read property
 
 <p>A client can query the actual value of any property by sending the <strong class="request">READ PROPERTY</strong> message.</p>
 
@@ -693,7 +675,6 @@ id:A303
                 <td><strong>Status</strong>. <br/>
                     <strong>Success</strong> if the property could be successfully read, <strong>NoDeviceAccess</strong> if the device access instance does not exist, <strong>NoDevice</strong> if the
                     device does not exist and <strong>NoProperty</strong> if the property does not exists. For all other errors, the general status <strong>Error</strong> is set.
-
                 </td>
             </tr>
             <tr>
@@ -722,6 +703,8 @@ value:0.1575
 </div>
 
 <p>Should the <strong>READ PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+### Write property
 
 <p>A client can ask the gateway to write to a property by sending the <strong class="request">WRITE PROPERTY</strong> message.</p>
 
@@ -810,6 +793,8 @@ id:A303.11.1415
 </div>
 
 <p>Should the <strong>WRITE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+### Subscribe to property
 
 <p>A client can subscribe to a property for changes by sending the <strong class="request">SUBSCRIBE PROPERTY</strong> message.</p>
 
@@ -910,7 +895,6 @@ id:A303.11.3023
                 <td><strong>ID of the property</strong>. <br/>
                     The ID of the property that has changed (or was read) in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
                 </td>
-
             </tr>
             <tr>
                 <td>value</td>
@@ -1005,7 +989,7 @@ id:A303.11.3023
 
 <p>Should the <strong>UNSUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
-<h3 class="ws-api-doc">Device messages</h3>
+### Device messages
 
 <p>Devices can publish broadcast messages and the gateway will forwards those messages to all connected clients using the <strong class="indication">DEVICE MESSAGE</strong> message.</p>
 
@@ -1027,7 +1011,6 @@ id:A303.11.3023
                 <td>string</td>
                 <td><strong>ID of the device access instance that received the message</strong>.
                 </td>
-
             </tr>
             <tr>
                 <td>device_id</td>
@@ -1059,7 +1042,7 @@ message:AUX2 relay deactivation
     </div>
 </div>
 
-<h3 class="ws-api-doc">Error</h3>
+### Error
 
 If a client sends a malformed message to the gateway or the gateway is in an invalid state (mostly because of missing authorization), the gateway sends an <strong class="error">Error</strong>
 message to the client.
@@ -1095,8 +1078,8 @@ reason:authorization required
     </div>
 </div>
 
-<h2>EBNF Grammar</h2>
+## EBNF Grammar
 
-The grammar of the different messages can be download from here: <a href="bnf/websocket-api-grammar.bnf">websocket-api-grammar.bnf</a>.
+The grammar of the different messages can be downloaded from here: <a href="bnf/websocket-api-grammar.bnf">websocket-api-grammar.bnf</a>.
 
 <div style="height:60vh"></div>

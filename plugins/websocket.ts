@@ -197,6 +197,10 @@ const websocketTestHtml = `
 		border-radius: 8px;
 		margin-left: 20%;
 		background: var(--textBackground);
+		-webkit-user-select: auto;
+		-moz-user-select: auto;
+		-ms-user-select: auto;
+		user-select: auto;
 	}
 	
 	#websocket ul.log li.request {
