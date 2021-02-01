@@ -47,12 +47,13 @@ converters and devices might will be added in a future release of the software.
 
 #### Storage driver
 
-> TODO
+A **storage driver** is responsible to store and retrieve property log data and device messages. Depending on the used storage driver, the data can be saved just to memory, persisted to the local 
+filesystem (or any mass storage drive), or the data can be saved and retrieved to/from a remote database server.
 
 #### Authorize driver
 
-> [!ATTENTION]
-> This functionality is not implemented yet.
+If user authorization is enabled, an **authorize driver** returns an access level based on the user credentials that were provided in the **AUTHORIZE** message when a client connects to the gateway.
+The gateway has a build-in implementation that authorizes against a user text file located in the configuration folder that can be modified using the `sigwctl` command.
 
 ## Installation
 
@@ -66,7 +67,7 @@ The configuration of the gateway is divided in two separate configuration files:
 - `/etc/openstuder/sigatewayd.conf`: This file contains the general configuration of the gateway daemon itself.
 - `/etc/openstuder/drivers.conf`: This file lists the device access drivers to instantiate and their configuration.
 
-If security is enabled, a third file `/etc/openstuder/users.txt` contains the list of users along with their password hashes and configured access level. You will have to use the `sigwctl user` CLI 
+If security is enabled, another file `/etc/openstuder/users.txt` contains the list of users along with their password hashes and configured access level. You will have to use the `sigwctl user` CLI 
 command to add, list, modify and delete user accounts in that file. 
 
 ### Gateway configuration `/etc/openstuder/sigatewayd.conf`
@@ -224,20 +225,37 @@ See the respective authorize driver documentation for supported configuration pa
 
 ```ini
 [Authorize]
-required = true
+enabled = true
 driver = Internal
 guestAccessLevel = Expert
 ```
 
+In this example configuration, authorization is enabled and users are authorized using the `users.txt` text file in the configuration folder. If a client connects as guest, it will have `Expert`
+access level.
 
 
 ### Device access driver configuration `/etc/openstuder/drivers.conf`
 
-> TODO
+Each section in this file configures one **access driver**. This enables the gateway to connect to multiple Studer Innotec installations at the same time. The section name is the identifier that
+will be attributed to the device access instance. The only parameter which is required for all device access sections is `drive` which identifies the name of the driver to be loaded. All other 
+parameters depend the actual driver and you need to consult the documentation of each driver for a list of supported parameters.
 
 #### Example
 
-> TODO
+```ini
+[zone0]
+driver = XCom485i
+port = /dev/ttyUSB0
+baudRate = 115200
+
+[zone1]
+driver = XCom485i
+port = /dev/ttyUSB1
+baudRate =57600
+```
+
+This example configuration instantiates two device access drivers, the first one called *zone0* with the driver *XCom485i* and a second one called *zone1* using the same driver. The respective 
+parameters *port* and *baudRate* are forwarded to the drivers.
 
 ## Start and stop daemon
 
