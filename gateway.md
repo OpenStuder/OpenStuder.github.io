@@ -259,7 +259,35 @@ parameters *port* and *baudRate* are forwarded to the drivers.
 
 ## Start and stop daemon
 
-> TODO
+The **Open Studer gateway daemon** is installed as a [systemd](https://www.freedesktop.org/wiki/Software/systemd/) service unit and you can use the standard commands to start and stop the daemon or
+check the status or log output.
+
+A typical use case is to stop the daemon, modify it's configuration and then start the daemon again.
+
+#### start
+
+```
+> sudo systemctl start sigatewayd
+```
+
+#### stop
+
+```
+> sudo systemctl stop sigatewayd
+```
+
+#### status
+
+```
+> sudo systemctl status sigatewayd
+```
+
+#### log output
+
+```
+> sudo journalctl -u sigatewayd
+```
+
  
 ## sigwctl
 
