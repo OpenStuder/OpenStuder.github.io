@@ -440,12 +440,12 @@ class SIWebSocketTestConnection {
 	};
 
 	private onTestCopyButtonClicked = (event: MouseEvent) => {
-		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
+		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.querySelector<HTMLElement>('code').innerHTML.split('<br>').join('\n');
 		this.onTxChanged(null);
 	}
 
 	private onTestSendButtonClicked = (event: MouseEvent) => {
-		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
+		this.editTextarea_.value = (event.target as HTMLElement).parentElement.parentElement.querySelector<HTMLElement>('code').innerHTML.split('<br>').join('\n');
 		this.onTxChanged(null);
 		this.onSendButtonClicked(null);
 	}
@@ -537,7 +537,7 @@ class SIWebSocketTestConnection {
 	private io_: HTMLCollectionOf<HTMLDivElement> = null;
 
 	private editTextarea_: HTMLTextAreaElement = null;
-	private editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:[a-z0-9A-Z_.,]+\\n)*\\n$');
+	private editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:[a-z0-9A-Z_.,]*\\n)*\\n$');
 	private sendButton_: HTMLButtonElement = null;
 
 	private log_: HTMLUListElement = null;
@@ -567,17 +567,22 @@ function docsifyPlugin(hook: any, vm: any) {
 							const element = headerElement as HTMLSelectElement;
 							if (element.multiple) {
 								const options = element.options;
+								let forceFlags = false;
 								let flags = '';
 								for (let i = 0; i < options.length; ++i) {
 									if (options[i].selected) {
-										flags += options[i].value + ',';
+										if (options[i].value != '__EMPTY__') {
+											flags += options[i].value + ',';
+										} else {
+											forceFlags = true;
+										}
 									}
 								}
 								if (flags[flags.length - 1] == ',') {
 									flags = flags.slice(0, flags.length - 1);
 								}
-								if (flags || 'wsRequired' in element.dataset) {
-									msg += headerElement.dataset.wsHeader + ':' + flags;
+								if (flags || forceFlags || 'wsRequired' in element.dataset) {
+									msg += headerElement.dataset.wsHeader + ':' + flags + '\n';
 								}
 							} else {
 								const value = element.value;

@@ -734,6 +734,19 @@ value:0.1575
                 </td>
             </tr>
             <tr>
+                <td>flags</td>
+                <td>Permanent<br/><em>(optional)</em></td>
+                <td><strong>Write flags</strong>.<br/>
+                    If the <strong>Permanent</strong> flag is set, the value is written to the non-volatile memory of the device. If not present, it defaults to <strong>Permanent</strong>.
+                </td>
+                <td>
+                    <select data-ws-header="flags" multiple>
+                        <option value="__EMPTY__">Send flags</option>
+                        <option value="Permanent">Permanent</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td>value</td>
                 <td>number of string<br/><em>(optional)</em></td>
                 <td><strong>New value for the property</strong>. <br/>

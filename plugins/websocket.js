@@ -41,11 +41,11 @@ var SIWebSocketTestConnection = /** @class */ (function () {
             _this.sendButton_.disabled = !_this.editVerifyRegex_.test(_this.editTextarea_.value);
         };
         this.onTestCopyButtonClicked = function (event) {
-            _this.editTextarea_.value = event.target.parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
+            _this.editTextarea_.value = event.target.parentElement.parentElement.querySelector('code').innerHTML.split('<br>').join('\n');
             _this.onTxChanged(null);
         };
         this.onTestSendButtonClicked = function (event) {
-            _this.editTextarea_.value = event.target.parentElement.parentElement.firstElementChild.innerHTML.split('<br>').join('\n');
+            _this.editTextarea_.value = event.target.parentElement.parentElement.querySelector('code').innerHTML.split('<br>').join('\n');
             _this.onTxChanged(null);
             _this.onSendButtonClicked(null);
         };
@@ -115,7 +115,7 @@ var SIWebSocketTestConnection = /** @class */ (function () {
         this.connectButton_ = null;
         this.io_ = null;
         this.editTextarea_ = null;
-        this.editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:[a-z0-9A-Z_.,]+\\n)*\\n$');
+        this.editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:[a-z0-9A-Z_.,]*\\n)*\\n$');
         this.sendButton_ = null;
         this.log_ = null;
         this.clearLogButton_ = null;
@@ -242,17 +242,23 @@ function docsifyPlugin(hook, vm) {
                             var element = headerElement;
                             if (element.multiple) {
                                 var options = element.options;
+                                var forceFlags = false;
                                 var flags = '';
                                 for (var i = 0; i < options.length; ++i) {
                                     if (options[i].selected) {
-                                        flags += options[i].value + ',';
+                                        if (options[i].value != '__EMPTY__') {
+                                            flags += options[i].value + ',';
+                                        }
+                                        else {
+                                            forceFlags = true;
+                                        }
                                     }
                                 }
                                 if (flags[flags.length - 1] == ',') {
                                     flags = flags.slice(0, flags.length - 1);
                                 }
-                                if (flags || 'wsRequired' in element.dataset) {
-                                    msg += headerElement.dataset.wsHeader + ':' + flags;
+                                if (flags || forceFlags || 'wsRequired' in element.dataset) {
+                                    msg += headerElement.dataset.wsHeader + ':' + flags + '\n';
                                 }
                             }
                             else {
