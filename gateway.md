@@ -448,11 +448,26 @@ If you desire to install the gateway software on the very same host it was build
 > sudo cmake --build build --target install
 ```
 
-<!-- #### Create package
+In order to start the gateway, run the following commands:
+
+```
+> sudo systemctl daemon-reload
+> sudo systemctl start sigatewayd
+```
+
+##### Uninstall gateway software
+
+During install, the file **install_manifest.txt** is generated in the build folder. This file lists all installed files, so you can use that file to uninstall the software simply by calling:
+
+```
+> sudo xargs rm < install_manifest.txt
+```
+
+
+#### Create package
 
 You can create a *Debian* package that can be installed on other systems without the need to install all the development dependencies.
 
 ```
 > cmake --build build --target package
 ```
--->
