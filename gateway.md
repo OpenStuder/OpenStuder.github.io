@@ -70,7 +70,7 @@ The configuration of the gateway is divided in two separate configuration files:
 If security is enabled, another file `/etc/openstuder/users.txt` contains the list of users along with their password hashes and configured access level. You will have to use the `sigwctl user` CLI 
 command to add, list, modify and delete user accounts in that file. 
 
-### Gateway configuration `/etc/openstuder/sigatewayd.conf`
+### Gateway configuration `/etc/openstuder/sigateway.conf`
 
 #### Gateway section
 
@@ -201,10 +201,11 @@ The `Internal` authorize driver uses a text file located in the configuration fo
 
 ##### `guestAccessLevel`
 
-If authorization is disabled (`enabled = false`), every connection is considered as a guest connection and thus this access level is granted to every incoming client connection.
+If authorization is disabled (`enabled = false`), every connection is considered as a guest connection and thus this access level is granted to every incoming client connection even if user 
+credentials are provided.
 
 If authorization is enabled (`enabled = true`), this access level is granted to clients which do not provide user credentials (username and password). 
-Set this to 'None' to disallow guest connections.
+Set this to 'None' to disallow guest connections completely.
 
 Valid values are:
 
@@ -262,7 +263,7 @@ parameters *port* and *baudRate* are forwarded to the drivers.
 The **Open Studer gateway daemon** is installed as a [systemd](https://www.freedesktop.org/wiki/Software/systemd/) service unit and you can use the standard commands to start and stop the daemon or
 check the status or log output.
 
-A typical use case is to stop the daemon, modify it's configuration and then start the daemon again.
+A typical use case is to stop the daemon, modify the configuration and then start the daemon again.
 
 #### start
 
@@ -453,6 +454,12 @@ In order to start the gateway, run the following commands:
 ```
 > sudo systemctl daemon-reload
 > sudo systemctl start sigatewayd
+```
+
+If you install the software as described here, it does not automatically start at boot. You can enable the daemon using systemd to be started at boot with the following command:
+
+```
+> sudo systemctl enable sigatewayd
 ```
 
 ##### Uninstall gateway software
