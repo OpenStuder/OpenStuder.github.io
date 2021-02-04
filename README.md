@@ -9,9 +9,9 @@ The OpenStuder gateway is the link from the IT world to a Studer Innotec install
 
 This chapter contains the basic line command to execute in order to create a gateway for a Studer Innotec installation.
 
-For more information about OpenStuder, please refer to the [introduction](http://openstuder.codemonkey.ch/#/gateway?id=main)
+For more information about OpenStuder, please refer to the [introduction](gateway.md#main)
 
-For more details for the installation, please refer to the [Build or develop](http://openstuder.codemonkey.ch/#/gateway?id=build-or-develop) chapter.
+For more details for the installation, please refer to the [Build or develop](gateway.md#build-or-develop) chapter.
 
 ## Installation
 
@@ -91,7 +91,7 @@ You can read/write a file in a console with the text editor nano:
 > sudo nano <file_path>
 ```
 
-For more details, refer to the [Configuration](http://openstuder.codemonkey.ch/#/gateway?id=configuration) chapter.
+For more details, refer to the [Configuration](gateway.md#configuration) chapter.
 
 ## User Management
 
@@ -122,4 +122,4 @@ The following command can be used to manage the users :
 >sudo sigwctl user rm <user>
 ```
 
-Please, refer to [User Management](http://openstuder.codemonkey.ch/#/gateway?id=user-management) for more features.
+Please, refer to [User Management](gateway.md#user-management) for more features.
