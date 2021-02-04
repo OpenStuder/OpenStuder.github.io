@@ -1,7 +1,7 @@
 - Introduction
     - [Quick start](README.md#main)
     - [Gateway](gateway.md#main)
-<!--    - [Drivers](drivers.md) -->
+    - [Drivers](drivers.md)
 <!--    - [Clients](clients.md) -->
   
 - Developer

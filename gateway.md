@@ -42,7 +42,7 @@ The fact that access to devices (or busses), data log storage and authorization 
 #### Device access driver
 
 A device **access driver** abstracts a Studer Innotec installation by communicating with all connected devices using a bus converter. Typically, one or multiple 
-[XCom-485i](https://www.studer-innotec.com/en/accessoires/variotrack-series/communication-module-xcom-485i-7397) bus converters will be used to access installed devices. Support for other bus 
+[Xcom-485i](https://www.studer-innotec.com/en/accessoires/variotrack-series/communication-module-xcom-485i-7397) bus converters will be used to access installed devices. Support for other bus 
 converters and devices might will be added in a future release of the software.
 
 #### Storage driver
@@ -245,17 +245,17 @@ parameters depend the actual driver and you need to consult the documentation of
 
 ```ini
 [zone0]
-driver = XCom485i
+driver = Xcom485i
 port = /dev/ttyUSB0
 baudRate = 115200
 
 [zone1]
-driver = XCom485i
+driver = Xcom485i
 port = /dev/ttyUSB1
 baudRate =57600
 ```
 
-This example configuration instantiates two device access drivers, the first one called *zone0* with the driver *XCom485i* and a second one called *zone1* using the same driver. The respective 
+This example configuration instantiates two device access drivers, the first one called *zone0* with the driver *Xcom485i* and a second one called *zone1* using the same driver. The respective 
 parameters *port* and *baudRate* are forwarded to the drivers.
 
 ## Start and stop daemon
