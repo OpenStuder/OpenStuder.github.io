@@ -129,6 +129,11 @@
         padding: 4px 12px;
     }
 
+    div.ws-api-doc input:invalid {
+        border-color: var(--warn);
+        background-color: var(--warnBackground);
+    }
+
     div.ws-api-doc input[type=number] {
         width: 80px;
     }
@@ -371,7 +376,7 @@ body
                 <td><strong>Password used to authorize</strong>. <br/>
                     If not provided, the connection will be granted guest access level if guest access is enabled on the gateway.
                 </td>
-                <td><input type="text" placeholder="no password" data-ws-header="password"></input></td>
+                <td><input type="password" placeholder="no password" data-ws-header="password"></input></td>
             </tr>
             <tr>
                 <td>protocol_version</td>
@@ -1004,7 +1009,7 @@ id:A303.11.3023
 
 ### Device messages
 
-<p>Devices can publish broadcast messages and the gateway will forwards those messages to all connected clients using the <strong class="indication">DEVICE MESSAGE</strong> message.</p>
+<p>Devices can publish broadcast messages and the gateway will forward those messages to all connected clients using the <strong class="indication">DEVICE MESSAGE</strong> message.</p>
 
 <div class="ws-api-doc">
     <button class="accordion-toggle">DEVICE MESSAGE</button>
@@ -1052,6 +1057,115 @@ device_id:11
 message_id:210
 message:AUX2 relay deactivation
  </code></pre>
+    </div>
+</div>
+
+<p>The gateway stores all messages received from devices and a client can query the gateway for messages using the <strong class="request">READ MESSAGES</strong> message.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">READ MESSAGES</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>READ MESSAGES</strong> message is send to the gateway to retrieve all or a subset of stored messages send by devices on all buses in the past.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>from</td>
+                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td><strong>Start date and time to get the device messages from</strong>.<br/>
+                The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
+                Defaults to the start of the UNIX Epoch.
+                </td>
+                <td><input type="text" placeholder="yyyy-MM-ddTHH&colon;mm&colon;ss" data-ws-header="from"
+                    pattern="^(19|20)[0-9]{2}-(0[1-9]|1[0-2])-((0|1|2)[1-9]|3[0,1])(T((0|1)[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])?$"/></td>
+            </tr>
+            <tr>
+                <td>to</td>
+                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td><strong>End date and time to get the device messages to</strong>.<br/>
+                The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
+                Defaults to the current date and time.
+                </td>
+                <td><input type="text" placeholder="yyyy-MM-ddTHH&colon;mm&colon;ss" data-ws-header="to"
+                    pattern="^(19|20)[0-9]{2}-(0[1-9]|1[0-2])-((0|1|2)[1-9]|3[0,1])(T((0|1)[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])?$"/></td>
+            </tr>
+            <tr>
+                <td>limit</td>
+                <td>number<br/><em>(optional)</em></td>
+                <td><strong>Maximal number of messages to return</strong>.<br/>
+                If not provided the maximal number of messages returned is not limited.
+                </td>
+                <td><input type="number" placeholder="no limit" data-ws-header="limit"
+                    /></td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="READ MESSAGES"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">MESSAGES READ</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">MESSAGES READ</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>MESSAGES READ</strong> message is send by the gateway as a response to an <strong class="request">READ MESSAGES</strong> that was accepted by the gateway. The only reason an
+            <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the messages could be retrieved from the storage or <strong>Error</strong> on any error.
+                </td>
+            </tr>
+            <tr>
+                <td>count</td>
+                <td>number</td>
+                <td><strong>Number of device messages retrieved</strong>. <br/>
+                    The Total amount of device messages retrieved from the message storage and returned in the body of this message.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p>The body of the <strong>MESSAGES READ</strong> message is a JSON array of all retrieved messages.</p>
+        <!-- TODO: JSON schema -->
+        <pre data-ws-example="MESSAGES READ"><code>MESSAGES READ
+count:2
+status:Success
+&nbsp;
+[
+    {
+        "access_id": "demo",
+        "device_id": "inv",
+        "message": "AUX2 relay activation",
+        "message_id": 209,
+        "timestamp": "2020-01-01T00:00:00"
+    },
+    {
+        "access_id": "demo",
+        "device_id": "inv",
+        "message": "AUX2 relay deactivation",
+        "message_id": 210,
+        "timestamp": "2020-01-01T00:15:00"
+    }
+]</code></pre>
     </div>
 </div>
 

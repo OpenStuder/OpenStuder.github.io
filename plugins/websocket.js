@@ -69,7 +69,7 @@ var SIWebSocketTestConnection = /** @class */ (function () {
             else {
                 entry.className = 'response';
             }
-            if (messageEvent.data.indexOf('DESCRIPTION\n') == 0) {
+            if (messageEvent.data.indexOf('DESCRIPTION\n') == 0 || messageEvent.data.indexOf('MESSAGES READ\n') == 0) {
                 var parts = messageEvent.data.split('\n\n');
                 if (parts.length == 2 && parts[1]) {
                     entry.innerText = parts[0] + '\n\n';
@@ -234,7 +234,7 @@ function docsifyPlugin(hook, vm) {
                         if (headerElement.tagName.toLowerCase() == 'input') {
                             var element = headerElement;
                             var value = element.value;
-                            if (value || 'wsRequired' in element.dataset) {
+                            if (element.validity.valid && value || 'wsRequired' in element.dataset) {
                                 msg += headerElement.dataset.wsHeader + ':' + value + '\n';
                             }
                         }
