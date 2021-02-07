@@ -427,6 +427,13 @@ body
                     Protocol version used on the gateway's side. Currently only version 1 is supported.
                 </td>
             </tr>
+            <tr>
+                <td>gateway_version</td>
+                <td>string</td>
+                <td><strong>Gateway software version</strong>. <br/>
+                    Version of the gateway OpenStuder software actually runing on the gateway.
+                </td>
+            </tr>
         </table>
         <h6>body</h6>
         <p><em>No body</em></p>
