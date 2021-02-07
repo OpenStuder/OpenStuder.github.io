@@ -1007,6 +1007,119 @@ id:A303.11.3023
 
 <p>Should the <strong>UNSUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
+### Data log access
+
+<p>The gateway can be configured to log selected proprties at configurable intervals. The <strong class="request">READ DATALOG</strong> message can be used to retrieve logged data of a property
+from the gateway.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">READ DATALOG</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>READ DATALOG</strong> message is send to the gateway to retrieve all or a subset of logged data of a given property.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>number</td>
+                <td><strong>Property ID</strong>.<br/>
+                Global ID of the property for which the logged data will be requested. <br/>
+                It has to be in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
+                </td>
+            </tr>
+            <tr>
+                <td>from</td>
+                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td><strong>Start date and time to get logged data from</strong>.<br/>
+                The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
+                Defaults to the start of the UNIX Epoch.
+                </td>
+                <td><input type="text" placeholder="yyyy-MM-ddTHH&colon;mm&colon;ss" data-ws-header="from"
+                    pattern="^(19|20)[0-9]{2}-(0[1-9]|1[0-2])-((0|1|2)[1-9]|3[0,1])(T((0|1)[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])?$"/></td>
+            </tr>
+            <tr>
+                <td>to</td>
+                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td><strong>End date and time to get the logged data to</strong>.<br/>
+                The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
+                Defaults to the current date and time.
+                </td>
+                <td><input type="text" placeholder="yyyy-MM-ddTHH&colon;mm&colon;ss" data-ws-header="to"
+                    pattern="^(19|20)[0-9]{2}-(0[1-9]|1[0-2])-((0|1|2)[1-9]|3[0,1])(T((0|1)[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])?$"/></td>
+            </tr>
+            <tr>
+                <td>limit</td>
+                <td>number<br/><em>(optional)</em></td>
+                <td><strong>Maximal number of values to return</strong>.<br/>
+                If not provided the maximal number of values returned is not limited.
+                </td>
+                <td><input type="number" placeholder="no limit" data-ws-header="limit"
+                    /></td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="READ DATALOG"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">DATALOG READ</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">DATALOG READ</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>DATALOG READ</strong> message is send by the gateway as a response to an <strong class="request">READ DATALOG</strong> that was accepted by the gateway. The only reason an
+            <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the data could be retrieved from the storage or <strong>Error</strong> on any error.
+                </td>
+            </tr>
+            <tr>
+                <td>count</td>
+                <td>number</td>
+                <td><strong>Number of data log entries retrieved</strong>. <br/>
+                    The Total number of data log entries retrieved from the storage and returned in the body of this message.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p>The body of the <strong>DATALOG READ</strong> message is CSV formatted data where each line corresponds to value at a given time. The line starts with the timestamp in ISO 8601 extended
+        format and is followed by the respective values. Comas are used as separators.</p>
+        <pre data-ws-example="DATALOG READ"><code>DATALOG READ
+status:Success
+count:6
+&nbsp;
+2021-02-07T20:18:00,0.03145
+2021-02-07T20:17:00,0.84634
+2021-02-07T20:16:00,0.56374
+2021-02-07T20:15:00,0.48567
+2021-02-07T20:14:00,0.03145
+2021-02-07T20:13:00,0.03145</code></pre>
+    </div>
+</div>
+
 ### Device messages
 
 <p>Devices can publish broadcast messages and the gateway will forward those messages to all connected clients using the <strong class="indication">DEVICE MESSAGE</strong> message.</p>
