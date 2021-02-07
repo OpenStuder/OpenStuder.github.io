@@ -1046,21 +1046,24 @@ pre:after {
 
 ::-webkit-scrollbar-track {
 	border-radius: 4px;
-	background: hsla(0, 0%, 50%, 0.25);
+	border: 1px solid hsla(0, 0%, 50%, 1);
+	background: var(--textColor);
+	opacity: 0.75;
 }
 
 ::-webkit-scrollbar-corner {
-	background: hsla(0, 0%, 50%, 0.25);
+	background: var(--textColor);
+	opacity: 0.75;
 }
 
 ::-webkit-scrollbar-thumb {
 	width: 8px;
 	border-radius: 4px;
-	background: var(--accent);
-	opacity: 0.5;
+	background: var(--background);
+	opacity: 0.75;
 }
 
 html {
-	scrollbar-color: var(--accent) hsla(0, 0%, 50%, 0.25);
+	scrollbar-color: hsla(0, 0%, 50%, .75) hsla(0, 0%, 50%, 0.25);
 	scrollbar-width: thin;
 }

@@ -168,6 +168,8 @@
         background: none;
         margin: 0;
         padding: 0;
+        max-height: 25vh;
+        overflow-y: scroll;
     }
 
     div.ws-api-doc.request code {
