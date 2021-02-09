@@ -1106,6 +1106,13 @@ from the gateway.</p>
                 </td>
             </tr>
             <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>ID of the property</strong>. <br/>
+                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">READ DATALOG</strong> message.
+                </td>
+            </tr>
+            <tr>
                 <td>count</td>
                 <td>number</td>
                 <td><strong>Number of data log entries retrieved</strong>. <br/>
@@ -1118,6 +1125,7 @@ from the gateway.</p>
         format and is followed by the respective values. Comas are used as separators.</p>
         <pre data-ws-example="DATALOG READ"><code>DATALOG READ
 status:Success
+id:demo.inf.3136
 count:6
 &nbsp;
 2021-02-07T20:18:00,0.03145
