@@ -545,15 +545,19 @@ device_count:42
             </tr>
             <tr>
                 <td>flags</td>
-                <td>IncludeAccessInformation|<br/>IncludeAccessDetails|<br/>IncludeDeviceDetails|<br/>IncludeDriverInformation<br/><em>(optional)</em></td>
+                <td>IncludeAccessInformation&nbsp;|<br/>IncludeDeviceInformation&nbsp;|<br/>IncludePropertyInformation&nbsp;|<br/>IncludeDriverInformation<br/><em>(optional)</em></td>
                 <td><strong>Flags to control description format</strong>. <br/>
-                    A comma-separate list (without spaces) of each of those flags can be passed to control the output format of the description.
+                    A comma-separate list (without spaces) of each of those flags can be passed to control the output format of the description.<br/><br/>
+                    <strong>IncludeAccessInformation</strong>: Include information about all device access driver instances.<br/>
+                    <strong>IncludeDeviceInformation</strong>: Include information about devices.<br/>
+                    <strong>IncludePropertyInformation</strong>: Include information about properties.<br/>
+                    <strong>IncludeDriverInformation</strong>: Include information about loaded device access drivers.
                 </td>
                 <td>
                     <select data-ws-header="flags" multiple>
                         <option value="IncludeAccessInformation">Include device access information</option>
-                        <option value="IncludeAccessDetails">Include device access details</option>
-                        <option value="IncludeDeviceDetails">Include device details</option>
+                        <option value="IncludeDeviceInformation">Include device information</option>
+                        <option value="IncludePropertyInformation">Include device property information</option>
                         <option value="IncludeDriverInformation">Include driver information</option>
                     </select>
                 </td>
