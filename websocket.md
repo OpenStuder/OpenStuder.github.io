@@ -745,7 +745,7 @@ value:0.1575
                 <td>id</td>
                 <td>string</td>
                 <td><strong>ID of the property</strong>. <br/>
-                    The ID of the property to read in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                    The ID of the property to write in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
                 </td>
                 <td>
                     <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
