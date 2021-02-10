@@ -1052,7 +1052,7 @@ from the gateway.</p>
             </tr>
             <tr>
                 <td>from</td>
-                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td>datetime<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
                 <td><strong>Start date and time to get logged data from</strong>.<br/>
                 The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
                 Defaults to the start of the UNIX Epoch.
@@ -1062,7 +1062,7 @@ from the gateway.</p>
             </tr>
             <tr>
                 <td>to</td>
-                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td>datetime<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
                 <td><strong>End date and time to get the logged data to</strong>.<br/>
                 The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
                 Defaults to the current date and time.
@@ -1159,6 +1159,12 @@ count:6
                 <th>description</th>
             </tr>
             <tr>
+                <td>timestamp</td>
+                <td>datetime<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td><strong>Timestamp when the message was received by the gateway</strong>.
+                </td>
+            </tr>
+            <tr>
                 <td>access_id</td>
                 <td>string</td>
                 <td><strong>ID of the device access instance that received the message</strong>.
@@ -1212,7 +1218,7 @@ message:AUX2 relay deactivation
             </tr>
             <tr>
                 <td>from</td>
-                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td>datetime<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
                 <td><strong>Start date and time to get the device messages from</strong>.<br/>
                 The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
                 Defaults to the start of the UNIX Epoch.
@@ -1222,7 +1228,7 @@ message:AUX2 relay deactivation
             </tr>
             <tr>
                 <td>to</td>
-                <td>date<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td>datetime<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
                 <td><strong>End date and time to get the device messages to</strong>.<br/>
                 The format is <em>yyyy-MM-dd</em> to specify a date or <em>yyyy-MM-ddTHH&colon;mm&colon;ss</em> to specify date and time.<br/>
                 Defaults to the current date and time.
