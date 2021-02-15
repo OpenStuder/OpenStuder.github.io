@@ -69,6 +69,14 @@ the same whatever settings was choosen for this offset.
 > [!Tip]
 > If you connect to the Xcom-485i bus converter directly without other devices on the same RS485 bus, leave this at the default.
 
+##### forceSlowEnumeration
+
+The Xcom485i device access driver supports fast device enumeration using Modbus registers that are only present on newer versions of the Xcom-485i bus converter. Normally the driver detects if fast
+enumeration is not present and uses the slow enumeration mechanism as fallback. Should that fallback mechanism not work correctly, you can use disable the fast enumeration functionality using this
+configuration parameter.
+
+The **optional** parameter can be either `true` or `false` and defaults to `false`.
+
 #### Example
 
 ```ini
@@ -77,9 +85,11 @@ driver = Xcom485i
 port = /dev/ttyUSB0
 baudRate = 115200
 deviceAddressOffset = 128
+forceSlowEnumeration = false
 ```
 
-Creates a device access instance with the ID `xcom` which connects to `/dev/ttyUSB0` using `115200` baud. An offset of 128 is added to all virtual device addresses.
+Creates a device access instance with the ID `xcom` which connects to `/dev/ttyUSB0` using `115200` baud. An offset of 128 is added to all virtual device addresses. Slow enumeration of devices is not 
+forced.
 
 ### Demo
 
@@ -113,7 +123,7 @@ Instantiates two demo drivers, the first with the ID `demo0` and the second with
 
 ### SQLite
 
-The **SQLite** storage driver saves the property value time series and the device messages into a local [SQLite](https://www.sqlite.org/index.html) database.
+The **SQLite** storage driver saves the property value time-series and the device messages into a local [SQLite](https://www.sqlite.org/index.html) database.
 
 #### Parameters
 
@@ -122,6 +132,16 @@ The driver can be configured in the `[Storage]` section inside the `sigateway.co
 ##### file
 
 Path and filename of the SQLite database. **Optional**, defaults to */var/lib/openstuder/storage.sqlite*.
+
+##### cleanupInterval
+
+**Optional** interval in seconds at which the storage is cleaned up. This is the interval at which values and messages outside the storage time limit will be removed. The interval defaults to 86400 
+seconds which is a day (24 hours).
+
+##### maxStorageDays
+
+Maximal storage duration in days for values and messages. This is the maximal duration data is kept in the storage before deleted to save storage space. This **optional** parameter defaults to 730 
+days (about 2 years). 
 
 ## Authorize drivers
 
