@@ -766,7 +766,7 @@ value:0.1575
             </tr>
             <tr>
                 <td>value</td>
-                <td>number of string<br/><em>(optional)</em></td>
+                <td>number or string<br/><em>(optional)</em></td>
                 <td><strong>New value for the property</strong>. <br/>
                     The value to set for the property. This header is optional as it is possible to write to properties with the data type "Signal" where there is no actual value written, the write
                     operation rather triggers an action on the device (or bus).
@@ -1160,7 +1160,7 @@ count:6
             </tr>
             <tr>
                 <td>timestamp</td>
-                <td>datetime<br/><em>ISO 8601 extended format<br/>(optional)</em></td>
+                <td>datetime<br/><em>ISO 8601 extended format</em></td>
                 <td><strong>Timestamp when the message was received by the gateway</strong>.
                 </td>
             </tr>
@@ -1192,6 +1192,7 @@ count:6
         <h6>body</h6>
         <p><em>No body</em></p>
         <pre data-ws-example="DEVICE MESSAGE"><code>DEVICE MESSAGE
+timestamp:2020-01-01T12:44:23
 access_id:A303
 device_id:11
 message_id:210
