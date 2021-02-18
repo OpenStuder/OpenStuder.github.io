@@ -5,6 +5,6 @@
 <!--    - [Clients](clients.md) -->
   
 - Developer
-<!--    - [Client libraries](clientlibs.md) -->
+    - [Client libraries](clientlibs.md)
     - [WebSocket protocol](websocket.md#main)
 <!--    - [Driver development](driverdev.md)-->
