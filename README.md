@@ -1,10 +1,5 @@
 # Quick start
 
-<img src="images/UnderConstruction.svg" width="400px"></img>
-
-> [!Note]
-> The OpenStuder project is in a very early stage and documentation will be added on a daily base.
-
 The OpenStuder gateway is the link from the IT world to a Studer Innotec installation. With this gateway, the devices of your Studer Innotec installation can be accessed.
 
 This chapter contains the basic line command to execute in order to create a gateway for a Studer Innotec installation.
