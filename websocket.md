@@ -143,6 +143,7 @@
     }
 
     div.ws-api-doc pre {
+        box-shadow: none;
         border: none;
         border-radius: 0;
         margin: 0 0;

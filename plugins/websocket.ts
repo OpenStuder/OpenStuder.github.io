@@ -219,6 +219,36 @@ const websocketTestHtml = `
 		background: var(--warnBackground);
 		border-color: var(--warn);
 	}
+	
+	#websocket ::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+		border-radius: 4px;
+	}
+
+	#websocket ::-webkit-scrollbar-track {
+		border-radius: 4px;
+		border: 1px solid hsla(0, 0%, 50%, 1);
+		background: var(--textColor);
+		opacity: 0.75;
+	}
+
+	#websocket ::-webkit-scrollbar-corner {
+		background: var(--textColor);
+		opacity: 0.75;
+	}
+
+	#websocket ::-webkit-scrollbar-thumb {
+		width: 8px;
+		border-radius: 4px;
+		background: var(--background);
+		opacity: 0.75;
+	}
+
+	#websocket {
+		scrollbar-color: hsla(0, 0%, 50%, .75) hsla(0, 0%, 50%, 0.25);
+		scrollbar-width: thin;
+	}
 </style>
 <div id="websocket">
     <div class="control">
@@ -325,6 +355,7 @@ class SIWebSocketTestConnection {
 				this.io_ = document.getElementsByClassName('websocket-io') as HTMLCollectionOf<HTMLDivElement>;
 
 				this.editTextarea_ = document.getElementById('websocket.io.tx') as HTMLTextAreaElement;
+				this.editTextarea_.onkeydown = this.onTxKeyDown;
 				this.editTextarea_.onkeyup = this.onTxChanged;
 				this.editTextarea_.onpaste = this.onTxChanged;
 				this.sendButton_ = document.getElementById('websocket.io.send') as HTMLButtonElement;
@@ -433,6 +464,15 @@ class SIWebSocketTestConnection {
 			this.log_.scrollTop = this.log_.scrollHeight;
 		}
 		SIWebSocketTestConnection.setCookie('logFollows', this.followLogCheckbox_.checked);
+	}
+
+	private onTxKeyDown = (event: KeyboardEvent) => {
+		if ((event.ctrlKey || event.metaKey) && event.key == "Enter") {
+			if (!this.sendButton_.disabled) {
+				this.onSendButtonClicked(null);
+			}
+			return false;
+		}
 	}
 
 	private onTxChanged = (_event: Event) => {
