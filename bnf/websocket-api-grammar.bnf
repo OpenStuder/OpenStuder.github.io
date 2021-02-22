@@ -1,59 +1,67 @@
 grammar ::= request | response
 
-request ::= authorize_request | enumerate_request | describe_request | read_property_request | write_property_request | subscribe_property_request | unsubscribe_property_request
+request ::= authorize | enumerate | describe | read_property | write_property | subscribe_property | unsubscribe_property | read_datalog | read_messages
 
-authorize_request ::= "AUTHORIZE" nl ("user:" authorize_user nl "password:" authorize_password nl)? ("protocol_version:" authorize_version nl)? nl
+authorize ::= "AUTHORIZE" nl ("user:" authorize_user nl "password:" authorize_password nl)? ("protocol_version:" authorize_protocol_version nl)? nl
 authorize_user ::= string
 authorize_password ::= string
-authorize_version ::= integer
+authorize_protocol_version ::= integer
 
-enumerate_request ::= "ENUMERATE" nl nl
+enumerate ::= "ENUMERATE" nl nl
 
-describe_request ::= "DESCRIBE" nl ("id:" describe_id nl)? ("flags:" describe_flags? nl)? nl
+describe ::= "DESCRIBE" nl ("id:" describe_id nl)? ("flags:" describe_flags? nl)? nl
 describe_flags ::= describe_flag ("," describe_flag)*
-describe_flag ::= "IncludeAccessInformation" | "IncludeAccessDetails" | "IncludeDeviceDetails" | "IncludeDriverInformation"
+describe_flag ::= "IncludeAccessInformation" | "IncludeDeviceInformation" | "IncludePropertyInformation" | "IncludeDriverInformation"
 
-read_property_request ::= "READ PROPERTY" nl "id:" property_id nl nl
+read_property ::= "READ PROPERTY" nl "id:" property_id nl nl
 
-write_property_request ::= "WRITE PROPERTY" nl "id:" property_id nl ("value:" property_value nl)? nl
+write_property ::= "WRITE PROPERTY" nl "id:" property_id nl ("flags:" property_write_flags nl)? ("value:" property_value nl)? nl
+property_write_flags ::= property_write_flag ("," property_write_flag)*
+property_write_flag ::= "Permanent"
 
-subscribe_property_request ::= "SUBSCRIBE PROPERTY" nl "id:" property_id nl nl
+subscribe_property ::= "SUBSCRIBE PROPERTY" nl "id:" property_id nl nl
 
-unsubscribe_property_request ::= "UNSUBSCRIBE PROPERTY" nl "id:" property_id nl nl
+unsubscribe_property ::= "UNSUBSCRIBE PROPERTY" nl "id:" property_id nl nl
 
+read_datalog ::= "READ DATALOG" nl "id:" property_id ("from:" iso8601 nl)? ("to:" iso8601 nl)? ("limit:" integer nl)? nl
 
-response ::= error_response | authorize_response | enumerate_response | describe_response | read_property_response | write_property_response | subscribe_property_response | unsubscribe_property_response | property_update_indication | device_message
+read_messages ::= "READ MESSAGES" nl ("from:" iso8601 nl)? ("to:" iso8601 nl)? ("limit:" integer nl)? nl
 
-error_response ::= "ERROR" nl "reason:" error_reason nl nl
+response ::= error | authorized | enumerated | description | property_read | property_written | property_subscribed | property_unsubscribed | property_update | device_message | datalog_read | messages_read
+
+error ::= "ERROR" nl "reason:" error_reason nl nl
 error_reason ::= string
 
-authorize_response ::= "AUTHORIZED" nl "access_level:" authorize_access_level nl "protocol_version:" authorize_version nl nl
+authorized ::= "AUTHORIZED" nl "access_level:" authorize_access_level nl "protocol_version:" authorize_protocol_version nl nl
 authorize_access_level ::= "Basic" | "Installer" | "Expert" | "QSP"
 
-enumerate_response ::= "ENUMERATED" nl "status:" status nl "device_count:" enumerate_device_count nl nl
+enumerated ::= "ENUMERATED" nl "status:" status nl "device_count:" enumerate_device_count nl nl
 enumerate_device_count ::= integer
 
-describe_response ::= "DESCRIPTION" nl "status:" status nl ("id:" describe_id nl)? nl (json)?
+description ::= "DESCRIPTION" nl "status:" status nl ("id:" describe_id nl)? nl (json)?
 
-read_property_response ::= "PROPERTY READ" nl "status:" status nl "id:" property_id nl ("value:" property_value nl)? nl
+property_read ::= "PROPERTY READ" nl "status:" status nl "id:" property_id nl ("value:" property_value nl)? nl
 
-write_property_response ::= "PROPERTY WRITTEN" nl "status:" status nl "id:" property_id nl nl
+property_written ::= "PROPERTY WRITTEN" nl "status:" status nl "id:" property_id nl nl
 
-subscribe_property_response ::= "PROPERTY SUBSCRIBED" nl "status:" status nl "id:" property_id nl nl
+property_subscribed ::= "PROPERTY SUBSCRIBED" nl "status:" status nl "id:" property_id nl nl
 
-unsubscribe_property_response ::= "PROPERTY UNSUBSCRIBED" nl "status:" status nl "id:" property_id nl nl
+property_unsubscribed ::= "PROPERTY UNSUBSCRIBED" nl "status:" status nl "id:" property_id nl nl
 
-property_update_indication ::= "PROPERTY UPDATE" nl "id:" property_id nl "value:" property_value nl nl
+property_update ::= "PROPERTY UPDATE" nl "id:" property_id nl "value:" property_value nl nl
 
 device_message ::= "DEVICE MESSAGE" nl "access_id:" access_id nl "device_id:" device_id nl "message_id:" message_id nl "message:" message_text nl nl
 message_id ::= integer
 message_text ::= (string | sp)+
 
+datalog_read ::= "DATALOG READ" nl "status:" status nl "id:" property_id nl "count:" integer nl nl (iso8601 "," property_value)+
+
+messages_read ::= "MESSAGES READ" nl "status:" status nl "count:" integer nl nl json
 
 status ::= "SISuccess" | "InProgress" | "Error" | "NoProperty" | "NoDevice" | "NoDeviceAccess" | "Timeout" | "InvalidValue"
 property_value ::= (string | ".")*
 
-describe_id ::= access_id | device_id
+describe_id ::= access_id | device_id | property_id
 access_id ::= device_access_selector
 device_id ::= device_access_selector "." device_selector
 property_id ::= device_id "." property_selector
@@ -62,6 +70,7 @@ device_access_selector ::= (digit | char)+
 device_selector ::= (digit | char)+
 property_selector ::= digit+
 
+iso8601 ::= 4 * digit "-" [0-1] digit "-" [0-3] digit ("T" (([0-1] digit) | ("2" [0-3])) ":" [0-5] digit ":" [0-5] digit)?
 json ::= "{" ([.] | nl)* "}"
 string ::= (char | digit | [_-])*
 char ::= lower_char | upper_char
