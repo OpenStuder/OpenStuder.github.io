@@ -773,4 +773,639 @@ client.on_error = on_error
 client.on_connected = on_connected
 client.on_device_message = on_device_message
 client.connect('localhost', background=False)
+```## Web Client
+
+The web client allows connecting and interacting with an OpenStuder gateway. It offers an asynchronous API to connect to a gateway and use the gateway's WebSocket API.
+This library is written in javascript but allows typescript implementation.
+
+### Installation
+You can install the **OpenstuderClient** package using **npm**:
+
 ```
+# npm i @marcocrettena/openstuder
+```
+
+As the client code is all in one single file, another possibility to use the client is to add the source file 
+[openstuder.js](https://github.com/OpenStuder/openstuder-client-python/raw/main/openstuder.py) to your project.
+
+### Usage
+
+To use the API, the user needs to implement the `OpenStuderInterface` interface to one class to accede to the different provided callbacks.
+The second implementation needed is to create an instance of `SIGatewayClient` which permits the user to connect and communicate with the gateway.
+
+The client is documented using JSDoc. In addition to that, the documentation here gives an overview on the different functions.
+
+#### SIGatewayClient - *Asynchronous client*
+
+This client is asynchronous which permits the use of subscription process and so the different update of some properties can be caught.
+
+The strategy with this class is to create a SIGatewayClient instance and use the different function described below.
+
+##### Establish connection - *connect()*
+
+Establishes the WebSocket connection to the OpenStuder gateway and executes the user authorization process once the connection has been established in the background. This method returns immediately 
+and does not block the current thread.
+
+The status of the connection attempt is reported either by the `onConnect()` callback on success, either by the `onError()` callback if the connection could not be established, or the authorisation for 
+the given user was rejected by the gateway.
+
+**Parameters**:
+- `host`: Hostname or IP address of the OpenStuder gateway to connect to. *Required*
+- `port`: TCP port used for the connection to the OpenStuder gateway. *Optional*, defaults to 1987.
+- `user`: Username send to the gateway used for authorization. *Optional*.
+- `password`: Password send to the gateway used for authorization. *Optional*.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If there was an error initiating the WebSocket connection.
+
+**Callback parameters**: `onConnected()`
+A SIMessage instance with the different information:
+1. The access level that was granted to the user during authorization.
+2. The version of the OpenStuder software running on the gateway. 
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    isConnected:boolean;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={isConnected:false};
+    }
+
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+
+    public render() {
+        let str:string = this.state.isConnected ? "true":"false";
+        return (
+            <div>
+                <p>Connected : {str}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        this.setState({isConnected:true});
+    }
+    public onDisconnected(): void {
+        this.setState({isConnected:false});
+    }
+}
+```
+
+The example above establishes a connection to **localhost** using the guest account. If the client has to authorize using a username and password, you have to provide them in the `connect()` method.
+
+*Example:*
+```python
+    public componentDidMount() {
+            let user = "Garfield";
+            let password = "lasagne";
+            this.sigc.connect("localhost", 1987, user, password);
+    }
+```
+
+##### Enumerate devices - *enumerate()*
+
+Instructs the gateway to scan every configured and functional device access driver for new devices and remove devices that do not respond anymore.
+
+The status of the operation and the number of devices present are reported using the `onEnumerated()` callback.
+
+**Parameters**: *None*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onEnumerated()`
+A SIMessage instance with the different information:
+1. Operation status.
+2. Number of devices present.
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    numberOfDevice:number;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={numberOfDevice:-1};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div>
+                <p>Number of device : {this.state.numberOfDevice}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        this.sigc.enumerate();
+    }
+    public onEnumerate(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.deviceCount) {
+            this.setState({numberOfDevice: +deviceMessage.deviceCount});
+        }
+    }
+}
+```
+
+##### Describe - *describe()*
+
+This method can be used to retrieve information about the available devices and their properties from the connected gateway. Using the optional deviceAccessId and
+deviceId parameters, the method can either request information about the whole topology, a particular device access instance, a device or a property.
+
+The flags control the level of detail in the gateway's response.
+
+The description is reported using the `onDescription()` callback.
+
+**Parameters**:
+- `deviceAccessId`: Device access ID for which the description should be retrieved. *Optional*.
+- `deviceId`: Device ID for which the description should be retrieved. *Optional*, note that deviceAccessId must be present too.
+- `propertyId`: Property ID for which the description should be retrieved. *Optional*, note that deviceAccessId and deviceId must be present too.
+- `flags`: Flags to control level of detail of the response. *Optional*.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onDescription()`
+A SIMessage instance with the different information:
+1. Status of the operation.
+2. The subject's ID.
+3. The description object.
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+import {SIDescriptionFlags} from "@marcocrettena/openstuder";
+
+type AppState={
+    jsonDescription:string;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={jsonDescription:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+
+    public render() {
+        return (
+            <div>
+                <p>{this.state.jsonDescription}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        let flags:SIDescriptionFlags[] = [SIDescriptionFlags.INCLUDE_DEVICE_INFORMATION,SIDescriptionFlags.INCLUDE_PROPERTY_INFORMATION];
+        this.sigc.describe(undefined,undefined,undefined,flags);
+    }
+    public onDescription(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.body) {
+            this.setState({jsonDescription: deviceMessage.body});
+        }
+    }
+}
+```
+
+##### Reading properties - *readProperty()*
+
+This method is used to retrieve the actual value of a given property from the connected gateway. The property is identified by the propertyId parameter.
+
+The status of the read operation and the actual value of the property are reported using the `onPropertyRead()` callback.
+
+**Parameters**:
+- `propertyId`: The ID of the property to read in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onPropertyRead()`
+A SIMessage instance with the different information:
+1. Status of the read operation.
+2. The ID of the property read.
+3. The value read.
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    value:string;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={value:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div>
+                <p>Read value : {this.state.value}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        this.sigc.readProperty('demo.sol.11004');
+    }
+    public onPropertyRead(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.value) {
+            this.setState({value: deviceMessage.value});
+        }
+    }
+}
+```
+
+##### Writing properties - *writeProperty()*
+
+The writeProperty method is used to change the actual value of a given property. The property is identified by the propertyId parameter and the new value is passed by the optional value parameter.
+
+This value parameter is optional as it is possible to write to properties with the data type "Signal" where there is no actual value written, the write operation rather triggers an action on the
+device.
+
+The status of the write operation is reported using the `onPropertyWritten()` callback.
+
+**Parameters**:
+- `propertyId`: The ID of the property to write in the form '{device access ID}.{<device ID}.{<property ID}'. *Required*
+- `value`: *Optional* value to write.
+- `flags`: *Optional* write flags, See SIWriteFlags for details, if not provided the flags are not send by the client and the gateway uses the default flags (SIWriteFlags.PERMANENT).
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onPropertyWritten()`
+A SIMessage instance with the different information:
+1. Status of the write operation.
+2. The ID of the property written.
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    status:string;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={status:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div>
+                <p>Status of written property : {this.state.status}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        this.sigc.writeProperty('demo.inv.1415');
+    }
+    public onPropertyWritten(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.status) {
+            this.setState({status: deviceMessage.status});
+        }
+    }
+}
+```
+
+##### Subscribing to properties - *subscribeProperty(), unsubscribeProperty()*
+
+The method `subscribeToProperty()` can be used to subscribe to a property on the connected gateway. The property is identified by the propertyId parameter.
+
+The status of the subscribe request is reported using the `onPropertySubscribed()` callback.
+
+**Parameters**:
+- `propertyId`: The ID of the property to subscribe to in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+  
+**Callback parameters**: `onPropertySubscribed()`
+1. The status of the subscription.
+2. The ID of the property.
+
+The callback `onPropertyUpdated()` is called whenever the gateway did send a property update.
+
+**Callback parameters**: `onPropertyUpdated()`
+A SIMessage instance with the different information:
+1. The ID of the property that has updated.
+2. The actual value.
+
+The method `unsubscribeFromProperty()` can be used to unsubscribe from a property on the connected gateway. The property is identified by the propertyId parameter.
+
+The status of the unsubscribe request is reported using the `onPropertyUnsubscribed()` callback.
+
+**Parameters**:
+- `propertyId`: The ID of the property to unsubscribe from in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onPropertyUnsubscribed()`
+A SIMessage instance with the different information:
+1. The status of the unsubscription.
+2. The ID of the property.
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    status:string;
+    value:string;
+}
+const maxUpdate:number = 3;
+let countUpdate:number = 0;
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={status:"-", value:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+
+    public render() {
+        return (
+            <div>
+                <p>Status of the property : {this.state.status}</p>
+                <p>Last value of property : {this.state.value}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        this.sigc.subscribeProperty('demo.sol.11004');
+    }
+    public onPropertySubscribed(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.status) {
+            this.setState({status: "subscription -> "+deviceMessage.status});
+        }
+    }
+    public onPropertyUnsubscribed(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.status) {
+            this.setState({status: "unsubscription -> "+deviceMessage.status});
+        }
+    }
+    public onPropertyUpdate(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.value) {
+            this.setState({value: deviceMessage.value});
+        }
+        countUpdate++;
+        if(countUpdate===maxUpdate){
+            this.sigc.unsubscribeFromProperty('demo.sol.11004');
+        }
+    }
+}
+```
+
+##### Reading datalog - *readDatalog()*
+
+This method is used to retrieve all, or a subset of logged data of a given property from the gateway.
+
+The status of this operation and the respective values are reported using the `onDatalogRead()` callback.
+
+**Parameters**:
+- `propertyId`: Global ID of the property for which the logged data should be retrieved. It has to be in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+- `dateFrom`: *Optional* date and time from which the data has to be retrieved, defaults to the oldest value logged.
+- `dateTo`: *Optional* date and time to which the data has to be retrieved, defaults to the current time on the gateway.
+- `limit`: Using this optional parameter you can limit the number of results retrieved in total. *Optional*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onDatalogRead()`
+A SIMessage instance with the different information:
+1. Status of the operation.
+2. ID of the property.
+3. Number of entries.
+4. Property log data in CSV format whereas the first column is the date and time in ISO 8601 extended format and the second column contains the actual values.
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    countDatalogMessages:string;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={countDatalogMessages:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div>
+                <p>Count of messages: {this.state.countDatalogMessages}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        this.sigc.readDatalog('demo.inv.3136', undefined, undefined, 50);
+    }
+    public onDatalogRead(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.count) {
+            this.setState({countDatalogMessages:deviceMessage.count});
+        }
+    }
+}
+```
+
+##### Reading device messages - *readMessages()*
+
+The `readMessages()` method can be used to retrieve all or a subset of stored messages send by devices on all buses in the past from the gateway.
+
+The status of this operation and the retrieved messages are reported using the `onMessagesRead()` callback.
+
+**Parameters**:
+- `dateFrom`: *Optional* date and time from which the messages have to be retrieved, defaults to the oldest message saved.
+- `dateTo`: *Optional* date and time to which the messages have to be retrieved, Defaults to the current time on the gateway.
+- `limit`: Using this optional parameter you can limit the number of messages retrieved in total.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onMessagesRead()`
+An array of SIMessage instance with the different information:
+1. The status of the operation.
+2. The number of messages retrieved.
+3. The list of retrieved messages.
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    readMessage:string;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={readMessage:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div>
+                <p>{this.state.readMessage}</p>
+            </div>
+        );
+    }
+    public onConnect(deviceMessage: OSI.SIMessage): void {
+        this.sigc.readMessages();
+    }
+    public onMessageRead(devicesMessage: OSI.SIMessage[]): void {
+        let count:number=0;
+        let str:string="";
+        devicesMessage.map(deviceMessage =>{
+            count++;
+            str.concat("Message number " + count + ":\n");
+            if(deviceMessage.body){
+                str.concat(deviceMessage.body+"\n");
+            }
+        });
+        this.setState({readMessage:str});
+    }
+}
+```
+
+##### Device message indications
+
+Once connected to the gateway, the gateway will send device messages to the client automatically. This callback is called whenever a device message was received from the gateway.
+
+**Callback parameters**: `onDeviceMessage()`
+An array of SIMessage instance with the different information:
+1. The access ID of the device access instance that received the message.
+2. The message ID
+3. The message
+4. The device ID that send the message
+5. The timestamp when the message was received by the gateway. 
+
+*Example:*
+```python
+import React from 'react';
+import * as OSI from '@marcocrettena/openstuder';
+
+type AppState={
+    readMessage:string;
+}
+
+class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+
+    sigc:OSI.SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new OSI.SIGatewayClient(this);
+        this.state={readMessage:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div className="App">
+                <p>{this.state.readMessage}</p>
+            </div>
+        );
+    }
+    public onDeviceMessage(deviceMessage: OSI.SIMessage): void {
+        if(deviceMessage.message){
+            this.setState({readMessage:deviceMessage.message});
+        }
+    }
+}
+```
+
+
+
+
+
+
+
+
