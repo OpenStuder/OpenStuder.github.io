@@ -773,7 +773,9 @@ client.on_error = on_error
 client.on_connected = on_connected
 client.on_device_message = on_device_message
 client.connect('localhost', background=False)
-```## Web Client
+```
+
+## Web Client
 
 The web client allows connecting and interacting with an OpenStuder gateway. It offers an asynchronous API to connect to a gateway and use the gateway's WebSocket API.
 This library is written in javascript but allows typescript implementation.
@@ -785,8 +787,8 @@ You can install the **OpenstuderClient** package using **npm**:
 # npm i @marcocrettena/openstuder
 ```
 
-As the client code is all in one single file, another possibility to use the client is to add the source file 
-[openstuder.js](https://github.com/OpenStuder/openstuder-client-python/raw/main/openstuder.py) to your project.
+As the client code is all in one single file, another possibility to use the client is to add a source file 
+[openstuder](https://github.com/OpenStuder/openstuder-client-web/tree/main/src/OpenStuder) to your project. A Javascript and a Typescript version are available.
 
 ### Usage
 
