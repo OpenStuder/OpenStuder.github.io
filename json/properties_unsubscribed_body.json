@@ -7,7 +7,12 @@
     "type": "object",
     "properties": {
       "status": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "Success",
+          "NoProperty",
+          "Error"
+        ]
       },
       "id": {
         "type": "string"

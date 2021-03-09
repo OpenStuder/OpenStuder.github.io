@@ -1010,7 +1010,7 @@ id:A303.11.1415
 
 <p>Should the <strong class="request">WRITE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
-### Subscribe to one or multiple properties
+### Subscribe to properties
 
 <p>A client can subscribe to a property for changes by sending the <strong class="request">SUBSCRIBE PROPERTY</strong> message.</p>
 
