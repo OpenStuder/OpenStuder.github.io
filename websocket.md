@@ -23,6 +23,14 @@
         background: var(--warnBackground);
     }
 
+    div.ws-api-doc.json {
+        border: none;
+        background: var(--textColor);
+        width: auto;        
+        margin: 12px 24px;
+        color: var(--textBackground);
+    }
+
     div.ws-api-doc button.accordion-toggle {
         padding: 6px;
         margin: 6px;
@@ -46,6 +54,12 @@
         background: var(--warn);
     }
 
+    div.ws-api-doc.json button.accordion-toggle {
+        background: var(--textBackground);
+        color: var(--textColor);
+        min-width: 250px;
+    }
+
     div.ws-api-doc div {
         font-size: 100%;
         padding: 0;
@@ -62,6 +76,10 @@
 
     div.ws-api-doc.error div {
         border-color: var(--warn);
+    }
+
+    div.ws-api-doc.json div {
+        border: none;
     }
 
     div.ws-api-doc p {
@@ -117,7 +135,8 @@
     }
 
     div.ws-api-doc input,
-    div.ws-api-doc select {
+    div.ws-api-doc select,
+    div.ws-api-doc textarea {
         outline: none;
         -webkit-appearance: none;
         font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
@@ -127,6 +146,11 @@
         background: transparent;
         border-radius: 12px;
         padding: 4px 12px;
+    }
+
+    div.ws-api-doc textarea {
+        width: 100%;
+        max-width: 100%;
     }
 
     div.ws-api-doc input:invalid {
@@ -163,18 +187,28 @@
         background: var(--warn);
     }
 
+    div.ws-api-doc.json pre {
+        background: var(--textColor);
+    }
+
     div.ws-api-doc code {
         font-size: 12px;
         color: var(--backgroundHighContrast);
         background: none;
         margin: 0;
         padding: 0;
-        max-height: 25vh;
+        max-height: 50vh;
         overflow-y: scroll;
     }
 
     div.ws-api-doc.request code {
         font-size: 15px;
+    }
+
+    div.ws-api-doc.json code {
+        font-size: 12px;
+        max-height: none;
+        overflow-y: auto;
     }
 
     .request strong {
@@ -185,25 +219,41 @@
         color: var(--accent) !important;
     }
 
-    .response strong {
+    .response strong,
+    .response a {
         color: var(--secondary);
     }
 
-    strong.response {
+    strong.response,
+    a.response {
         color: var(--secondary) !important;
     }
 
     strong.indication,
-    .indication strong {
+    a.indication, 
+    .indication strong,
+    .indication a {
         color: var(--textColor);
     }
 
-    .error strong {
+    .error strong,
+    .error a {
         color: var(--warn);
     }
 
-    strong.error {
+    strong.error,
+    a.error {
         color: var(--warn) !important;
+    }
+
+    .json strong,
+    .json a {
+        color: var(--textBackground);
+    }
+
+    strong.json,
+    a.json {
+        color: var(--textBackground) !important;
     }
 
     span.circle {
@@ -509,7 +559,7 @@ device_count:42
     </div>
 </div>
 
-<p>Should the <strong>ENUMERATE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">ENUMERATE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
 ### Discovery and description
 
@@ -605,9 +655,63 @@ device_count:42
             </tr>
         </table>
         <h6>body</h6>
-        <p>The body of the <strong>DESCRIPTION</strong> message is a JSON representation of the requested entity (device access instance, device or property).</p>
-        <!-- TODO: JSON schema -->
-        <pre data-ws-example="DESCRIPTION"><code>DESCRIPTION
+        <p>The body of the <strong>DESCRIPTION</strong> message is a JSON representation of the requested entity (whole gateway, device access instance, device or property).
+<div class="ws-api-doc json">
+<button class="accordion-toggle">Definitions JSON schema</button> Common definitions for all description schemas.
+<div class="accordion-content" hidden>
+
+[description_definitions](json/description_definitions.json ':include :type=code')
+
+Download the JSON schema: <a href="json/description_definitions.json" download>description_definitions.json</a>
+
+</div>
+</div>
+
+<div class="ws-api-doc json">
+<button class="accordion-toggle">Global JSON schema</button> ID is empty, so the global description was requested.
+<div class="accordion-content" hidden>
+
+[description_global_body](json/description_global_body.json ':include :type=code')
+
+Download the JSON schema: <a class="response" href="json/description_global_body.json" download>description_global_body.json</a>
+
+</div>
+</div>
+
+<div class="ws-api-doc json">
+<button class="accordion-toggle">Device access JSON schema</button> ID refers to a device access instance.
+<div class="accordion-content" hidden>
+
+[description_access_body](json/description_access_body.json ':include :type=code')
+
+Download the JSON schema: <a class="response" href="json/description_access_body.json" download>description_access_body.json</a>
+
+</div>
+</div>
+
+<div class="ws-api-doc json">
+<button class="accordion-toggle">Device JSON schema</button> ID refers to a device.
+<div class="accordion-content" hidden>
+
+[description_device_body](json/description_device_body.json ':include :type=code')
+
+Download the JSON schema: <a class="response" href="json/description_device_body.json" download>description_device_body.json</a>
+
+</div>
+</div>
+
+<div class="ws-api-doc json">
+<button class="accordion-toggle">Property JSON schema</button> ID refers to a property.
+<div class="accordion-content" hidden>
+
+[description_property_body](json/description_property_body.json ':include :type=code')
+
+Download the JSON schema: <a class="response" href="json/description_property_body.json" download>description_property_body.json</a>
+
+</div>
+</div>
+</p>
+<pre data-ws-example="DESCRIPTION"><code>DESCRIPTION
 status:Success
 &nbsp;
 {
@@ -635,7 +739,7 @@ status:Success
     </div>
 </div>
 
-<p>Should the <strong>DESCRIBE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">DESCRIBE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
 ### Read property
 
@@ -713,7 +817,7 @@ status:Success
         </table>
         <h6>body</h6>
         <p><em>No body</em></p>
-        <pre data-ws-example="PROPERTY READ"><code>PROPERTY
+        <pre data-ws-example="PROPERTY READ"><code>PROPERTY READ
 status:Success
 id:A303.11.3023
 value:0.1575
@@ -721,7 +825,87 @@ value:0.1575
     </div>
 </div>
 
-<p>Should the <strong>READ PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">READ PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+### Read multiple properties
+
+<p>A client can query the actual value of multiple properties by sending the <strong class="request">READ PROPERTIES</strong> message.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">READ PROPERTIES</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>READ PROPERTIES</strong> message is send to a gateway to retrieve the actual value of multiple properties at the same time. The properties are identified by their 
+            <strong>ids</strong> that are encoded as a JSON array of strings in the body of the message. This message has no headers.
+        </p>
+         <h6>headers</h6>
+        <p><em>No headers</em></p>
+        <h6>body</h6>
+        <p>IDs of the properties encoded as a JSON array of strings.
+<div class="ws-api-doc json">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[read_properties_body](json/read_properties_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/read_properties_body.json" download>read_properties_body.json</a>
+
+</div>
+</div>
+        </p>
+        <p>
+            <em>use value:</em><br/>
+            <textarea placeholder="required" data-ws-body data-ws-required>[]</textarea>
+        </p>
+        <pre data-ws-try><code data-ws-preview="READ PROPERTIES"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTIES READ</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTIES READ</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTIES READ</strong> message is send by the gateway as a response to an <strong class="request">READ PROPERTIES</strong> that was accepted by the gateway. The only reason 
+            an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the operation to read multiple properties could be started. For all errors, the general status <strong>Error</strong> is set.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p>JSON array containing an object for each requested property. Each object in the array contains the id, status and value of the property read operation.
+<div class="ws-api-doc json">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[properties_read_body](json/properties_read_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/properties_read_body.json" download>properties_read_body.json</a>
+
+</div>
+</div>
+        </p>
+        <pre data-ws-example="PROPERTIES READ"><code>PROPERTIES READ
+status:Success
+&nbsp;
+[]</code></pre>
+    </div>
+</div>
+
+<p>Should the <strong class="request">READ PROPERTIES</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
 ### Write property
 
@@ -824,9 +1008,9 @@ id:A303.11.1415
     </div>
 </div>
 
-<p>Should the <strong>WRITE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">WRITE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
-### Subscribe to property
+### Subscribe to one or multiple properties
 
 <p>A client can subscribe to a property for changes by sending the <strong class="request">SUBSCRIBE PROPERTY</strong> message.</p>
 
@@ -903,7 +1087,85 @@ id:A303.11.3023
     </div>
 </div>
 
-<p>Should the <strong>SUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">SUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+<p>A client can subscribe to multiple properties by sending the <strong class="request">SUBSCRIBE PROPERTIES</strong> message.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">SUBSCRIBE PROPERTIES</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>SUBSCRIBE PROPERTIES</strong> message is send to a gateway to subscribe to multiple properties at the same time. The properties are identified by their <strong>ids</strong> 
+            that are encoded as a JSON array of strings in the body of the message. This message has no headers.
+        </p>
+         <h6>headers</h6>
+        <p><em>No headers</em></p>
+        <h6>body</h6>
+        <p>IDs of the properties encoded as a JSON array of strings.
+<div class="ws-api-doc json">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[subscribe_properties_body](json/subscribe_properties_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/subscribe_properties_body.json" download>subscribe_properties_body.json</a>
+
+</div>
+</div>
+        </p>
+        <p>
+            <em>use value:</em><br/>
+            <textarea placeholder="required" data-ws-body data-ws-required>[]</textarea>
+        </p>
+        <pre data-ws-try><code data-ws-preview="SUBSCRIBE PROPERTIES"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTIES SUBSCRIBED</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTIES SUBSCRIBED</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTIES SUBSCRIBED</strong> message is send by the gateway as a response to an <strong class="request">SUBSCRIBE PROPERTIES</strong> that was accepted by the gateway. The 
+            only reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the operation to subscribe to multiple properties could be started. For all errors, the general status <strong>Error</strong> is set.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p>JSON array containing an object for each property asked to get subscribed. Each object in the array contains the id and status of the subscription.
+<div class="ws-api-doc json">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[properties_subscribed_body](json/properties_subscribed_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/properties_subscribed_body.json" download>properties_subscribed_body.json</a>
+
+</div>
+</div>
+        </p>
+        <pre data-ws-example="PROPERTIES SUBSCRIBED"><code>PROPERTIES SUBSCRIBED
+status:Success
+&nbsp;
+[]</code></pre>
+    </div>
+</div>
+
+<p>Should the <strong class="request">SUBSCRIBE PROPERTIES</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
 <p>For all property subscriptions of a given client, the gateway sends a <strong class="request">PROPERTY UPDATE</strong> message when the property has changed.</p>
 
@@ -945,7 +1207,7 @@ value:0
     </div>
 </div>
 
-<p>A client can unsubscribe to a property for changes by sending the <strong class="request">UNSUBSCRIBE PROPERTY</strong> message.</p>
+<p>A client can unsubscribe from a property by sending the <strong class="request">UNSUBSCRIBE PROPERTY</strong> message.</p>
 
 <div class="ws-api-doc request">
     <button class="accordion-toggle">UNSUBSCRIBE PROPERTY</button>
@@ -1019,7 +1281,85 @@ id:A303.11.3023
     </div>
 </div>
 
-<p>Should the <strong>UNSUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">UNSUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
+<p>A client can unsubscribe from multiple properties by sending the <strong class="request">UNSUBSCRIBE PROPERTIES</strong> message.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">UNSUBSCRIBE PROPERTIES</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>UNSUBSCRIBE PROPERTIES</strong> message is send to a gateway to unsubscribe from multiple properties at the same time. The properties are identified by their <strong>ids</strong> 
+            that are encoded as a JSON array of strings in the body of the message. This message has no headers.
+        </p>
+         <h6>headers</h6>
+        <p><em>No headers</em></p>
+        <h6>body</h6>
+        <p>IDs of the properties encoded as a JSON array of strings.
+<div class="ws-api-doc json">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[unsubscribe_properties_body](json/unsubscribe_properties_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/unsubscribe_properties_body.json" download>unsubscribe_properties_body.json</a>
+
+</div>
+</div>
+        </p>
+        <p>
+            <em>use value:</em><br/>
+            <textarea placeholder="required" data-ws-body data-ws-required>[]</textarea>
+        </p>
+        <pre data-ws-try><code data-ws-preview="UNSUBSCRIBE PROPERTIES"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTIES UNSUBSCRIBED</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTIES UNSUBSCRIBED</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTIES UNSUBSCRIBED</strong> message is send by the gateway as a response to an <strong class="request">UNSUBSCRIBE PROPERTIES</strong> that was accepted by the gateway. The 
+            only reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the operation to unsubscribe from multiple properties could be started. For all errors, the general status <strong>Error</strong> is set.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p>JSON array containing an object for each property asked to get unsubscribed. Each object in the array contains the id and status of the unsubscription.
+<div class="ws-api-doc json">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[properties_unsubscribed_body](json/properties_unsubscribed_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/properties_unsubscribed_body.json" download>properties_unsubscribed_body.json</a>
+
+</div>
+</div>
+        </p>
+        <pre data-ws-example="PROPERTIES UNSUBSCRIBED"><code>PROPERTIES UNSUBSCRIBED
+status:Success
+&nbsp;
+[]</code></pre>
+    </div>
+</div>
+
+<p>Should the <strong class="request">UNSUBSCRIBE PROPERTIES</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
 ### Data log access
 
@@ -1286,8 +1626,18 @@ message:AUX2 relay deactivation
             </tr>
         </table>
         <h6>body</h6>
-        <p>The body of the <strong>MESSAGES READ</strong> message is a JSON array of all retrieved messages.</p>
-        <!-- TODO: JSON schema -->
+        <p>The body of the <strong>MESSAGES READ</strong> message is a JSON array of all retrieved messages.
+<div class="ws-api-doc json">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[messages_read_body](json/messages_read_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/messages_read_body.json" download>messages_read_body.json</a>
+
+</div>
+</div>
+        </p>
         <pre data-ws-example="MESSAGES READ"><code>MESSAGES READ
 count:2
 status:Success
@@ -1313,7 +1663,7 @@ status:Success
 
 ### Error
 
-If a client sends a malformed message to the gateway or the gateway is in an invalid state (mostly because of missing authorization), the gateway sends an <strong class="error">Error</strong>
+If a client sends a malformed message to the gateway, or the gateway is in an invalid state (mostly because of missing authorization), the gateway sends an <strong class="error">Error</strong>
 message to the client.
 
 <div class="ws-api-doc error">
@@ -1347,8 +1697,10 @@ reason:authorization required
     </div>
 </div>
 
-## EBNF Grammar
+## EBNF grammar
 
-The grammar of the different messages can be downloaded from here: <a href="bnf/websocket-api-grammar.bnf">websocket-api-grammar.bnf</a>.
+[websocket-api-grammar](bnf/websocket-api-grammar.bnf ':include :type=code')
+
+The grammar of the different messages can be downloaded from here: <a href="bnf/websocket-api-grammar.bnf" download>websocket-api-grammar.bnf</a>.
 
 <div style="height:60vh"></div>

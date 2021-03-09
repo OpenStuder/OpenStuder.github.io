@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "title": "PROPERTIES READ body",
+  "description": "List of IDs, status and values of the properties read",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "Success",
+          "NoDeviceAccess",
+          "NoDevice",
+          "NoProperty",
+          "Error"
+        ]
+      },
+      "id": {
+        "type": "string"
+      },
+      "value": {
+        "type": [
+          "null",
+          "boolean",
+          "integer",
+          "number",
+          "string"
+        ]
+      }
+    },
+    "required": [
+      "status",
+      "id",
+      "value"
+    ],
+    "additionalProperties": false
+  }
+}

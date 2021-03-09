@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "title": "PROPERTIES SUBSCRIBED body",
+  "description": "List of IDs of the properties and their subscription status",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "id"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -77,7 +77,8 @@ var SIWebSocketTestConnection = /** @class */ (function () {
             else {
                 entry.className = 'response';
             }
-            if (messageEvent.data.indexOf('DESCRIPTION\n') == 0 || messageEvent.data.indexOf('MESSAGES READ\n') == 0) {
+            if (messageEvent.data.indexOf('DESCRIPTION\n') == 0 || messageEvent.data.indexOf('MESSAGES READ\n') == 0 || messageEvent.data.indexOf('PROPERTIES READ\n') == 0 ||
+                messageEvent.data.indexOf('PROPERTIES SUBSCRIBED\n') == 0 || messageEvent.data.indexOf('PROPERTIES UNSUBSCRIBED\n') == 0) {
                 var parts = messageEvent.data.split('\n\n');
                 if (parts.length == 2 && parts[1]) {
                     entry.innerText = parts[0] + '\n\n';
@@ -123,7 +124,7 @@ var SIWebSocketTestConnection = /** @class */ (function () {
         this.connectButton_ = null;
         this.io_ = null;
         this.editTextarea_ = null;
-        this.editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:.*\\n)*\\n$');
+        this.editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:.*\\n)*\\n.*$');
         this.sendButton_ = null;
         this.log_ = null;
         this.clearLogButton_ = null;
@@ -237,6 +238,7 @@ function docsifyPlugin(hook, vm) {
             var preview = docElement.querySelector('code[data-ws-preview]');
             if (preview) {
                 var headers_1 = docElement.querySelectorAll('[data-ws-header]');
+                var body_1 = docElement.querySelector('[data-ws-body]');
                 var renderPreview_1 = function () {
                     var msg = String(preview.dataset.wsPreview) + '\n';
                     headers_1.forEach(function (headerElement) {
@@ -279,12 +281,19 @@ function docsifyPlugin(hook, vm) {
                         }
                     });
                     msg += '\n';
+                    if (body_1) {
+                        msg += body_1.value;
+                    }
                     preview.innerText = msg;
                 };
                 headers_1.forEach(function (element) {
                     element.onchange = renderPreview_1;
                     element.onkeyup = renderPreview_1;
                 });
+                if (body_1) {
+                    body_1.onchange = renderPreview_1;
+                    body_1.onkeyup = renderPreview_1;
+                }
                 renderPreview_1();
             }
         });

@@ -509,7 +509,8 @@ class SIWebSocketTestConnection {
 		} else {
 			entry.className = 'response';
 		}
-		if (messageEvent.data.indexOf('DESCRIPTION\n') == 0 || messageEvent.data.indexOf('MESSAGES READ\n') == 0) {
+		if (messageEvent.data.indexOf('DESCRIPTION\n') == 0 || messageEvent.data.indexOf('MESSAGES READ\n') == 0 || messageEvent.data.indexOf('PROPERTIES READ\n') == 0 ||
+			messageEvent.data.indexOf('PROPERTIES SUBSCRIBED\n') == 0 || messageEvent.data.indexOf('PROPERTIES UNSUBSCRIBED\n') == 0) {
 			const parts = messageEvent.data.split('\n\n');
 			if (parts.length == 2 && parts[1]) {
 				entry.innerText = parts[0] + '\n\n';
@@ -577,7 +578,7 @@ class SIWebSocketTestConnection {
 	private io_: HTMLCollectionOf<HTMLDivElement> = null;
 
 	private editTextarea_: HTMLTextAreaElement = null;
-	private editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:.*\\n)*\\n$');
+	private editVerifyRegex_ = new RegExp('^[A-Z ]+\\n([a-z_]+:.*\\n)*\\n.*$');
 	private sendButton_: HTMLButtonElement = null;
 
 	private log_: HTMLUListElement = null;
@@ -593,6 +594,7 @@ function docsifyPlugin(hook: any, vm: any) {
 			const preview = docElement.querySelector<HTMLElement>('code[data-ws-preview]');
 			if (preview) {
 				const headers = docElement.querySelectorAll<HTMLElement>('[data-ws-header]');
+				const body = docElement.querySelector<HTMLTextAreaElement>('[data-ws-body]');
 
 				const renderPreview = () => {
 					let msg = String(preview.dataset.wsPreview) + '\n';
@@ -634,6 +636,11 @@ function docsifyPlugin(hook: any, vm: any) {
 
 					});
 					msg += '\n';
+
+					if (body) {
+						msg += body.value;
+					}
+
 					preview.innerText = msg;
 				};
 
@@ -641,6 +648,11 @@ function docsifyPlugin(hook: any, vm: any) {
 					element.onchange = renderPreview;
 					element.onkeyup = renderPreview;
 				});
+
+				if (body) {
+					body.onchange = renderPreview;
+					body.onkeyup = renderPreview;
+				}
 
 				renderPreview();
 			}

@@ -1,6 +1,6 @@
 grammar ::= request | response
 
-request ::= authorize | enumerate | describe | read_property | write_property | subscribe_property | unsubscribe_property | read_datalog | read_messages
+request ::= authorize | enumerate | describe | read_property | read_properties | write_property | subscribe_property | subscribe_properties | unsubscribe_property | unsubscribe_properties | read_datalog | read_messages
 
 authorize ::= "AUTHORIZE" nl ("user:" authorize_user nl "password:" authorize_password nl)? ("protocol_version:" authorize_protocol_version nl)? nl
 authorize_user ::= string
@@ -15,19 +15,25 @@ describe_flag ::= "IncludeAccessInformation" | "IncludeDeviceInformation" | "Inc
 
 read_property ::= "READ PROPERTY" nl "id:" property_id nl nl
 
+read_properties ::= "READ PROPERTIES" nl nl json
+
 write_property ::= "WRITE PROPERTY" nl "id:" property_id nl ("flags:" property_write_flags nl)? ("value:" property_value nl)? nl
 property_write_flags ::= property_write_flag ("," property_write_flag)*
 property_write_flag ::= "Permanent"
 
 subscribe_property ::= "SUBSCRIBE PROPERTY" nl "id:" property_id nl nl
 
+subscribe_properties ::= "SUBSCRIBE PROPERTIES" nl nl json
+
 unsubscribe_property ::= "UNSUBSCRIBE PROPERTY" nl "id:" property_id nl nl
+
+unsubscribe_properties ::= "UNSUBSCRIBE PROPERTIES" nl nl json
 
 read_datalog ::= "READ DATALOG" nl "id:" property_id ("from:" iso8601 nl)? ("to:" iso8601 nl)? ("limit:" integer nl)? nl
 
 read_messages ::= "READ MESSAGES" nl ("from:" iso8601 nl)? ("to:" iso8601 nl)? ("limit:" integer nl)? nl
 
-response ::= error | authorized | enumerated | description | property_read | property_written | property_subscribed | property_unsubscribed | property_update | device_message | datalog_read | messages_read
+response ::= error | authorized | enumerated | description | property_read | properties_read | property_written | property_subscribed | properties_subscribed | property_unsubscribed | properties_unsubscribed | property_update | device_message | datalog_read | messages_read
 
 error ::= "ERROR" nl "reason:" error_reason nl nl
 error_reason ::= string
@@ -42,11 +48,17 @@ description ::= "DESCRIPTION" nl "status:" status nl ("id:" describe_id nl)? nl 
 
 property_read ::= "PROPERTY READ" nl "status:" status nl "id:" property_id nl ("value:" property_value nl)? nl
 
+properties_read ::= "PROPERTIES READ" nl "status:" status nl nl json
+
 property_written ::= "PROPERTY WRITTEN" nl "status:" status nl "id:" property_id nl nl
 
 property_subscribed ::= "PROPERTY SUBSCRIBED" nl "status:" status nl "id:" property_id nl nl
 
+properties_subscribed ::= "PROPERTIES SUBSCRIBED" nl "status:" status nl nl json
+
 property_unsubscribed ::= "PROPERTY UNSUBSCRIBED" nl "status:" status nl "id:" property_id nl nl
+
+properties_unsubscribed ::= "PROPERTIES UNSUBSCRIBED" nl "status:" status nl nl json
 
 property_update ::= "PROPERTY UPDATE" nl "id:" property_id nl "value:" property_value nl nl
 

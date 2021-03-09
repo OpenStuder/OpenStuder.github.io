@@ -1,5 +1,5 @@
 function accordionToggle(mouseEvent) {
-    var content = mouseEvent.target.nextElementSibling;
+    var content = mouseEvent.target.parentElement.querySelector('.accordion-content');
     content.hidden = !content.hidden;
 }
 function accordionPlugin(hook, vm) {

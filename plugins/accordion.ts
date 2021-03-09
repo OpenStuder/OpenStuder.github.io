@@ -1,6 +1,6 @@
 
 function accordionToggle(mouseEvent: MouseEvent) {
-    const content = (mouseEvent.target as HTMLElement).nextElementSibling as HTMLDivElement;
+    const content = (mouseEvent.target as HTMLElement).parentElement.querySelector<HTMLDivElement>('.accordion-content');
     content.hidden = !content.hidden;
 }
 

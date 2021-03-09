@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "title": "Description JSON",
+  "description": "Basic definitions for JSON descriptions",
+  "property_information": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "ID of the property",
+        "type": "integer"
+      },
+      "type": {
+        "description": "Datatype of the property",
+        "type": "string",
+        "enum": [
+          "Float",
+          "Enum",
+          "Bool",
+          "TimeOfDay",
+          "DaysOfWeek",
+          "Signal",
+          "Invalid"
+        ]
+      },
+      "readable": {
+        "description": "True if the property can be read, false otherwise",
+        "type": "boolean"
+      },
+      "writeable": {
+        "description": "True if the property can be written, false otherwise",
+        "type": "boolean"
+      },
+      "description": {
+        "description": "Property description",
+        "type": "string"
+      },
+      "values": {
+        "description": "All values the enum can have",
+        "type": "object",
+        "additionalProperties": {
+          "type": "integer"
+        }
+      },
+      "unit": {
+        "description": "Property physical unit",
+        "type": "string"
+      }
+    },
+    "if": {
+      "properties": {
+        "type": {
+          "const": "Enum"
+        }
+      }
+    },
+    "then": {
+      "required": [
+        "id",
+        "type",
+        "readable",
+        "writeable",
+        "description",
+        "values"
+      ]
+    },
+    "else": {
+      "required": [
+        "id",
+        "type",
+        "readable",
+        "writeable",
+        "description",
+        "unit"
+      ]
+    },
+    "additionalProperties": false
+  },
+  "device_information": {
+    "type": "object",
+    "properties": {
+      "model": {
+        "description": "Model of the device",
+        "type": "string"
+      },
+      "id": {
+        "description": "ID of the device",
+        "type": "string"
+      },
+      "properties": {
+        "description": "List of all properties and their description",
+        "type": "array",
+        "items": {
+          "$ref": "#/property_information"
+        }
+      }
+    },
+    "required": [
+      "model",
+      "id"
+    ],
+    "additionalProperties": true
+  },
+  "access_information": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "ID of the device access instance",
+        "type": "string"
+      },
+      "devices": {
+        "description": "List of all devices and their description currently available",
+        "type": "array",
+        "items": {
+          "$ref": "#/device_information"
+        }
+      },
+      "driver": {
+        "description": "Device access driver - only present in global description",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": true
+  },
+  "driver_information": {
+    "description": "Information about all loaded device access drivers",
+    "type": "object",
+    "additionalProperties": {
+      "type": "object"
+    }
+  }
+}

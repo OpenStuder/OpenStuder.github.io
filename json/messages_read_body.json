@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "title": "MESSAGES READ body",
+  "description": "List of device messages - Body of the MESSAGES READ message",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "description": "Timestamp when the message was received by the gateway in ISO 8601 extended format",
+        "type": "string"
+      },
+      "access_id": {
+        "description": "ID of the device access instance from which the message was received",
+        "type": "string"
+      },
+      "device_id": {
+        "description": "ID of the device that send the message",
+        "type": "string"
+      },
+      "message_id": {
+        "description": "ID of the message",
+        "type": "number"
+      },
+      "message": {
+        "description": "Message as human readable string",
+        "type": "string"
+      }
+    },
+    "required": [
+      "timestamp",
+      "access_id",
+      "device_id",
+      "message_id",
+      "message"
+    ],
+    "additionalProperties": false
+  }
+}
