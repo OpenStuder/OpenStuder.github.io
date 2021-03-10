@@ -197,6 +197,31 @@ except SIProtocolError as error:
     print(f'Error: {error.reason()}')
 ```
 
+##### Reading multiple properties - *read_properties()*
+
+This method is used to retrieve the actual value of multiple properties at once from the connected gateway. The properties are identified by the property_ids parameter.
+
+**Parameters**:
+- `property_ids`: List of IDs of the properties to read in the form `{device access ID}.{device ID}.{property ID}`. *Required*.
+
+**Returns**:
+1. List of statuses and values of all read properties.
+
+*Example:*
+```python
+from openstuder import SIGatewayClient, SIProtocolError
+
+try:
+    client = SIGatewayClient()
+    client.connect('localhost')
+    results = client.read_properties(['demo.sol.11004', 'demo.inv.3136'])
+    for result in results:
+        print(f'Read property {result.id}, status = {result.status}, value = {result.value}')
+
+except SIProtocolError as error:
+    print(f'Error: {error.reason()}')
+```
+
 ##### Writing properties - *write_property()*
 
 The `write_property()` method is used to change the actual value of a given property. The property is identified by the property_id parameter, and the new value is passed by the optional value 
@@ -306,9 +331,8 @@ advantages are that long operations do not block the main thread as all results 
 possible.
 
 >[!Note]
-> All examples set the `background` parameter to `False` in order to keep the scripts running, if you use the asynchronous client along with a GUI framework or there is a main thread that continues
+> Some examples set the `background` parameter to `False` in order to keep the scripts running, if you use the asynchronous client along with a GUI framework or there is a main thread that continues
 > to run, you should not provide this parameter and use the default behavior which runs in the background.
-
 
 ##### Establish connection - *connect()*
 
@@ -517,6 +541,50 @@ client.on_property_read = on_property_read
 client.connect('localhost', background=False)
 ```
 
+##### Reading multiple properties - *read_properties()*
+
+This method is used to retrieve the actual value of multiple properties at once from the connected gateway. The properties are identified by the property_ids parameter.
+
+The status of the read operation and the actual value of the property are reported using the `on_properties_read()` callback.
+
+**Parameters**:
+- `property_ids`: List of IDs of the properties to read in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_properties_read()`
+1. List if status, id and value of the read operations.
+
+*Example:*
+```python
+from typing import List
+from openstuder import SIAsyncGatewayClient, SIProtocolError, SIStatus, SIPropertyReadResult
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.read_properties(['demo.sol.11004', "demo.inv.3136"])
+
+
+def on_properties_read(results: List[SIPropertyReadResult]):
+    for result in results:
+        print(f'Property read, status = {result.status}, id = {result.id}, value = {result.value}')
+    client.disconnect()
+
+
+client = SIAsyncGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_properties_read = on_properties_read
+client.connect('localhost', background=False)
+```
+
 ##### Writing properties - *write_property()*
 
 The write_property method is used to change the actual value of a given property. The property is identified by the property_id parameter and the new value is passed by the optional value parameter.
@@ -641,6 +709,79 @@ client.on_property_unsubscribed = on_property_unsubscribed
 client.connect('localhost')
 time.sleep(10)
 client.unsubscribe_from_property('demo.sol.11004')
+time.sleep(2)
+```
+
+##### Subscribing to multiple properties - *subscribe_properties(), unsubscribe_properties()*
+
+The method `subscribe_to_properties()` can be used to subscribe to multiple properties on the connected gateway. The properties are identified by the property_ids parameter.
+
+The status of the multiple subscribe request is reported using the `on_properties_subscribed()` callback.
+
+**Parameters**:
+- `property_ids`: List of IDs of the properties to subscribe to in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_properties_subscribed()`
+1. List of SIPropertySubscriptionResult objects containing the id and status for each property subscription.
+
+The method `unsubscribe_from_properties()` can be used to unsubscribe from multiple properties on the connected gateway. The properties are identified by the property_ids parameter.
+
+The status of the multiple unsubscribe request is reported using the `on_properties_unsubscribed()` callback.
+
+**Parameters**:
+- `property_ids`: List of IDs of the properties to unsubscribe from in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_properties_unsubscribed()`
+1. List of SIPropertySubscriptionResult objects containing the id and status for each property subscription.
+
+*Example:*
+```python
+import time
+from typing import List
+from openstuder import SIAsyncGatewayClient, SIProtocolError, SIStatus, SIPropertySubscriptionResult
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.subscribe_to_properties(['demo.sol.11004', 'demo.inv.3136'])
+
+
+def on_properties_subscribed(statuses: List[SIPropertySubscriptionResult]):
+    for status in statuses:
+        print(f'Subscribed to {status.id}, status = {status.status}')
+
+
+def on_property_updated(id_: str, value: any):
+    print(f'Property {id_} updated, value = {value}')
+
+
+def on_properties_unsubscribed(statuses: List[SIPropertySubscriptionResult]):
+    for status in statuses:
+        print(f'Unsubscribed from {status.id}, status = {status.status}')
+
+
+client = SIAsyncGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_properties_subscribed = on_properties_subscribed
+client.on_property_updated = on_property_updated
+client.on_properties_unsubscribed = on_properties_unsubscribed
+client.connect('localhost')
+time.sleep(10)
+client.unsubscribe_from_properties(['demo.sol.11004', 'demo.inv.3136'])
 time.sleep(2)
 ```
 
