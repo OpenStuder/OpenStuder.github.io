@@ -23,12 +23,20 @@
         background: var(--warnBackground);
     }
 
-    div.ws-api-doc.json {
+    div.ws-api-doc.json-schema {
         border: none;
         background: var(--textColor);
         width: auto;        
         margin: 12px 24px;
         color: var(--textBackground);
+    }
+
+    div.ws-api-doc.json-example {
+        border-color: var(--textColor) !important;
+        background: none;
+        width: auto;        
+        margin: 12px 24px;
+        color: var(--textColor);
     }
 
     div.ws-api-doc button.accordion-toggle {
@@ -54,9 +62,15 @@
         background: var(--warn);
     }
 
-    div.ws-api-doc.json button.accordion-toggle {
+    div.ws-api-doc.json-schema button.accordion-toggle {
         background: var(--textBackground);
         color: var(--textColor);
+        min-width: 250px;
+    }
+
+    div.ws-api-doc.json-example button.accordion-toggle {
+        background: var(--textColor);
+        color: var(--textBackground);
         min-width: 250px;
     }
 
@@ -78,8 +92,12 @@
         border-color: var(--warn);
     }
 
-    div.ws-api-doc.json div {
+    div.ws-api-doc.json-schema div {
         border: none;
+    }
+
+    div.ws-api-doc.json-example div {
+        border-color: var(--textColor);
     }
 
     div.ws-api-doc p {
@@ -187,8 +205,12 @@
         background: var(--warn);
     }
 
-    div.ws-api-doc.json pre {
+    div.ws-api-doc.json-schema pre {
         background: var(--textColor);
+    }
+
+    div.ws-api-doc.json-example pre {
+        background: none;
     }
 
     div.ws-api-doc code {
@@ -205,10 +227,15 @@
         font-size: 15px;
     }
 
-    div.ws-api-doc.json code {
+    div.ws-api-doc.json-schema code,
+    div.ws-api-doc.json-example code {
         font-size: 12px;
         max-height: none;
         overflow-y: auto;
+    }
+
+    div.ws-api-doc.json-example code {
+        color: var(--textColor);
     }
 
     .request strong {
@@ -246,13 +273,13 @@
         color: var(--warn) !important;
     }
 
-    .json strong,
-    .json a {
+    .json-schema strong,
+    .json-schema a {
         color: var(--textBackground);
     }
 
-    strong.json,
-    a.json {
+    strong.json-schema,
+    a.json-schema {
         color: var(--textBackground) !important;
     }
 
@@ -656,7 +683,7 @@ device_count:42
         </table>
         <h6>body</h6>
         <p>The body of the <strong>DESCRIPTION</strong> message is a JSON representation of the requested entity (whole gateway, device access instance, device or property).
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">Definitions JSON schema</button> Common definitions for all description schemas.
 <div class="accordion-content" hidden>
 
@@ -667,7 +694,7 @@ Download the JSON schema: <a href="json/description_definitions.json" download>d
 </div>
 </div>
 
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">Global JSON schema</button> ID is empty, so the global description was requested.
 <div class="accordion-content" hidden>
 
@@ -678,7 +705,47 @@ Download the JSON schema: <a class="response" href="json/description_global_body
 </div>
 </div>
 
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">Global JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+{
+  "drivers": {
+    "Demo": {
+      "author": "michael.clausen@hevs.ch",
+      "name": "Demo",
+      "parameters": [],
+      "version": "1.0"
+    }
+  },
+  "instances": [
+    {
+      "devices": [
+        {
+          "id": "inv",
+          "model": "Demo inverter"
+        },
+        {
+          "id": "sol",
+          "model": "Demo MPPT"
+        },
+        {
+          "id": "bat",
+          "model": "Demo BSP"
+        }
+      ],
+      "driver": "Demo",
+      "id": "demo"
+    }
+  ]
+}
+```
+
+</div>
+</div>
+
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">Device access JSON schema</button> ID refers to a device access instance.
 <div class="accordion-content" hidden>
 
@@ -689,7 +756,179 @@ Download the JSON schema: <a class="response" href="json/description_access_body
 </div>
 </div>
 
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">Device access JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+{
+  "devices": [
+    {
+      "id": "inv",
+      "model": "Demo inverter",
+      "properties": [
+        {
+          "description": "State of auxiliary relay 2",
+          "id": 3032,
+          "readable": true,
+          "type": "Enum",
+          "values": {
+            "Closed": 1,
+            "Opened": 0
+          },
+          "writeable": false
+        },
+        {
+          "description": "Input active power",
+          "id": 3137,
+          "readable": true,
+          "type": "Float",
+          "unit": "kW",
+          "writeable": false
+        },
+        {
+          "description": "Output active power",
+          "id": 3136,
+          "readable": true,
+          "type": "Float",
+          "unit": "kW",
+          "writeable": false
+        },
+        {
+          "description": "Energy AC-In from the current day",
+          "id": 3081,
+          "readable": true,
+          "type": "Float",
+          "unit": "kWh",
+          "writeable": false
+        },
+        {
+          "description": "Energy AC-In from the previous day",
+          "id": 3080,
+          "readable": true,
+          "type": "Float",
+          "unit": "kWh",
+          "writeable": false
+        },
+        {
+          "description": "Consumers energy of the current day",
+          "id": 3083,
+          "readable": true,
+          "type": "Float",
+          "unit": "kWh",
+          "writeable": false
+        },
+        {
+          "description": "Consumers energy of the previous day",
+          "id": 3082,
+          "readable": true,
+          "type": "Float",
+          "unit": "kWh",
+          "writeable": false
+        },
+        {
+          "description": "ON of the Xtenders",
+          "id": 1415,
+          "readable": false,
+          "type": "Signal",
+          "unit": "",
+          "writeable": true
+        },
+        {
+          "description": "OFF of the Xtenders",
+          "id": 1399,
+          "readable": false,
+          "type": "Signal",
+          "unit": "",
+          "writeable": true
+        }
+      ]
+    },
+    {
+      "id": "sol",
+      "model": "Demo MPPT",
+      "properties": [
+        {
+          "description": "Power of the PV generator",
+          "id": 11004,
+          "readable": true,
+          "type": "Float",
+          "unit": "kW",
+          "writeable": false
+        },
+        {
+          "description": "Production in (kWh) for the current day",
+          "id": 11007,
+          "readable": true,
+          "type": "Float",
+          "unit": "kWh",
+          "writeable": false
+        },
+        {
+          "description": "Production in (kWh) for the previous day",
+          "id": 11011,
+          "readable": true,
+          "type": "Float",
+          "unit": "kWh",
+          "writeable": false
+        }
+      ]
+    },
+    {
+      "id": "bat",
+      "model": "Demo BSP",
+      "properties": [
+        {
+          "description": "Power",
+          "id": 7003,
+          "readable": true,
+          "type": "Float",
+          "unit": "W",
+          "writeable": false
+        },
+        {
+          "description": "Battery voltage",
+          "id": 7000,
+          "readable": true,
+          "type": "Float",
+          "unit": "V",
+          "writeable": false
+        },
+        {
+          "description": "Battery current",
+          "id": 7001,
+          "readable": true,
+          "type": "Float",
+          "unit": "A",
+          "writeable": false
+        },
+        {
+          "description": "State of Charge",
+          "id": 7002,
+          "readable": true,
+          "type": "Float",
+          "unit": "%",
+          "writeable": false
+        },
+        {
+          "description": "Battery temperature (minute avg)",
+          "id": 7033,
+          "readable": true,
+          "type": "Float",
+          "unit": "degree C",
+          "writeable": false
+        }
+      ]
+    }
+  ],
+  "id": "demo"
+}
+```
+
+</div>
+</div>
+
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">Device JSON schema</button> ID refers to a device.
 <div class="accordion-content" hidden>
 
@@ -700,7 +939,98 @@ Download the JSON schema: <a class="response" href="json/description_device_body
 </div>
 </div>
 
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">Device JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+{
+  "id": "inv",
+  "model": "Demo inverter",
+  "properties": [
+    {
+      "description": "State of auxiliary relay 2",
+      "id": 3032,
+      "readable": true,
+      "type": "Enum",
+      "values": {
+        "Closed": 1,
+        "Opened": 0
+      },
+      "writeable": false
+    },
+    {
+      "description": "Input active power",
+      "id": 3137,
+      "readable": true,
+      "type": "Float",
+      "unit": "kW",
+      "writeable": false
+    },
+    {
+      "description": "Output active power",
+      "id": 3136,
+      "readable": true,
+      "type": "Float",
+      "unit": "kW",
+      "writeable": false
+    },
+    {
+      "description": "Energy AC-In from the current day",
+      "id": 3081,
+      "readable": true,
+      "type": "Float",
+      "unit": "kWh",
+      "writeable": false
+    },
+    {
+      "description": "Energy AC-In from the previous day",
+      "id": 3080,
+      "readable": true,
+      "type": "Float",
+      "unit": "kWh",
+      "writeable": false
+    },
+    {
+      "description": "Consumers energy of the current day",
+      "id": 3083,
+      "readable": true,
+      "type": "Float",
+      "unit": "kWh",
+      "writeable": false
+    },
+    {
+      "description": "Consumers energy of the previous day",
+      "id": 3082,
+      "readable": true,
+      "type": "Float",
+      "unit": "kWh",
+      "writeable": false
+    },
+    {
+      "description": "ON of the Xtenders",
+      "id": 1415,
+      "readable": false,
+      "type": "Signal",
+      "unit": "",
+      "writeable": true
+    },
+    {
+      "description": "OFF of the Xtenders",
+      "id": 1399,
+      "readable": false,
+      "type": "Signal",
+      "unit": "",
+      "writeable": true
+    }
+  ]
+}
+```
+
+</div>
+</div>
+
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">Property JSON schema</button> ID refers to a property.
 <div class="accordion-content" hidden>
 
@@ -710,6 +1040,25 @@ Download the JSON schema: <a class="response" href="json/description_property_bo
 
 </div>
 </div>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">Property JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+{
+  "description": "Output active power",
+  "id": 3136,
+  "readable": true,
+  "type": "Float",
+  "unit": "kW",
+  "writeable": false
+}
+```
+
+</div>
+</div>
+
 </p>
 <pre data-ws-example="DESCRIPTION"><code>DESCRIPTION
 status:Success
@@ -842,7 +1191,7 @@ value:0.1575
         <p><em>No headers</em></p>
         <h6>body</h6>
         <p>IDs of the properties encoded as a JSON array of strings.
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">JSON schema</button>
 <div class="accordion-content" hidden>
 
@@ -852,7 +1201,23 @@ Download the JSON schema: <a href="json/read_properties_body.json" download>read
 
 </div>
 </div>
-        </p>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+[
+  "demo.bat.7000",
+  "demo.inv.3136",
+  "demo.inv.3137"
+]
+```
+
+</div>
+</div>
+
+</p>
         <p>
             <em>use value:</em><br/>
             <textarea placeholder="required" data-ws-body data-ws-required>[]</textarea>
@@ -887,7 +1252,7 @@ Download the JSON schema: <a href="json/read_properties_body.json" download>read
         </table>
         <h6>body</h6>
         <p>JSON array containing an object for each requested property. Each object in the array contains the id, status and value of the property read operation.
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">JSON schema</button>
 <div class="accordion-content" hidden>
 
@@ -897,7 +1262,35 @@ Download the JSON schema: <a href="json/properties_read_body.json" download>prop
 
 </div>
 </div>
-        </p>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+[
+  {
+    "id": "demo.bat.7000",
+    "status": "Success",
+    "value": "12.65"
+  },
+  {
+    "id": "demo.inv.3136",
+    "status": "Success",
+    "value": "0"
+  },
+  {
+    "id": "demo.inv.3137",
+    "status": "Success",
+    "value": "0"
+  }
+]
+```
+
+</div>
+</div>
+
+</p>
         <pre data-ws-example="PROPERTIES READ"><code>PROPERTIES READ
 status:Success
 &nbsp;
@@ -1102,7 +1495,7 @@ id:A303.11.3023
         <p><em>No headers</em></p>
         <h6>body</h6>
         <p>IDs of the properties encoded as a JSON array of strings.
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">JSON schema</button>
 <div class="accordion-content" hidden>
 
@@ -1112,7 +1505,23 @@ Download the JSON schema: <a href="json/subscribe_properties_body.json" download
 
 </div>
 </div>
-        </p>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+[
+  "demo.inv.3032",
+  "demo.inv.3136",
+  "demo.inv.3137"
+]
+```
+
+</div>
+</div>
+
+</p>
         <p>
             <em>use value:</em><br/>
             <textarea placeholder="required" data-ws-body data-ws-required>[]</textarea>
@@ -1147,7 +1556,7 @@ Download the JSON schema: <a href="json/subscribe_properties_body.json" download
         </table>
         <h6>body</h6>
         <p>JSON array containing an object for each property asked to get subscribed. Each object in the array contains the id and status of the subscription.
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">JSON schema</button>
 <div class="accordion-content" hidden>
 
@@ -1157,7 +1566,32 @@ Download the JSON schema: <a href="json/properties_subscribed_body.json" downloa
 
 </div>
 </div>
-        </p>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+[
+  {
+    "id": "demo.inv.3032",
+    "status": "Success"
+  },
+  {
+    "id": "demo.inv.3136",
+    "status": "Success"
+  },
+  {
+    "id": "demo.inv.3137",
+    "status": "Success"
+  }
+]
+```
+
+</div>
+</div>
+
+</p>
         <pre data-ws-example="PROPERTIES SUBSCRIBED"><code>PROPERTIES SUBSCRIBED
 status:Success
 &nbsp;
@@ -1296,7 +1730,7 @@ id:A303.11.3023
         <p><em>No headers</em></p>
         <h6>body</h6>
         <p>IDs of the properties encoded as a JSON array of strings.
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">JSON schema</button>
 <div class="accordion-content" hidden>
 
@@ -1306,7 +1740,23 @@ Download the JSON schema: <a href="json/unsubscribe_properties_body.json" downlo
 
 </div>
 </div>
-        </p>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+[
+  "demo.inv.3032",
+  "demo.inv.3136",
+  "demo.inv.3137"
+]
+```
+
+</div>
+</div>
+
+</p>
         <p>
             <em>use value:</em><br/>
             <textarea placeholder="required" data-ws-body data-ws-required>[]</textarea>
@@ -1341,7 +1791,7 @@ Download the JSON schema: <a href="json/unsubscribe_properties_body.json" downlo
         </table>
         <h6>body</h6>
         <p>JSON array containing an object for each property asked to get unsubscribed. Each object in the array contains the id and status of the unsubscription.
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">JSON schema</button>
 <div class="accordion-content" hidden>
 
@@ -1351,7 +1801,32 @@ Download the JSON schema: <a href="json/properties_unsubscribed_body.json" downl
 
 </div>
 </div>
-        </p>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+[
+  {
+    "id": "demo.inv.3032",
+    "status": "Success"
+  },
+  {
+    "id": "demo.inv.3136",
+    "status": "Success"
+  },
+  {
+    "id": "demo.inv.3137",
+    "status": "Success"
+  }
+]
+```
+
+</div>
+</div>
+
+</p>
         <pre data-ws-example="PROPERTIES UNSUBSCRIBED"><code>PROPERTIES UNSUBSCRIBED
 status:Success
 &nbsp;
@@ -1627,7 +2102,7 @@ message:AUX2 relay deactivation
         </table>
         <h6>body</h6>
         <p>The body of the <strong>MESSAGES READ</strong> message is a JSON array of all retrieved messages.
-<div class="ws-api-doc json">
+<div class="ws-api-doc json-schema">
 <button class="accordion-toggle">JSON schema</button>
 <div class="accordion-content" hidden>
 
@@ -1637,7 +2112,34 @@ Download the JSON schema: <a href="json/messages_read_body.json" download>messag
 
 </div>
 </div>
-        </p>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+[
+  {
+    "access_id": "demo",
+    "device_id": "inv",
+    "message": "AUX2 relay deactivation",
+    "message_id": 210,
+    "timestamp": "2021-03-10T23:58:14"
+  },
+  {
+    "access_id": "demo",
+    "device_id": "inv",
+    "message": "AUX2 relay activation",
+    "message_id": 209,
+    "timestamp": "2021-03-10T23:58:19"
+  }
+]
+```
+
+</div>
+</div>
+
+</p>
         <pre data-ws-example="MESSAGES READ"><code>MESSAGES READ
 count:2
 status:Success
