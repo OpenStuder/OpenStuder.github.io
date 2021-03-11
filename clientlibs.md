@@ -1222,6 +1222,60 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 }
 ```
 
+##### Reading multiple properties - *readProperties()*
+
+This method is used to retrieve the actual value of multiple properties at once from the connected gateway. The properties are identified by the propertyIds parameter.
+
+**Parameters**:
+- `propertyIds`: List of IDs of the properties to read in the form `{device access ID}.{device ID}.{property ID}`. *Required*.
+
+**Returns**:
+1. List of statuses and values of all read properties.
+
+*Example:*
+```python
+import React from 'react';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
+
+type AppState={
+    valueProperty11004:string;
+    valueProperty3136:string;
+}
+
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
+
+    sigc:SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new SIGatewayClient();
+        this.state={valueProperty11004:"-", valueProperty3136:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.setCallback(this);
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div>
+                <p>Value of Property 11004 : {this.state.valueProperty11004}</p>
+                <p>Value of Property 3136 : {this.state.valueProperty3136}</p>
+             </div>
+        );
+    }
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+        this.sigc.readProperties(['demo.sol.11004', 'demo.inv.3136']);
+    }
+    onPropertiesRead(results: SIPropertyReadResult[]): void {
+        this.setState({valueProperty11004:results[0].value, valueProperty3136:results[1].value});
+    }
+}
+```
+
 ##### Writing properties - *writeProperty()*
 
 The writeProperty method is used to change the actual value of a given property. The property is identified by the propertyId parameter and the new value is passed by the optional value parameter.
