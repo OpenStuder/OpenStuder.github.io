@@ -1378,7 +1378,6 @@ The status of the unsubscribe request is reported using the `onPropertyUnsubscri
 - `SIProtocolError`: If the client is not connected or not yet authorized.
 
 **Callback parameters**: `onPropertyUnsubscribed()`
-A SIMessage instance with the different information:
 1. The status of the unsubscription.
 2. The ID of the property.
 
@@ -1421,19 +1420,119 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
         );
     }
     onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
-        this.sigc.subscribeProperty('demo.sol.11004');
+        this.sigc.subscribeToProperty('demo.sol.11004');
     }
     onPropertySubscribed(status: SIStatus, propertyId: string): void {
         this.setState({status: "subscription -> " + status});
     }
     onPropertyUnsubscribed(status: SIStatus, propertyId: string): void {
-            this.setState({status: "unsubscription -> " + status});
+        this.setState({status: "unsubscription -> " + status});
     }
     onPropertyUpdated(propertyId: string, value: any): void {
         this.setState({value: value});
         countUpdate++;
         if(countUpdate===maxUpdate){
             this.sigc.unsubscribeFromProperty('demo.sol.11004');
+        }
+    }
+}
+```
+
+##### Subscribing to multiple properties - *subscribeProperties(), unsubscribeProperties()*
+
+The method `subscribeToProperties()` can be used to subscribe to multiple properties on the connected gateway. The properties are identified by the propertyIds parameter.
+
+The status of the multiple subscribe request is reported using the `onPropertiesSubscribed()` callback.
+
+**Parameters**:
+- `propertyIds`: List of IDs of the properties to subscribe to in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onPropertiesSubscribed()`
+1. List of SIPropertySubscriptionResult objects containing the id and status for each property subscription.
+
+The method `unsubscribeFromProperties()` can be used to unsubscribe from multiple properties on the connected gateway. The properties are identified by the propertyIds parameter.
+
+The status of the multiple unsubscribe request is reported using the `onPropertiesUnsubscribed()` callback.
+
+**Parameters**:
+- `propertyIds`: List of IDs of the properties to unsubscribe from in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onPropertiesUnsubscribed()`
+1. List of SIPropertySubscriptionResult objects containing the id and status for each property subscription.
+
+*Example:*
+```python
+import React from 'react';
+
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
+
+type AppState={
+    subscribed:boolean;
+    valueProperty11004:string;
+    valueProperty3136:string;
+}
+let countUpdate=0;
+const MAXUPDATE=4;
+
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
+
+    sigc:SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new SIGatewayClient();
+        this.state={subscribed:false, valueProperty11004:"-", valueProperty3136:"-"};
+    }
+    public componentDidMount() {
+        this.sigc.setCallback(this);
+        this.sigc.connect("ws://172.22.22.50");
+    }
+    public render() {
+        let subscribed:string = this.state.subscribed?"true":"false";
+        return (
+            <div>
+                <p> Subscription : {subscribed}</p>
+                <p>Value of Property 11004 : {this.state.valueProperty11004}</p>
+                <p>Value of Property 3136 : {this.state.valueProperty3136}</p>
+            </div>
+        );
+    }
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+        this.sigc.subscribeToProperties(['demo.sol.11004', 'demo.inv.3136']);
+    }
+    onPropertiesSubscribed(statuses: SISubscriptionsResult[]): void {
+        if(statuses[0].status===0 && statuses[1].status===0){
+            this.setState({subscribed:true});
+        }
+    }
+
+    onPropertiesUnsubscribed(statuses: SISubscriptionsResult[]): void {
+        this.setState({subscribed:false});
+    }
+    onPropertyUpdated(propertyId: string, value: any): void {
+        if(propertyId='demo.sol.11004'){
+            this.setState({valueProperty11004:value});
+        }
+        if(propertyId='demo.inv.3136'){
+            this.setState({valueProperty3136:value});
+        }
+        countUpdate++;
+        if(countUpdate===MAXUPDATE){
+            this.sigc.unsubscribeFromProperties(['demo.sol.11004', 'demo.inv.3136']);
         }
     }
 }
