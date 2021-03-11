@@ -64,13 +64,13 @@ The gateway has a build-in implementation that authorizes against a user text fi
 
 The configuration of the gateway is divided in two separate configuration files:
 
-- `/etc/openstuder/sigatewayd.conf`: This file contains the general configuration of the gateway daemon itself.
+- `/etc/openstuder/gateway.conf`: This file contains the general configuration of the gateway daemon itself.
 - `/etc/openstuder/drivers.conf`: This file lists the device access drivers to instantiate and their configuration.
 
 If security is enabled, another file `/etc/openstuder/users.txt` contains the list of users along with their password hashes and configured access level. You will have to use the `sigwctl user` CLI 
 command to add, list, modify and delete user accounts in that file. 
 
-### Gateway configuration `/etc/openstuder/sigateway.conf`
+### Gateway configuration `/etc/openstuder/gateway.conf`
 
 #### Gateway section
 
