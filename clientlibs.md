@@ -929,7 +929,7 @@ You can install the **OpenstuderClient** package using **npm**:
 ```
 
 As the client code is all in one single file, another possibility to use the client is to add a source file 
-[openstuder](https://github.com/OpenStuder/openstuder-client-web/tree/main/src/OpenStuder) to your project. A Javascript and a Typescript version are available.
+[openstuder](https://github.com/OpenStuder/openstuder-client-web/tree/main/src/OpenStuder) to your project.
 
 ### Usage
 
@@ -943,6 +943,15 @@ The client is documented using JSDoc. In addition to that, the documentation her
 This client is asynchronous which permits the use of subscription process and so the different update of some properties can be caught.
 
 The strategy with this class is to create a SIGatewayClient instance and use the different function described below.
+
+##### Set callback - *setCallback()*
+
+This function set the different callback for the SIGatewayClient instance. This allows the main class (if he implements the SIGatewayCallback interface) to treat by himself the information provided by the gateway.
+
+**Parameters**:
+- `siGatewayCallback`: Instance of the class who implements the SIGatewayCallback *Required*
+
+**Returns**: *None*
 
 ##### Establish connection - *connect()*
 
@@ -964,30 +973,35 @@ the given user was rejected by the gateway.
 - `SIProtocolError`: If there was an error initiating the WebSocket connection.
 
 **Callback parameters**: `onConnected()`
-A SIMessage instance with the different information:
 1. The access level that was granted to the user during authorization.
 2. The version of the OpenStuder software running on the gateway. 
 
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     isConnected:boolean;
+    accessLevel:SIAccessLevel
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-    sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
-        this.state={isConnected:false};
+        this.sigc=new SIGatewayClient();
+        this.state={isConnected:false, accessLevel:SIAccessLevel.NONE};
     }
 
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
 
@@ -996,14 +1010,15 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
         return (
             <div>
                 <p>Connected : {str}</p>
+                <p>Access Level : {this.state.accessLevel}</p>
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
-        this.setState({isConnected:true});
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+        this.setState({isConnected:true, accessLevel:accessLevel});
     }
     public onDisconnected(): void {
-        this.setState({isConnected:false});
+        this.setState({isConnected:false, accessLevel:SIAccessLevel.NONE});
     }
 }
 ```
@@ -1033,29 +1048,32 @@ The status of the operation and the number of devices present are reported using
 - `SIProtocolError`: If the client is not connected or not yet authorized.
 
 **Callback parameters**: `onEnumerated()`
-A SIMessage instance with the different information:
 1. Operation status.
 2. Number of devices present.
 
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
-
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 type AppState={
     numberOfDevice:number;
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={numberOfDevice:-1};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
     public render() {
@@ -1065,13 +1083,11 @@ sigc:OSI.SIGatewayClient;
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         this.sigc.enumerate();
     }
-    public onEnumerate(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.deviceCount) {
-            this.setState({numberOfDevice: +deviceMessage.deviceCount});
-        }
+    onEnumerated(status: SIStatus, deviceCount: number): void {
+                this.setState({numberOfDevice:deviceCount});
     }
 }
 ```
@@ -1097,7 +1113,6 @@ The description is reported using the `onDescription()` callback.
 - `SIProtocolError`: If the client is not connected or not yet authorized.
 
 **Callback parameters**: `onDescription()`
-A SIMessage instance with the different information:
 1. Status of the operation.
 2. The subject's ID.
 3. The description object.
@@ -1105,23 +1120,27 @@ A SIMessage instance with the different information:
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
-import {SIDescriptionFlags} from "@marcocrettena/openstuder";
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     jsonDescription:string;
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-    sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={jsonDescription:"-"};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
 
@@ -1132,14 +1151,12 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         let flags:SIDescriptionFlags[] = [SIDescriptionFlags.INCLUDE_DEVICE_INFORMATION,SIDescriptionFlags.INCLUDE_PROPERTY_INFORMATION];
         this.sigc.describe(undefined,undefined,undefined,flags);
     }
-    public onDescription(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.body) {
-            this.setState({jsonDescription: deviceMessage.body});
-        }
+    onDescription(status: SIStatus, description: string, id?: string): void {
+                this.setState({jsonDescription: description});
     }
 }
 ```
@@ -1159,7 +1176,6 @@ The status of the read operation and the actual value of the property are report
 - `SIProtocolError`: If the client is not connected or not yet authorized.
 
 **Callback parameters**: `onPropertyRead()`
-A SIMessage instance with the different information:
 1. Status of the read operation.
 2. The ID of the property read.
 3. The value read.
@@ -1167,22 +1183,27 @@ A SIMessage instance with the different information:
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     value:string;
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-    sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={value:"-"};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
     public render() {
@@ -1192,13 +1213,11 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         this.sigc.readProperty('demo.sol.11004');
     }
-    public onPropertyRead(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.value) {
-            this.setState({value: deviceMessage.value});
-        }
+    onPropertyRead(status: SIStatus, propertyId: string, value?: string): void {
+        this.setState({value: ""+value});
     }
 }
 ```
@@ -1223,29 +1242,33 @@ The status of the write operation is reported using the `onPropertyWritten()` ca
 - `SIProtocolError`: If the client is not connected or not yet authorized.
 
 **Callback parameters**: `onPropertyWritten()`
-A SIMessage instance with the different information:
 1. Status of the write operation.
 2. The ID of the property written.
 
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     status:string;
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
     sigc:OSI.SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={status:"-"};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
     public render() {
@@ -1255,13 +1278,11 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         this.sigc.writeProperty('demo.inv.1415');
     }
-    public onPropertyWritten(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.status) {
-            this.setState({status: deviceMessage.status});
-        }
+    onPropertyWritten(status: SIStatus, propertyId: string): void {
+        this.setState({status: ""+SIStatus});
     }
 }
 ```
@@ -1287,7 +1308,6 @@ The status of the subscribe request is reported using the `onPropertySubscribed(
 The callback `onPropertyUpdated()` is called whenever the gateway did send a property update.
 
 **Callback parameters**: `onPropertyUpdated()`
-A SIMessage instance with the different information:
 1. The ID of the property that has updated.
 2. The actual value.
 
@@ -1311,7 +1331,11 @@ A SIMessage instance with the different information:
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     status:string;
@@ -1320,16 +1344,17 @@ type AppState={
 const maxUpdate:number = 3;
 let countUpdate:number = 0;
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-    sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={status:"-", value:"-"};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
 
@@ -1341,23 +1366,17 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         this.sigc.subscribeProperty('demo.sol.11004');
     }
-    public onPropertySubscribed(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.status) {
-            this.setState({status: "subscription -> "+deviceMessage.status});
-        }
+    onPropertySubscribed(status: SIStatus, propertyId: string): void {
+        this.setState({status: "subscription -> " + status});
     }
-    public onPropertyUnsubscribed(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.status) {
-            this.setState({status: "unsubscription -> "+deviceMessage.status});
-        }
+    onPropertyUnsubscribed(status: SIStatus, propertyId: string): void {
+            this.setState({status: "unsubscription -> " + status});
     }
-    public onPropertyUpdate(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.value) {
-            this.setState({value: deviceMessage.value});
-        }
+    onPropertyUpdated(propertyId: string, value: any): void {
+        this.setState({value: value});
         countUpdate++;
         if(countUpdate===maxUpdate){
             this.sigc.unsubscribeFromProperty('demo.sol.11004');
@@ -1384,7 +1403,6 @@ The status of this operation and the respective values are reported using the `o
 - `SIProtocolError`: If the client is not connected or not yet authorized.
 
 **Callback parameters**: `onDatalogRead()`
-A SIMessage instance with the different information:
 1. Status of the operation.
 2. ID of the property.
 3. Number of entries.
@@ -1393,22 +1411,27 @@ A SIMessage instance with the different information:
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     countDatalogMessages:string;
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-    sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={countDatalogMessages:"-"};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
     public render() {
@@ -1418,13 +1441,11 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         this.sigc.readDatalog('demo.inv.3136', undefined, undefined, 50);
     }
-    public onDatalogRead(deviceMessage: OSI.SIMessage): void {
-        if(deviceMessage.count) {
-            this.setState({countDatalogMessages:deviceMessage.count});
-        }
+    onDatalogRead(status: SIStatus, propertyId: string, count: number, values: string): void {
+        this.setState({countDatalogMessages:count});
     }
 }
 ```
@@ -1446,7 +1467,6 @@ The status of this operation and the retrieved messages are reported using the `
 - `SIProtocolError`: If the client is not connected or not yet authorized.
 
 **Callback parameters**: `onMessagesRead()`
-An array of SIMessage instance with the different information:
 1. The status of the operation.
 2. The number of messages retrieved.
 3. The list of retrieved messages.
@@ -1454,22 +1474,27 @@ An array of SIMessage instance with the different information:
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     readMessage:string;
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-    sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={readMessage:"-"};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
     public render() {
@@ -1479,18 +1504,19 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
             </div>
         );
     }
-    public onConnect(deviceMessage: OSI.SIMessage): void {
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         this.sigc.readMessages();
     }
-    public onMessageRead(devicesMessage: OSI.SIMessage[]): void {
+    onMessageRead(status: SIStatus, count: number, messages: SIDeviceMessage[]): void {
         let count:number=0;
         let str:string="";
-        devicesMessage.map(deviceMessage =>{
+        messages.map(deviceMessage =>{
             count++;
             str.concat("Message number " + count + ":\n");
-            if(deviceMessage.body){
+            if(deviceMessage.message){
                 str.concat(deviceMessage.body+"\n");
             }
+            str.concat("\n");
         });
         this.setState({readMessage:str});
     }
@@ -1502,7 +1528,6 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
 Once connected to the gateway, the gateway will send device messages to the client automatically. This callback is called whenever a device message was received from the gateway.
 
 **Callback parameters**: `onDeviceMessage()`
-An array of SIMessage instance with the different information:
 1. The access ID of the device access instance that received the message.
 2. The message ID
 3. The message
@@ -1512,22 +1537,27 @@ An array of SIMessage instance with the different information:
 *Example:*
 ```python
 import React from 'react';
-import * as OSI from '@marcocrettena/openstuder';
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
 
 type AppState={
     readMessage:string;
 }
 
-class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterface{
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 
-    sigc:OSI.SIGatewayClient;
+    sigc:SIGatewayClient;
 
     constructor(props:any){
         super(props);
-        this.sigc=new OSI.SIGatewayClient(this);
+        this.sigc=new SIGatewayClient();
         this.state={readMessage:"-"};
     }
     public componentDidMount() {
+        this.sigc.setCallback(this);
         this.sigc.connect("localhost");
     }
     public render() {
@@ -1537,9 +1567,9 @@ class App extends React.Component<{ }, AppState> implements OSI.OpenStuderInterf
             </div>
         );
     }
-    public onDeviceMessage(deviceMessage: OSI.SIMessage): void {
+    onDeviceMessage(message: SIDeviceMessage): void {
         if(deviceMessage.message){
-            this.setState({readMessage:deviceMessage.message});
+            this.setState({readMessage:message.message});
         }
     }
 }
