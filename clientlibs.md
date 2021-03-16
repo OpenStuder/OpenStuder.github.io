@@ -256,6 +256,39 @@ except SIProtocolError as error:
     print(f'Error: {error.reason()}')
 ```
 
+##### Reading available properties in datalog - *read_datalog_properties()*
+
+This method is used to retrieve the list of IDs of all properties for whom data is logged on the gateway. If a time window is given using from and to, only data in this time windows is considered.
+
+**Parameters**:
+- `from_`: Optional date and time of the start of the time window to be considered.
+- `to`: Optional date and time of the end of the time window to be considered.
+
+**Returns**:
+1. Status of the operation. 
+2. List of all properties for whom data is logged on the gateway in the optional time window.
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol or framing error.
+
+*Example:*
+```python
+from openstuder import SIGatewayClient, SIProtocolError
+
+try:
+    client = SIGatewayClient()
+    client.connect('localhost')
+    status, properties = client.read_datalog_properties()
+    print(f'Read datalog properties, status = {status}:')
+    for property in properties:
+        print(f'  - {property}')
+    client.disconnect()
+
+except SIProtocolError as error:
+    print(f'Error: {error.reason()}')
+
+```
+
 ##### Reading datalog - *read_datalog_csv()*
 
 This method is used to retrieve all, or a subset of logged data of a given property from the gateway.
@@ -785,7 +818,54 @@ client.unsubscribe_from_properties(['demo.sol.11004', 'demo.inv.3136'])
 time.sleep(2)
 ```
 
-##### Reading datalog - *read_datalog_csv()*
+##### Reading available properties in datalog - *read_datalog_properties()*
+
+This method is used to retrieve the list of IDs of all properties for whom data is logged on the gateway. If a time window is given using from and to, only data in this time windows is considered.
+
+The status of the operation is the list of properties for whom logged data is available are reported using the `on_datalog_properties_read()` callback.
+
+**Parameters**:
+- `from_`: Optional date and time of the start of the time window to be considered.
+- `to`: Optional date and time of the end of the time window to be considered.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_datalog_properties_read()`
+1. Status of the operation.
+2. List of the IDs of the properties for whom data is available in the data log.
+
+*Example:*
+```python
+from typing import List
+from openstuder import SIAsyncGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.read_datalog_properties()
+
+
+def on_datalog_properties_read(status: SIStatus, properties: List[str]):
+    print(f'Read datalog properties, status = {status}:')
+    for property in properties:
+        print(f'  - {property}')
+    client.disconnect()
+
+
+client = SIAsyncGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_datalog_properties_read = on_datalog_properties_read
+client.connect('localhost', background=False)
+```
+
+##### Reading datalog - *read_datalog()*
 
 This method is used to retrieve all, or a subset of logged data of a given property from the gateway.
 

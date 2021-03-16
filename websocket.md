@@ -1838,14 +1838,14 @@ status:Success
 
 ### Data log access
 
-<p>The gateway can be configured to log selected proprties at configurable intervals. The <strong class="request">READ DATALOG</strong> message can be used to retrieve logged data of a property
-from the gateway.</p>
+<p>The gateway can be configured to log selected properties at configurable intervals. The <strong class="request">READ DATALOG</strong> message can be used to retrieve logged data of a property
+from the gateway or the list of properties that are logged.</p>
 
 <div class="ws-api-doc request">
     <button class="accordion-toggle">READ DATALOG</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>READ DATALOG</strong> message is send to the gateway to retrieve all or a subset of logged data of a given property.
+            The <strong>READ DATALOG</strong> message is send to the gateway to retrieve all or a subset of logged data of a given property or the list of properties that are actually logged.
         </p>
         <h6>headers</h6>
         <table>
@@ -1857,13 +1857,14 @@ from the gateway.</p>
             </tr>
             <tr>
                 <td>id</td>
-                <td>number</td>
+                <td>number<br/><em>(optional)</em></td>
                 <td><strong>Property ID</strong>.<br/>
                 Global ID of the property for which the logged data will be requested. <br/>
-                It has to be in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.
+                It has to be in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.<br/>
+                If no ID is given, the gateway returns the list of the IDs of properties for whose data is available.
                 </td>
                 <td>
-                    <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
+                    <input type="text" placeholder="none" data-ws-header="id"/>
                 </td>
             </tr>
             <tr>
@@ -1890,10 +1891,9 @@ from the gateway.</p>
                 <td>limit</td>
                 <td>number<br/><em>(optional)</em></td>
                 <td><strong>Maximal number of values to return</strong>.<br/>
-                If not provided the maximal number of values returned is not limited.
+                If not provided the maximal number of values returned is not limited and if no property ID is given (list available properties) this parameter will be ignored.
                 </td>
-                <td><input type="number" placeholder="no limit" data-ws-header="limit"
-                    /></td>
+                <td><input type="number" placeholder="no limit" data-ws-header="limit"/></td>
             </tr>
         </table>
         <h6>body</h6>
@@ -1927,7 +1927,7 @@ from the gateway.</p>
             </tr>
             <tr>
                 <td>id</td>
-                <td>string</td>
+                <td>string<br/><em>(optional)</em></td>
                 <td><strong>ID of the property</strong>. <br/>
                     Copy of the header <strong>id</strong> of the corresponding <strong class="request">READ DATALOG</strong> message.
                 </td>
@@ -1935,14 +1935,15 @@ from the gateway.</p>
             <tr>
                 <td>count</td>
                 <td>number</td>
-                <td><strong>Number of data log entries retrieved</strong>. <br/>
-                    The Total number of data log entries retrieved from the storage and returned in the body of this message.
+                <td><strong>Number of data log entries/properties retrieved</strong>. <br/>
+                    The Total number of data log entries or the number of IDs of available property logs retrieved from the storage and returned in the body of this message.
                 </td>
             </tr>
         </table>
         <h6>body</h6>
         <p>The body of the <strong>DATALOG READ</strong> message is CSV formatted data where each line corresponds to value at a given time. The line starts with the timestamp in ISO 8601 extended
-        format and is followed by the respective values. Comas are used as separators.</p>
+        format and is followed by the respective values. Comas are used as separators. In the case no property ID was requested the data is the list of property IDs where each line represents one
+        property ID.</p>
         <pre data-ws-example="DATALOG READ"><code>DATALOG READ
 status:Success
 id:demo.inf.3136
