@@ -258,6 +258,52 @@ baudRate =57600
 This example configuration instantiates two device access drivers, the first one called *zone0* with the driver *Xcom485i* and a second one called *zone1* using the same driver. The respective 
 parameters *port* and *baudRate* are forwarded to the drivers.
 
+### Datalog configuration `/etc/openstuder/datalog.conf`
+
+The file `/etc/openstuder/datalog.conf` defines the list of properties the gateway periodically read from and saves the values to the configured storage location (storage driver). Each line in the 
+configuration file either defines a **log interval group** or specifies the **ID of a property** to be logged. Wildcards for property IDs are supported in order to define properties that have to be 
+logged on all devices supporting these.
+
+> [!ATTENTION]
+> The configuration file has always to start with a **log interval group** definition.
+
+#### Interval group
+
+If a line starts with the keyword `interval`, a new **log interval group** is defined. The keyword has to be followed by a number that defines the number of seconds representing the log interval.
+All properties following that definition will be read at that interval.
+
+For example `interval 60` defines a **log interval group** where the properties are read and saved all *60 seconds*.
+
+#### Property definition
+
+Every non-empty line not starting with `interval` or `#` is interpreted as a property ID in the format `<device access ID>.<device ID>.<property ID>`. The wildcard character `*` is supported for
+`<device access ID>` and `<device ID>` fields.
+
+Examples:
+
+- `demo.inv.3136`: represents the property with ID *3136* on the device with ID *inv* connected through the device access *demo*.
+- `*.inv.3136`: represents all properties with ID *3136* on the device with ID *inv* connected through **any** device access.
+- `demo.*.3136`: represents all properties with ID *3136* on **any** device that disposes that property connected through the device access *demo*.
+- `*.*.3136`: represents all properties with ID *3136* on **any** device that disposes that property connected through **any** device access.
+
+#### Example 
+
+```
+interval 300
+*.*.3136
+*.*.3137
+*.*.11004
+*.*.15010
+*.*.7002
+*.*.7003
+
+interval 86400
+*.*.3083
+```
+
+The example configuration instructs the gateway to read all properties with ids *3136*, *3137*, *11004*, *15010*, *7002* and *7003* from **any** device that disposes those connected by **any** device
+access each *600* seconds (5 minutes). The property with the ID *3083* is read and saved every *86400* seconds (once a day).
+
 ## Start and stop daemon
 
 The **Open Studer gateway daemon** is installed as a [systemd](https://www.freedesktop.org/wiki/Software/systemd/) service unit and you can use the standard commands to start and stop the daemon or
