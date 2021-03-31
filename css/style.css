@@ -21,13 +21,7 @@ body:not(.ready) {
 }
 
 .search input {
-	border: 1px solid var(--borderColor) !important;
-	background-color: var(--background) !important;
-	margin: 0 auto;
-	color: var(--textColor);
-	width: 90% !important;
-	border-radius: 15px;
-	text-indent: 15px;
+	display: none;
 }
 
 body:not(.ready) .app-nav,
