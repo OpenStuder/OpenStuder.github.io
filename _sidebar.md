@@ -7,4 +7,5 @@
 - Developer
     - [Client libraries](clientlibs.md)
     - [WebSocket protocol](websocket.md#main)
+    - [Bluetooth protocol](bluetooth.md#main)
 <!--    - [Driver development](driverdev.md)-->

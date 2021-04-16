@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="1122 900.203 636.49 335.9064" width="636.49" height="335.9064">
+  <defs>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="StickArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-7 -4 8 8" markerWidth="8" markerHeight="8" color="gray">
+      <g>
+        <path d="M -5.76 0 L 0 0 M 0 2.16 L -5.76 0 L 0 -2.16" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <font-face font-family="Avenir" font-size="15" panose-1="2 11 4 2 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="462" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="300">
+      <font-face-src>
+        <font-face-name name="Avenir-Light"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 0 6 3 2 0 0 2 0 3" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="474" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Avenir-Medium"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.18\n2021-04-16 09:57:15 +0000</metadata>
+  <g id="WebSocket-State01" stroke="none" stroke-dasharray="none" fill="none" stroke-opacity="1" fill-opacity="1">
+    <title>WebSocket-State01</title>
+    <g id="WebSocket-State01_Ebene_1">
+      <title>Ebene 1</title>
+      <g id="Line_11">
+        <title>Transition</title>
+        <line x1="1372.2148" y1="1015.67" x2="1372.0204" y2="920.4351" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Graphic_13">
+        <text transform="translate(1470 1027)" fill="gray">
+          <tspan font-family="Avenir" font-size="15" font-weight="300" fill="gray" x="0" y="15">authorize [granted]</tspan>
+        </text>
+      </g>
+      <g id="Line_15">
+        <title>Transition</title>
+        <path d="M 1617.676 1061.6612 C 1599.6446 1057.3175 1566.5144 1050.8299 1529.4793 1050.8299 C 1473.807 1050.8299 1435.49 1065.49 1435.49 1065.49" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Line_16">
+        <title>Transition</title>
+        <path d="M 1504.2168 1208.8889 C 1482.8924 1196.4148 1452.3216 1176.8614 1431.244 1156.2914 C 1395.7933 1121.6943 1403.8675 1100.49 1403.8675 1100.49" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Line_17">
+        <title>Transition</title>
+        <path d="M 1548.2791 1209.4746 C 1568.726 1195.4502 1602.1332 1172.2705 1632 1150.3311 C 1679.098 1115.7341 1695.245 1100.49 1695.245 1100.49" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Group_2">
+        <title>Start</title>
+        <g id="Graphic_4">
+          <text transform="translate(1389.916 900.203)" fill="gray">
+            <tspan font-family="Avenir" font-size="16" font-weight="500" fill="gray" x="7425172e-19" y="16">start</tspan>
+          </text>
+        </g>
+        <g id="Graphic_3">
+          <title>Circle</title>
+          <circle cx="1372" cy="910.4351" r="10.000015979019" fill="#5895a6"/>
+        </g>
+      </g>
+      <g id="Group_5">
+        <title>End</title>
+        <g id="Graphic_8">
+          <text transform="translate(1547.716 1212.268)" fill="gray">
+            <tspan font-family="Avenir" font-size="16" font-weight="500" fill="gray" x="0" y="16">end</tspan>
+          </text>
+        </g>
+        <g id="Graphic_7">
+          <circle cx="1529" cy="1222.6095" r="11.0000175769207" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+        </g>
+      </g>
+      <g id="Graphic_12">
+        <title>State</title>
+        <path d="M 1636 1030.49 L 1754.49 1030.49 C 1756.6991 1030.49 1758.49 1032.2809 1758.49 1034.49 L 1758.49 1096.49 C 1758.49 1098.6991 1756.6991 1100.49 1754.49 1100.49 L 1636 1100.49 C 1633.7909 1100.49 1632 1098.6991 1632 1096.49 L 1632 1034.49 C 1632 1032.2809 1633.7909 1030.49 1636 1030.49 Z" fill="#5895a6"/>
+        <text transform="translate(1638 1054.49)" fill="black">
+          <tspan font-family="Avenir" font-size="16" font-weight="500" fill="black" x="17.084999" y="16">Authorized</tspan>
+        </text>
+      </g>
+      <g id="Graphic_14">
+        <title>State</title>
+        <path d="M 1313 1030.49 L 1431.49 1030.49 C 1433.6991 1030.49 1435.49 1032.2809 1435.49 1034.49 L 1435.49 1096.49 C 1435.49 1098.6991 1433.6991 1100.49 1431.49 1100.49 L 1313 1100.49 C 1310.7909 1100.49 1309 1098.6991 1309 1096.49 L 1309 1034.49 C 1309 1032.2809 1310.7909 1030.49 1313 1030.49 Z" fill="#5895a6"/>
+        <text transform="translate(1315 1054.49)" fill="black">
+          <tspan font-family="Avenir" font-size="16" font-weight="500" fill="black" x="8.484999" y="16">Unauthorized</tspan>
+        </text>
+      </g>
+      <g id="Graphic_18">
+        <text transform="translate(1377.755 959)" fill="gray">
+          <tspan font-family="Avenir" font-size="15" font-weight="300" fill="gray" x="0" y="15">connect</tspan>
+        </text>
+      </g>
+      <g id="Line_19">
+        <title>Transition</title>
+        <path d="M 1294.1995 1064.7704 C 1278.471 1064.713 1255.4824 1066.9363 1252.725 1080.1325 C 1248.4867 1100.416 1269.138 1131.3187 1294.0397 1137.0861 C 1318.9415 1142.8535 1340.6225 1100.49 1340.6225 1100.49" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Graphic_20">
+        <text transform="translate(1127 1080)" fill="gray">
+          <tspan font-family="Avenir" font-size="15" font-weight="300" fill="gray" x="0" y="15">authorize [denied]</tspan>
+        </text>
+      </g>
+      <g id="Graphic_21">
+        <text transform="translate(1359.645 1166)" fill="gray">
+          <tspan font-family="Avenir" font-size="15" font-weight="300" fill="gray" x="0" y="15">disconnect</tspan>
+        </text>
+      </g>
+      <g id="Graphic_22">
+        <text transform="translate(1637 1149)" fill="gray">
+          <tspan font-family="Avenir" font-size="15" font-weight="300" fill="gray" x="0" y="15">disconnect</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>

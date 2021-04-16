@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="969.5 823.5 571.49 73" width="571.49" height="73">
+  <defs>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 0 6 3 2 0 0 2 0 3" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="474" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Avenir-Medium"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="32" panose-1="2 0 6 3 2 0 0 2 0 3" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="474" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Avenir-Medium"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="12" panose-1="2 11 4 2 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="462" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="300">
+      <font-face-src>
+        <font-face-name name="Avenir-Light"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.18\n2021-04-16 09:50:05 +0000</metadata>
+  <g id="Bluetooth-Frame" stroke="none" stroke-dasharray="none" fill="none" stroke-opacity="1" fill-opacity="1">
+    <title>Bluetooth-Frame</title>
+    <g id="Bluetooth-Frame_Ebene_1">
+      <title>Ebene 1</title>
+      <g id="Graphic_60">
+        <title>State</title>
+        <path d="M 975 825 L 1093.49 825 C 1095.6991 825 1097.49 826.7909 1097.49 829 L 1097.49 891 C 1097.49 893.2091 1095.6991 895 1093.49 895 L 975 895 C 972.7909 895 971 893.2091 971 891 L 971 829 C 971 826.7909 972.7909 825 975 825 Z" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <text transform="translate(977 849)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="500" fill="#5895a6" x="19.741" y="16">Command</tspan>
+        </text>
+      </g>
+      <g id="Graphic_62">
+        <title>State</title>
+        <path d="M 1101.49 825 L 1219.98 825 C 1222.1891 825 1223.98 826.7909 1223.98 829 L 1223.98 891 C 1223.98 893.2091 1222.1891 895 1219.98 895 L 1101.49 895 C 1099.2809 895 1097.49 893.2091 1097.49 891 L 1097.49 829 C 1097.49 826.7909 1099.2809 825 1101.49 825 Z" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <text transform="translate(1103.49 849)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="500" fill="#5895a6" x="12.932999" y="16">Parameter 1</tspan>
+        </text>
+      </g>
+      <g id="Graphic_63">
+        <title>State</title>
+        <path d="M 1227.98 825 L 1346.47 825 C 1348.6791 825 1350.47 826.7909 1350.47 829 L 1350.47 891 C 1350.47 893.2091 1348.6791 895 1346.47 895 L 1227.98 895 C 1225.7709 895 1223.98 893.2091 1223.98 891 L 1223.98 829 C 1223.98 826.7909 1225.7709 825 1227.98 825 Z" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <text transform="translate(1229.98 849)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="500" fill="#5895a6" x="12.932999" y="16">Parameter 2</tspan>
+        </text>
+      </g>
+      <g id="Graphic_64">
+        <title>State</title>
+        <path d="M 1417 825 L 1535.49 825 C 1537.6991 825 1539.49 826.7909 1539.49 829 L 1539.49 891 C 1539.49 893.2091 1537.6991 895 1535.49 895 L 1417 895 C 1414.7909 895 1413 893.2091 1413 891 L 1413 829 C 1413 826.7909 1414.7909 825 1417 825 Z" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+        <text transform="translate(1419 849)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="500" fill="#5895a6" x="12.932999" y="16">Parameter n</tspan>
+        </text>
+      </g>
+      <g id="Graphic_65">
+        <text transform="translate(1365.735 836.7321)" fill="gray">
+          <tspan font-family="Avenir" font-size="32" font-weight="500" fill="gray" x="0" y="32">…</tspan>
+        </text>
+      </g>
+      <g id="Graphic_67">
+        <path d="M 1058 874.5359 L 1095.49 874.5359 C 1096.5946 874.5359 1097.49 875.4313 1097.49 876.5359 L 1097.49 893 C 1097.49 894.1046 1096.5946 895 1095.49 895 L 1058 895 C 1056.8954 895 1056 894.1046 1056 893 L 1056 876.5359 C 1056 875.4313 1056.8954 874.5359 1058 874.5359 Z" fill="#5895a6"/>
+        <text transform="translate(1056 876.7679)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="300" fill="black" x="4.179001" y="12">CBOR</tspan>
+        </text>
+      </g>
+      <g id="Graphic_68">
+        <path d="M 1183.383 874.5359 L 1220.873 874.5359 C 1221.9776 874.5359 1222.873 875.4313 1222.873 876.5359 L 1222.873 893 C 1222.873 894.1046 1221.9776 895 1220.873 895 L 1183.383 895 C 1182.2784 895 1181.383 894.1046 1181.383 893 L 1181.383 876.5359 C 1181.383 875.4313 1182.2784 874.5359 1183.383 874.5359 Z" fill="#5895a6"/>
+        <text transform="translate(1181.383 876.7679)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="300" fill="black" x="4.179001" y="12">CBOR</tspan>
+        </text>
+      </g>
+      <g id="Graphic_69">
+        <path d="M 1310.98 874.5359 L 1348.47 874.5359 C 1349.5746 874.5359 1350.47 875.4313 1350.47 876.5359 L 1350.47 893 C 1350.47 894.1046 1349.5746 895 1348.47 895 L 1310.98 895 C 1309.8754 895 1308.98 894.1046 1308.98 893 L 1308.98 876.5359 C 1308.98 875.4313 1309.8754 874.5359 1310.98 874.5359 Z" fill="#5895a6"/>
+        <text transform="translate(1308.98 876.7679)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="300" fill="black" x="4.179001" y="12">CBOR</tspan>
+        </text>
+      </g>
+      <g id="Graphic_70">
+        <path d="M 1500 874.5359 L 1537.49 874.5359 C 1538.5946 874.5359 1539.49 875.4313 1539.49 876.5359 L 1539.49 893 C 1539.49 894.1046 1538.5946 895 1537.49 895 L 1500 895 C 1498.8954 895 1498 894.1046 1498 893 L 1498 876.5359 C 1498 875.4313 1498.8954 874.5359 1500 874.5359 Z" fill="#5895a6"/>
+        <text transform="translate(1498 876.7679)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="300" fill="black" x="4.179001" y="12">CBOR</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>

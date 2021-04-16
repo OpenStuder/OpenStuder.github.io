@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="1002.5 725.9779 745.166 1361.0221" width="745.166" height="1361.0221">
+  <defs>
+    <font-face font-family="Avenir" font-size="12" panose-1="2 0 6 3 2 0 0 2 0 3" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="474" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Avenir-Medium"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 11 4 2 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="462" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="300">
+      <font-face-src>
+        <font-face-name name="Avenir-Light"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="18" panose-1="2 11 4 2 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="462" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="300">
+      <font-face-src>
+        <font-face-name name="Avenir-Light"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 11 8 3 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="486" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="800">
+      <font-face-src>
+        <font-face-name name="Avenir-Black"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.18\n2021-04-16 10:27:10 +0000</metadata>
+  <g id="WebSocket-Sequence02" stroke="none" stroke-dasharray="none" fill="none" stroke-opacity="1" fill-opacity="1">
+    <title>WebSocket-Sequence02</title>
+    <g id="WebSocket-Sequence02_Ebene_1">
+      <title>Ebene 1</title>
+      <g id="Line_4">
+        <path d="M 1040 818 L 1040 829 L 1040.5 1452 L 1041 2086" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_5">
+        <path d="M 1707.818 818 L 1707.818 829 L 1707.409 1452 L 1707 2086" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_8">
+        <path d="M 1064 941.25 L 1064 917.75 L 1668 917.75 L 1668 906 L 1688 929.5 L 1668 953 L 1668 941.25 Z" fill="#5eb345"/>
+        <text transform="translate(1147 921.5)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="192.784" y="12">ENUMERATE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_10">
+        <path d="M 1686.4703 988.6606 L 1686.4703 965.1606 L 1082.4703 965.1606 L 1082.4703 953.4106 L 1062.4703 976.9106 L 1082.4703 1000.4106 L 1082.4703 988.6606 Z" fill="#5895a6"/>
+        <text transform="translate(1145.4703 968.9106)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="188.338" y="12">ENUMERATED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_21">
+        <path d="M 1062.9802 2033.5571 L 1062.9802 2028.7288 L 1670.9866 2028.7288 L 1670.9866 2023.643 L 1685.9604 2031.143 L 1670.9866 2038.643 L 1670.9866 2033.5571 Z" fill="gray"/>
+      </g>
+      <g id="Graphic_20">
+        <text transform="translate(1338.6764 2000.1788)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="300" fill="gray" x="0" y="16">disconnect</tspan>
+        </text>
+      </g>
+      <g id="Graphic_28">
+        <path d="M 1075.625 806.75 L 1047.2117 806.75 C 1047.125 809.0715 1045.4879 810.5 1043.375 810.5 L 1036.25 810.5 C 1034.0598 810.5 1032.3805 808.4527 1032.4098 806.75 L 1004.375 806.75 C 1003.3438 806.75 1002.5 807.59375 1002.5 808.625 L 1002.5 810.5 C 1002.5 814.625 1005.875 818 1010 818 L 1070 818 C 1074.125 818 1077.5 814.625 1077.5 810.5 L 1077.5 808.625 C 1077.5 807.59375 1076.6562 806.75 1075.625 806.75 Z M 1070 763.625 C 1070 760.53125 1067.4688 758 1064.375 758 L 1015.625 758 C 1012.5312 758 1010 760.53125 1010 763.625 L 1010 803 L 1070 803 Z M 1062.5 795.5 L 1017.5 795.5 L 1017.5 765.5 L 1062.5 765.5 Z" fill="#5895a6"/>
+      </g>
+      <g id="Graphic_30">
+        <text transform="translate(1016.33 730.9779)" fill="gray">
+          <tspan font-family="Avenir" font-size="18" font-weight="300" fill="gray" x="0" y="18">Client</tspan>
+        </text>
+      </g>
+      <g id="Graphic_31">
+        <path d="M 1726.568 763.625 L 1726.568 812.375 C 1726.568 815.4816 1724.0496 818 1720.943 818 L 1694.693 818 C 1691.5864 818 1689.068 815.4816 1689.068 812.375 L 1689.068 763.625 C 1689.068 760.5184 1691.5864 758 1694.693 758 L 1720.943 758 C 1724.0496 758 1726.568 760.5184 1726.568 763.625 Z M 1737.818 770.4219 L 1737.818 771.8281 C 1737.818 772.21645 1737.5032 772.53125 1737.1149 772.53125 L 1735.0055 772.53125 L 1735.0055 773.2344 C 1735.0055 773.6227 1734.6907 773.9375 1734.3024 773.9375 L 1729.3805 773.9375 L 1729.3805 768.3125 L 1734.3024 768.3125 C 1734.6907 768.3125 1735.0055 768.6273 1735.0055 769.0156 L 1735.0055 769.71875 L 1737.1149 769.71875 C 1737.5032 769.71875 1737.818 770.03355 1737.818 770.4219 Z M 1737.818 781.6719 L 1737.818 783.0781 C 1737.818 783.46645 1737.5032 783.78125 1737.1149 783.78125 L 1735.0055 783.78125 L 1735.0055 784.4844 C 1735.0055 784.8727 1734.6907 785.1875 1734.3024 785.1875 L 1729.3805 785.1875 L 1729.3805 779.5625 L 1734.3024 779.5625 C 1734.6907 779.5625 1735.0055 779.8773 1735.0055 780.2656 L 1735.0055 780.96875 L 1737.1149 780.96875 C 1737.5032 780.96875 1737.818 781.28355 1737.818 781.6719 Z M 1737.818 792.9219 L 1737.818 794.3281 C 1737.818 794.71645 1737.5032 795.03125 1737.1149 795.03125 L 1735.0055 795.03125 L 1735.0055 795.7344 C 1735.0055 796.1227 1734.6907 796.4375 1734.3024 796.4375 L 1729.3805 796.4375 L 1729.3805 790.8125 L 1734.3024 790.8125 C 1734.6907 790.8125 1735.0055 791.1273 1735.0055 791.5156 L 1735.0055 792.21875 L 1737.1149 792.21875 C 1737.5032 792.21875 1737.818 792.53355 1737.818 792.9219 Z M 1737.818 804.1719 L 1737.818 805.5781 C 1737.818 805.96645 1737.5032 806.28125 1737.1149 806.28125 L 1735.0055 806.28125 L 1735.0055 806.9844 C 1735.0055 807.3727 1734.6907 807.6875 1734.3024 807.6875 L 1729.3805 807.6875 L 1729.3805 802.0625 L 1734.3024 802.0625 C 1734.6907 802.0625 1735.0055 802.3773 1735.0055 802.7656 L 1735.0055 803.46875 L 1737.1149 803.46875 C 1737.5032 803.46875 1737.818 803.78355 1737.818 804.1719 Z M 1681.3336 802.0625 L 1686.2555 802.0625 L 1686.2555 807.6875 L 1681.3336 807.6875 C 1680.9453 807.6875 1680.6305 807.3727 1680.6305 806.9844 L 1680.6305 806.28125 L 1678.5211 806.28125 C 1678.1328 806.28125 1677.818 805.96645 1677.818 805.5781 L 1677.818 804.1719 C 1677.818 803.78355 1678.1328 803.46875 1678.5211 803.46875 L 1680.6305 803.46875 L 1680.6305 802.7656 C 1680.6305 802.3773 1680.9453 802.0625 1681.3336 802.0625 Z M 1681.3336 790.8125 L 1686.2555 790.8125 L 1686.2555 796.4375 L 1681.3336 796.4375 C 1680.9453 796.4375 1680.6305 796.1227 1680.6305 795.7344 L 1680.6305 795.03125 L 1678.5211 795.03125 C 1678.1328 795.03125 1677.818 794.71645 1677.818 794.3281 L 1677.818 792.9219 C 1677.818 792.53355 1678.1328 792.21875 1678.5211 792.21875 L 1680.6305 792.21875 L 1680.6305 791.5156 C 1680.6305 791.1273 1680.9453 790.8125 1681.3336 790.8125 Z M 1681.3336 779.5625 L 1686.2555 779.5625 L 1686.2555 785.1875 L 1681.3336 785.1875 C 1680.9453 785.1875 1680.6305 784.8727 1680.6305 784.4844 L 1680.6305 783.78125 L 1678.5211 783.78125 C 1678.1328 783.78125 1677.818 783.46645 1677.818 783.0781 L 1677.818 781.6719 C 1677.818 781.28355 1678.1328 780.96875 1678.5211 780.96875 L 1680.6305 780.96875 L 1680.6305 780.2656 C 1680.6305 779.8773 1680.9453 779.5625 1681.3336 779.5625 Z M 1681.3336 768.3125 L 1686.2555 768.3125 L 1686.2555 773.9375 L 1681.3336 773.9375 C 1680.9453 773.9375 1680.6305 773.6227 1680.6305 773.2344 L 1680.6305 772.53125 L 1678.5211 772.53125 C 1678.1328 772.53125 1677.818 772.21645 1677.818 771.8281 L 1677.818 770.4219 C 1677.818 770.03355 1678.1328 769.71875 1678.5211 769.71875 L 1680.6305 769.71875 L 1680.6305 769.0156 C 1680.6305 768.6273 1680.9453 768.3125 1681.3336 768.3125 Z" fill="#5895a6"/>
+      </g>
+      <g id="Graphic_32">
+        <text transform="translate(1672.97 730.9779)" fill="gray">
+          <tspan font-family="Avenir" font-size="18" font-weight="300" fill="gray" x="0" y="18">Gateway</tspan>
+        </text>
+      </g>
+      <g id="Graphic_40">
+        <path d="M 1064.5099 1088.0712 L 1064.5099 1064.5712 L 1668.5099 1064.5712 L 1668.5099 1052.8212 L 1688.5099 1076.3212 L 1668.5099 1099.8212 L 1668.5099 1088.0712 Z" fill="#5eb345"/>
+        <text transform="translate(1147.5099 1068.3212)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="200.548" y="12">DESCRIBE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_41">
+        <path d="M 1688 1138.0891 L 1688 1114.5891 L 1084 1114.5891 L 1084 1102.8391 L 1064 1126.3391 L 1084 1149.8391 L 1084 1138.0891 Z" fill="#5895a6"/>
+        <text transform="translate(1147 1118.3391)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="189.556" y="12">DESCRIPTION</tspan>
+        </text>
+      </g>
+      <g id="Graphic_42">
+        <path d="M 1064 1234.8923 L 1064 1211.3923 L 1668 1211.3923 L 1668 1199.6423 L 1688 1223.1423 L 1668 1246.6423 L 1668 1234.8923 Z" fill="#5eb345"/>
+        <text transform="translate(1147 1215.1423)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="165.538" y="12">SUBSCRIBE PROPERTY</tspan>
+        </text>
+      </g>
+      <g id="Graphic_43">
+        <path d="M 1686.4703 1284.25 L 1686.4703 1260.75 L 1082.4703 1260.75 L 1082.4703 1249 L 1062.4703 1272.5 L 1082.4703 1296 L 1082.4703 1284.25 Z" fill="#5895a6"/>
+        <text transform="translate(1145.4703 1264.5)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="161.092" y="12">PROPERTY SUBSCRIBED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_44">
+        <path d="M 1688 1369.8923 L 1688 1346.3923 L 1084 1346.3923 L 1084 1334.6423 L 1064 1358.1423 L 1084 1381.6423 L 1084 1369.8923 Z" fill="gray"/>
+        <path d="M 1688 1369.8923 L 1688 1346.3923 L 1084 1346.3923 L 1084 1334.6423 L 1064 1358.1423 L 1084 1381.6423 L 1084 1369.8923 Z" stroke="white" stroke-opacity=".246742" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(1147 1350.1423)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="174.208" y="12">PROPERTY UPDATE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_45">
+        <path d="M 1688.5099 1521.9372 L 1688.5099 1498.4372 L 1084.5099 1498.4372 L 1084.5099 1486.6872 L 1064.5099 1510.1872 L 1084.5099 1533.6872 L 1084.5099 1521.9372 Z" fill="gray"/>
+        <path d="M 1688.5099 1521.9372 L 1688.5099 1498.4372 L 1084.5099 1498.4372 L 1084.5099 1486.6872 L 1064.5099 1510.1872 L 1084.5099 1533.6872 L 1084.5099 1521.9372 Z" stroke="white" stroke-opacity=".246742" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(1147.5099 1502.1872)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="174.208" y="12">PROPERTY UPDATE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_46">
+        <path d="M 1063.745 1611.25 L 1063.745 1587.75 L 1667.745 1587.75 L 1667.745 1576 L 1687.745 1599.5 L 1667.745 1623 L 1667.745 1611.25 Z" fill="#5eb345"/>
+        <text transform="translate(1146.745 1591.5)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="179.002" y="12">WRITE PROPERTY</tspan>
+        </text>
+      </g>
+      <g id="Graphic_47">
+        <path d="M 1686.7747 1657.3394 L 1686.7747 1633.8394 L 1082.7747 1633.8394 L 1082.7747 1622.0894 L 1062.7747 1645.5894 L 1082.7747 1669.0894 L 1082.7747 1657.3394 Z" fill="#5895a6"/>
+        <text transform="translate(1145.7747 1637.5894)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="170.782" y="12">PROPERTY WRITTEN</tspan>
+        </text>
+      </g>
+      <g id="Graphic_48">
+        <path d="M 1686.7747 1732.75 L 1686.7747 1709.25 L 1082.7747 1709.25 L 1082.7747 1697.5 L 1062.7747 1721 L 1082.7747 1744.5 L 1082.7747 1732.75 Z" fill="gray"/>
+        <path d="M 1686.7747 1732.75 L 1686.7747 1709.25 L 1082.7747 1709.25 L 1082.7747 1697.5 L 1062.7747 1721 L 1082.7747 1744.5 L 1082.7747 1732.75 Z" stroke="white" stroke-opacity=".246742" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(1145.7747 1713)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="174.208" y="12">PROPERTY UPDATE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_50">
+        <path d="M 1064.5099 1895.4288 L 1064.5099 1871.9288 L 1668.5099 1871.9288 L 1668.5099 1860.1788 L 1688.5099 1883.6788 L 1668.5099 1907.1788 L 1668.5099 1895.4288 Z" fill="#5eb345"/>
+        <text transform="translate(1147.5099 1875.6788)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="156.538" y="12">UNSUBSCRIBE PROPERTY</tspan>
+        </text>
+      </g>
+      <g id="Graphic_49">
+        <path d="M 1686.9802 1944.7865 L 1686.9802 1921.2865 L 1082.9802 1921.2865 L 1082.9802 1909.5365 L 1062.9802 1933.0365 L 1082.9802 1956.5365 L 1082.9802 1944.7865 Z" fill="#5895a6"/>
+        <text transform="translate(1145.9802 1925.0365)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="152.092" y="12">PROPERTY UNSUBSCRIBED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_51">
+        <path d="M 1686.0099 1808.982 L 1686.0099 1785.482 L 1082.0099 1785.482 L 1082.0099 1773.732 L 1062.0099 1797.232 L 1082.0099 1820.732 L 1082.0099 1808.982 Z" fill="gray"/>
+        <path d="M 1686.0099 1808.982 L 1686.0099 1785.482 L 1082.0099 1785.482 L 1082.0099 1773.732 L 1062.0099 1797.232 L 1082.0099 1820.732 L 1082.0099 1808.982 Z" stroke="white" stroke-opacity=".246742" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(1145.0099 1789.232)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="174.208" y="12">PROPERTY UPDATE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_52">
+        <path d="M 1686.0099 1447.7141 L 1686.0099 1424.2141 L 1082.0099 1424.2141 L 1082.0099 1412.4641 L 1062.0099 1435.9641 L 1082.0099 1459.4641 L 1082.0099 1447.7141 Z" fill="gray"/>
+        <path d="M 1686.0099 1447.7141 L 1686.0099 1424.2141 L 1082.0099 1424.2141 L 1082.0099 1412.4641 L 1062.0099 1435.9641 L 1082.0099 1459.4641 L 1082.0099 1447.7141 Z" stroke="white" stroke-opacity=".246742" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(1145.0099 1427.9641)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="177.55" y="12">DEVICE MESSAGE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_53">
+        <circle cx="1633.9604" cy="965" r="12.0000191748228" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="965" r="12.0000191748228" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 954)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5895a6" x="4.8640004" y="16">2</tspan>
+        </text>
+      </g>
+      <g id="Graphic_54">
+        <circle cx="1117.5099" cy="918" r="12.0000191748228" fill="#0a131e"/>
+        <circle cx="1117.5099" cy="918" r="12.0000191748228" stroke="#5eb345" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1107.9099 907)" fill="#5eb345">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5eb345" x="4.8640004" y="16">1</tspan>
+        </text>
+      </g>
+      <g id="Graphic_55">
+        <circle cx="1117.5099" cy="1064.8212" r="12.0000191748227" fill="#0a131e"/>
+        <circle cx="1117.5099" cy="1064.8212" r="12.0000191748227" stroke="#5eb345" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1107.9099 1053.8212)" fill="#5eb345">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5eb345" x="4.8640004" y="16">3</tspan>
+        </text>
+      </g>
+      <g id="Graphic_57">
+        <circle cx="1633.9604" cy="1113" r="12.0000191748228" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1113" r="12.0000191748228" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 1102)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5895a6" x="4.8640004" y="16">4</tspan>
+        </text>
+      </g>
+      <g id="Graphic_58">
+        <circle cx="1117.5099" cy="1211.6423" r="12.0000191748227" fill="#0a131e"/>
+        <circle cx="1117.5099" cy="1211.6423" r="12.0000191748227" stroke="#5eb345" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1107.9099 1200.6423)" fill="#5eb345">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5eb345" x="4.8640004" y="16">5</tspan>
+        </text>
+      </g>
+      <g id="Graphic_59">
+        <circle cx="1633.9604" cy="1261" r="12.0000191748228" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1261" r="12.0000191748228" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 1250)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5895a6" x="4.8640004" y="16">6</tspan>
+        </text>
+      </g>
+      <g id="Graphic_60">
+        <circle cx="1633.9604" cy="1346.6423" r="12.0000191748228" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1346.6423" r="12.0000191748228" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 1335.6423)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="gray" x="4.8640004" y="16">7</tspan>
+        </text>
+      </g>
+      <g id="Graphic_61">
+        <circle cx="1633.9604" cy="1422.6648" r="12.0000191748228" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1422.6648" r="12.0000191748228" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 1411.6648)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="gray" x="4.8640004" y="16">8</tspan>
+        </text>
+      </g>
+      <g id="Graphic_62">
+        <circle cx="1633.9604" cy="1496.75" r="12.0000191748228" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1496.75" r="12.0000191748228" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 1485.75)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="gray" x="4.8640004" y="16">9</tspan>
+        </text>
+      </g>
+      <g id="Graphic_63">
+        <circle cx="1117.5099" cy="1587.9282" r="12.0000191748226" fill="#0a131e"/>
+        <circle cx="1117.5099" cy="1587.9282" r="12.0000191748226" stroke="#5eb345" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1107.9099 1576.9282)" fill="#5eb345">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5eb345" x="3.6720004" y="16">A</tspan>
+        </text>
+      </g>
+      <g id="Graphic_64">
+        <circle cx="1633.9604" cy="1634.0894" r="12.0000191748227" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1634.0894" r="12.0000191748227" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.8404 1623.0894)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5895a6" x="4.4160004" y="16">B</tspan>
+        </text>
+      </g>
+      <g id="Graphic_65">
+        <circle cx="1633.9604" cy="1709.1432" r="12.0000191748227" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1709.1432" r="12.0000191748227" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 1698.1432)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="gray" x="4.1200004" y="16">C</tspan>
+        </text>
+      </g>
+      <g id="Graphic_66">
+        <circle cx="1633.9604" cy="1784.9106" r="12.0000191748227" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1784.9106" r="12.0000191748227" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1625.3204 1773.9106)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="gray" x="3.5280004" y="16">D</tspan>
+        </text>
+      </g>
+      <g id="Graphic_67">
+        <circle cx="1117.5099" cy="1872.1788" r="12.0000191748227" fill="#0a131e"/>
+        <circle cx="1117.5099" cy="1872.1788" r="12.0000191748227" stroke="#5eb345" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1107.9099 1861.1788)" fill="#5eb345">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5eb345" x="4.5600004" y="16">E</tspan>
+        </text>
+      </g>
+      <g id="Graphic_68">
+        <circle cx="1633.9604" cy="1921.5365" r="12.0000191748227" fill="#0a131e"/>
+        <circle cx="1633.9604" cy="1921.5365" r="12.0000191748227" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1624.3604 1910.5365)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#5895a6" x="4.8560004" y="16">F</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>

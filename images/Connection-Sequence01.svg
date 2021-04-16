@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="974.5 725.9779 1019.99 762.0221" width="1019.99" height="762.0221">
+  <defs>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 11 4 2 2 2 3 9 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="-500" x-height="462" cap-height="708" ascent="1e3" descent="-365.9973" font-style="italic" font-weight="300">
+      <font-face-src>
+        <font-face-name name="Avenir-LightOblique"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="12" panose-1="2 0 6 3 2 0 0 2 0 3" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="474" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Avenir-Medium"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 11 4 2 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="462" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="300">
+      <font-face-src>
+        <font-face-name name="Avenir-Light"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 0 6 3 2 0 0 2 0 3" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="474" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Avenir-Medium"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="StickArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-7 -4 8 8" markerWidth="8" markerHeight="8" color="gray">
+      <g>
+        <path d="M -5.76 0 L 0 0 M 0 2.16 L -5.76 0 L 0 -2.16" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <font-face font-family="Avenir" font-size="18" panose-1="2 11 4 2 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="462" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="300">
+      <font-face-src>
+        <font-face-name name="Avenir-Light"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.18\n2021-04-16 10:02:58 +0000</metadata>
+  <g id="WebSocket-Sequence01" stroke="none" stroke-dasharray="none" fill="none" stroke-opacity="1" fill-opacity="1">
+    <title>WebSocket-Sequence01</title>
+    <g id="WebSocket-Sequence01_Ebene_1">
+      <title>Ebene 1</title>
+      <g id="Graphic_14">
+        <rect x="975" y="978" width="797" height="477" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(980 983)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-style="italic" font-weight="300" fill="gray" x="0" y="16">alt</tspan>
+        </text>
+      </g>
+      <g id="Line_4">
+        <path d="M 1040 818 L 1040 829 L 1040.5 1152.5 L 1041 1487" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_5">
+        <path d="M 1707.818 818 L 1707.818 829 L 1707.409 1152.5 L 1707 1487" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_8">
+        <path d="M 1064 941.25 L 1064 917.75 L 1668 917.75 L 1668 906 L 1688 929.5 L 1668 953 L 1668 941.25 Z" fill="#5eb345"/>
+        <text transform="translate(1147 921.5)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="195.112" y="12">AUTHORIZE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_10">
+        <path d="M 1684.9901 1052.75 L 1684.9901 1029.25 L 1080.9901 1029.25 L 1080.9901 1017.5 L 1060.9901 1041 L 1080.9901 1064.5 L 1080.9901 1052.75 Z" fill="#5895a6"/>
+        <text transform="translate(1143.9901 1033)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="190.666" y="12">AUTHORIZED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_11">
+        <path d="M 1684.9901 1171 L 1684.9901 1147.5 L 1080.9901 1147.5 L 1080.9901 1135.75 L 1060.9901 1159.25 L 1080.9901 1182.75 L 1080.9901 1171 Z" fill="#e5702a"/>
+        <text transform="translate(1143.9901 1151.25)" fill="black">
+          <tspan font-family="Avenir" font-size="12" font-weight="500" fill="black" x="209.344" y="12">ERROR</tspan>
+        </text>
+      </g>
+      <g id="Graphic_12">
+        <path d="M 1064.5099 875.9142 L 1064.5099 871.0858 L 1672.5163 871.0858 L 1672.5163 866 L 1687.4901 873.5 L 1672.5163 881 L 1672.5163 875.9142 Z" fill="gray"/>
+      </g>
+      <g id="Graphic_13">
+        <text transform="translate(1345.636 842.5359)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="300" fill="gray" x="0" y="16">connect</tspan>
+        </text>
+      </g>
+      <g id="Line_16">
+        <line x1="975.5099" y1="1101.5" x2="1772.51" y2="1101.5" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.0,4.0" stroke-width="1"/>
+      </g>
+      <g id="Graphic_21">
+        <path d="M 1060.9901 1405.0565 L 1060.9901 1400.2281 L 1668.9965 1400.2281 L 1668.9965 1395.1423 L 1683.9703 1402.6423 L 1668.9965 1410.1423 L 1668.9965 1405.0565 Z" fill="gray"/>
+      </g>
+      <g id="Graphic_20">
+        <text transform="translate(1336.6863 1371.6782)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="300" fill="gray" x="0" y="16">disconnect</tspan>
+        </text>
+      </g>
+      <g id="Graphic_23">
+        <path d="M 1687.4901 1288.6283 L 1687.4901 1283.8 L 1079.4837 1283.8 L 1079.4837 1278.7141 L 1064.5099 1286.2141 L 1079.4837 1293.7141 L 1079.4837 1288.6283 Z" fill="gray"/>
+      </g>
+      <g id="Graphic_22">
+        <text transform="translate(1340.716 1255.25)" fill="gray">
+          <tspan font-family="Avenir" font-size="16" font-weight="300" fill="gray" x="0" y="16">disconnect</tspan>
+        </text>
+      </g>
+      <g id="Line_24">
+        <line x1="975.5099" y1="1216" x2="1772.51" y2="1216" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.0,4.0" stroke-width="1"/>
+      </g>
+      <g id="Line_25">
+        <line x1="975" y1="1329.6962" x2="1772" y2="1329.6962" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.0,4.0" stroke-width="1"/>
+      </g>
+      <g id="Graphic_26">
+        <title>State</title>
+        <path d="M 1871 1007.268 L 1989.49 1007.268 C 1991.6991 1007.268 1993.49 1009.0588 1993.49 1011.268 L 1993.49 1073.268 C 1993.49 1075.4771 1991.6991 1077.268 1989.49 1077.268 L 1871 1077.268 C 1868.7909 1077.268 1867 1075.4771 1867 1073.268 L 1867 1011.268 C 1867 1009.0588 1868.7909 1007.268 1871 1007.268 Z" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(1873 1031.268)" fill="#5895a6">
+          <tspan font-family="Avenir" font-size="16" font-weight="500" fill="#5895a6" x="17.084999" y="16">Authorized</tspan>
+        </text>
+      </g>
+      <g id="Line_27">
+        <title>Transition</title>
+        <line x1="1851.1813" y1="1042.0568" x2="1772" y2="1041" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Graphic_28">
+        <path d="M 1075.625 806.75 L 1047.2117 806.75 C 1047.125 809.0715 1045.4879 810.5 1043.375 810.5 L 1036.25 810.5 C 1034.0598 810.5 1032.3805 808.4527 1032.4098 806.75 L 1004.375 806.75 C 1003.3438 806.75 1002.5 807.59375 1002.5 808.625 L 1002.5 810.5 C 1002.5 814.625 1005.875 818 1010 818 L 1070 818 C 1074.125 818 1077.5 814.625 1077.5 810.5 L 1077.5 808.625 C 1077.5 807.59375 1076.6562 806.75 1075.625 806.75 Z M 1070 763.625 C 1070 760.53125 1067.4688 758 1064.375 758 L 1015.625 758 C 1012.5312 758 1010 760.53125 1010 763.625 L 1010 803 L 1070 803 Z M 1062.5 795.5 L 1017.5 795.5 L 1017.5 765.5 L 1062.5 765.5 Z" fill="#5895a6"/>
+      </g>
+      <g id="Graphic_30">
+        <text transform="translate(1016.33 730.9779)" fill="gray">
+          <tspan font-family="Avenir" font-size="18" font-weight="300" fill="gray" x="0" y="18">Client</tspan>
+        </text>
+      </g>
+      <g id="Graphic_31">
+        <path d="M 1726.568 763.625 L 1726.568 812.375 C 1726.568 815.4816 1724.0496 818 1720.943 818 L 1694.693 818 C 1691.5864 818 1689.068 815.4816 1689.068 812.375 L 1689.068 763.625 C 1689.068 760.5184 1691.5864 758 1694.693 758 L 1720.943 758 C 1724.0496 758 1726.568 760.5184 1726.568 763.625 Z M 1737.818 770.4219 L 1737.818 771.8281 C 1737.818 772.21645 1737.5032 772.53125 1737.1149 772.53125 L 1735.0055 772.53125 L 1735.0055 773.2344 C 1735.0055 773.6227 1734.6907 773.9375 1734.3024 773.9375 L 1729.3805 773.9375 L 1729.3805 768.3125 L 1734.3024 768.3125 C 1734.6907 768.3125 1735.0055 768.6273 1735.0055 769.0156 L 1735.0055 769.71875 L 1737.1149 769.71875 C 1737.5032 769.71875 1737.818 770.03355 1737.818 770.4219 Z M 1737.818 781.6719 L 1737.818 783.0781 C 1737.818 783.46645 1737.5032 783.78125 1737.1149 783.78125 L 1735.0055 783.78125 L 1735.0055 784.4844 C 1735.0055 784.8727 1734.6907 785.1875 1734.3024 785.1875 L 1729.3805 785.1875 L 1729.3805 779.5625 L 1734.3024 779.5625 C 1734.6907 779.5625 1735.0055 779.8773 1735.0055 780.2656 L 1735.0055 780.96875 L 1737.1149 780.96875 C 1737.5032 780.96875 1737.818 781.28355 1737.818 781.6719 Z M 1737.818 792.9219 L 1737.818 794.3281 C 1737.818 794.71645 1737.5032 795.03125 1737.1149 795.03125 L 1735.0055 795.03125 L 1735.0055 795.7344 C 1735.0055 796.1227 1734.6907 796.4375 1734.3024 796.4375 L 1729.3805 796.4375 L 1729.3805 790.8125 L 1734.3024 790.8125 C 1734.6907 790.8125 1735.0055 791.1273 1735.0055 791.5156 L 1735.0055 792.21875 L 1737.1149 792.21875 C 1737.5032 792.21875 1737.818 792.53355 1737.818 792.9219 Z M 1737.818 804.1719 L 1737.818 805.5781 C 1737.818 805.96645 1737.5032 806.28125 1737.1149 806.28125 L 1735.0055 806.28125 L 1735.0055 806.9844 C 1735.0055 807.3727 1734.6907 807.6875 1734.3024 807.6875 L 1729.3805 807.6875 L 1729.3805 802.0625 L 1734.3024 802.0625 C 1734.6907 802.0625 1735.0055 802.3773 1735.0055 802.7656 L 1735.0055 803.46875 L 1737.1149 803.46875 C 1737.5032 803.46875 1737.818 803.78355 1737.818 804.1719 Z M 1681.3336 802.0625 L 1686.2555 802.0625 L 1686.2555 807.6875 L 1681.3336 807.6875 C 1680.9453 807.6875 1680.6305 807.3727 1680.6305 806.9844 L 1680.6305 806.28125 L 1678.5211 806.28125 C 1678.1328 806.28125 1677.818 805.96645 1677.818 805.5781 L 1677.818 804.1719 C 1677.818 803.78355 1678.1328 803.46875 1678.5211 803.46875 L 1680.6305 803.46875 L 1680.6305 802.7656 C 1680.6305 802.3773 1680.9453 802.0625 1681.3336 802.0625 Z M 1681.3336 790.8125 L 1686.2555 790.8125 L 1686.2555 796.4375 L 1681.3336 796.4375 C 1680.9453 796.4375 1680.6305 796.1227 1680.6305 795.7344 L 1680.6305 795.03125 L 1678.5211 795.03125 C 1678.1328 795.03125 1677.818 794.71645 1677.818 794.3281 L 1677.818 792.9219 C 1677.818 792.53355 1678.1328 792.21875 1678.5211 792.21875 L 1680.6305 792.21875 L 1680.6305 791.5156 C 1680.6305 791.1273 1680.9453 790.8125 1681.3336 790.8125 Z M 1681.3336 779.5625 L 1686.2555 779.5625 L 1686.2555 785.1875 L 1681.3336 785.1875 C 1680.9453 785.1875 1680.6305 784.8727 1680.6305 784.4844 L 1680.6305 783.78125 L 1678.5211 783.78125 C 1678.1328 783.78125 1677.818 783.46645 1677.818 783.0781 L 1677.818 781.6719 C 1677.818 781.28355 1678.1328 780.96875 1678.5211 780.96875 L 1680.6305 780.96875 L 1680.6305 780.2656 C 1680.6305 779.8773 1680.9453 779.5625 1681.3336 779.5625 Z M 1681.3336 768.3125 L 1686.2555 768.3125 L 1686.2555 773.9375 L 1681.3336 773.9375 C 1680.9453 773.9375 1680.6305 773.6227 1680.6305 773.2344 L 1680.6305 772.53125 L 1678.5211 772.53125 C 1678.1328 772.53125 1677.818 772.21645 1677.818 771.8281 L 1677.818 770.4219 C 1677.818 770.03355 1678.1328 769.71875 1678.5211 769.71875 L 1680.6305 769.71875 L 1680.6305 769.0156 C 1680.6305 768.6273 1680.9453 768.3125 1681.3336 768.3125 Z" fill="#5895a6"/>
+      </g>
+      <g id="Graphic_32">
+        <text transform="translate(1672.97 730.9779)" fill="gray">
+          <tspan font-family="Avenir" font-size="18" font-weight="300" fill="gray" x="0" y="18">Gateway</tspan>
+        </text>
+      </g>
+      <g id="Line_38">
+        <title>Transition</title>
+        <line x1="1885.711" y1="1402.6423" x2="1772" y2="1402.6423" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Line_39">
+        <title>Transition</title>
+        <path d="M 1906.9958 1375.6263 C 1900.7394 1356.9037 1888.8827 1332.1892 1867 1314.1104 C 1826.9036 1280.9841 1772 1285.7141 1772 1285.7141" marker-start="url(#StickArrow_Marker)" stroke="gray" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Group_34">
+        <title>End</title>
+        <g id="Graphic_37">
+          <text transform="translate(1934.247 1392.9103)" fill="gray">
+            <tspan font-family="Avenir" font-size="16" font-weight="500" fill="gray" x="0" y="16">end</tspan>
+          </text>
+        </g>
+        <g id="Graphic_36">
+          <circle cx="1913.531" cy="1402.6423" r="15.0000239685285" stroke="#5895a6" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

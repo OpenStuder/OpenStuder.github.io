@@ -350,7 +350,7 @@ body
 
 <p>The communication between the client and the gateway has <strong>two principal phases</strong>:</p>
 
-<img src="images/WebSocket-State01.svg"/>
+<img src="images/Connection-State01.svg"/>
 
 #### Unauthorized phase
 
@@ -358,7 +358,7 @@ body
     <strong>AUTHORIZE</strong> requests from the client. This phase is only left after the client has send an <strong>AUTHORIZE</strong> request to the gateway and the gateway granted access or the
     WebSocket connection has been closed by either the client or the gateway. The gateway can close the WebSocket connection after one or more refused authorize attempts.</p>
 
-<img src="images/WebSocket-Sequence01.svg"/>
+<img src="images/Connection-Sequence01.svg"/>
 
 #### Authorized phase
 
@@ -367,7 +367,7 @@ body
     messages at any time.</p>
 <p>The following sequence diagram shows a typical conversation between a client and the gateway in during the authorized phase:</p>
 
-<img src="images/WebSocket-Sequence02.svg"/>
+<img src="images/Connection-Sequence02.svg"/>
 
 <p class="center request">The client sends a <strong>ENUMERATE</strong> <span class="circle">&nbsp;1&nbsp;</span> request message to the gateway. The gateway will initiate the enumeration operation.</p>
 <p class="center response">Once the enumeration operation has completed, the gateway responds with an <strong>ENUMERATED</strong> <span class="circle">&nbsp;2&nbsp;</span> message.</p>
@@ -395,7 +395,7 @@ body
 <p>Four types of frames exists and are differentiated using colors:</p>
 
 <ul>
-    <li><strong>Request messages</strong> send from the client to the gateway.</li>
+    <li><strong class="request">Request messages</strong> send from the client to the gateway.</li>
     <li><strong class="response">Response messages</strong> send from the gateway to the client as response to request messages.</li>
     <li><strong class="indication">Indication messages</strong> send from the gateway to the client spontaneous, subscribed properties and device message for example.</li>
     <li><strong class="error">Error message</strong> send from the gateway to the client on severe errors.</li>

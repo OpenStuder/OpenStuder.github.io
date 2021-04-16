@@ -285,7 +285,7 @@ const websocketProblemHtml = `
 <style>
 	div#websocket {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		justify-content: flex-end;
 		align-items: center;
 		position: fixed;
@@ -300,12 +300,13 @@ const websocketProblemHtml = `
 		border-top: 1px solid var(--warnBackground);
 	}
 	
-	div#websocket div {
-		padding: 8px;
+	div#websocket i, div#websocket span  {
+		margin: 4px;
 	}
 	
 	div#websocket button {
 		outline:none;
+		margin: 4px;
 		-webkit-appearance: none;
 		font-family: var(--siteFont), Helvetica Neue, Arial, sans-serif;
 		border: none;
@@ -316,13 +317,11 @@ const websocketProblemHtml = `
 	}
 </style>
 <div id="websocket">
-    <div>
-   		<i class="material-icons">error</i>
-		<span>
-        	<b>WebSocket connection testing not available on using HTTPS!</b>
-    	</span>
-    	<button onclick="window.location = 'http:'; window.location.reload();">Fix...</button>
-    </div>
+	<i class="material-icons">error</i>
+	<span>
+		<b>WebSocket connection testing not available when using HTTPS!</b>
+	</span>
+	<button onclick="window.location = 'http:'; window.location.reload();">Fix...</button>
 </div>
 `
 
@@ -588,7 +587,7 @@ class SIWebSocketTestConnection {
 	private testButtons_: HTMLButtonElement[] = [];
 }
 
-function docsifyPlugin(hook: any, vm: any) {
+function docsifyWebSocketPlugin(hook: any, vm: any) {
 	hook.doneEach(() => {
 		document.querySelectorAll<HTMLDivElement>('.ws-api-doc').forEach((docElement: HTMLDivElement) => {
 			const preview = docElement.querySelector<HTMLElement>('code[data-ws-preview]');
@@ -663,4 +662,4 @@ function docsifyPlugin(hook: any, vm: any) {
 }
 
 let docsify = (window as any).$docsify || {};
-docsify.plugins = [docsifyPlugin].concat(docsify.plugins || []);
+docsify.plugins = [docsifyWebSocketPlugin].concat(docsify.plugins || []);
