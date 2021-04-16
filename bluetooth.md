@@ -359,7 +359,7 @@
 
 #### Unauthorized phase
 
-<p>As soon as client has established the Bluetooth connection to the gateway, the connection is in the <strong>Unauthorized</strong> phase. In this phase, the gateway rejects all messages except
+<p>As soon as client has established the Bluetooth connection to the gateway, the connection is in the <strong>Unauthorized</strong> phase. In this phase, the gateway rejects all frames except
     <strong>AUTHORIZE</strong> requests from the client. This phase is only left after the client has send an <strong>AUTHORIZE</strong> request to the gateway and the gateway granted access or the
     Bluetooth connection has been closed by either the client or the gateway. The gateway can close the Bluetooth connection after one or more refused authorize attempts.</p>
 
@@ -369,52 +369,52 @@
 
 <p>If the gateway has granted access to the client, the connection enters the <strong>Authorized</strong> phase and remains there until either of the two communication peers close the Bluetooth
     connection. In this phase the client can send any request (except the AUTHORIZE request of course) at any time and the gateway responds accordingly. Additionally the gateway can send indication
-    messages at any time.</p>
+    frames at any time.</p>
 <p>The following sequence diagram shows a typical conversation between a client and the gateway in during the authorized phase:</p>
 
 <img src="images/Connection-Sequence02.svg"/>
 
-<p class="center request">The client sends a <strong>ENUMERATE</strong> <span class="circle">&nbsp;1&nbsp;</span> request message to the gateway. The gateway will initiate the enumeration operation.</p>
-<p class="center response">Once the enumeration operation has completed, the gateway responds with an <strong>ENUMERATED</strong> <span class="circle">&nbsp;2&nbsp;</span> message.</p>
-<p class="center request">The client sends a <strong>DESCRIBE</strong> <span class="circle">&nbsp;3&nbsp;</span> request message to the gateway. The gateway will generate a JSON representation of the
+<p class="center request">The client sends a <strong>ENUMERATE</strong> <span class="circle">&nbsp;1&nbsp;</span> request frame to the gateway. The gateway will initiate the enumeration operation.</p>
+<p class="center response">Once the enumeration operation has completed, the gateway responds with an <strong>ENUMERATED</strong> <span class="circle">&nbsp;2&nbsp;</span> frame.</p>
+<p class="center request">The client sends a <strong>DESCRIBE</strong> <span class="circle">&nbsp;3&nbsp;</span> request frame to the gateway. The gateway will generate a JSON representation of the
     requested entity.</p>
-<p class="center response">The gateway responds with an <strong>DESCRIPTION</strong> <span class="circle">&nbsp;4&nbsp;</span> message which contains the description.</p>
-<p class="center request">The client subscribes now to the properties he is interested in using <strong>SUBSCRIBE PROPERTY</strong> <span class="circle">&nbsp;5&nbsp;</span> messages.
+<p class="center response">The gateway responds with an <strong>DESCRIPTION</strong> <span class="circle">&nbsp;4&nbsp;</span> frame which contains the description.</p>
+<p class="center request">The client subscribes now to the properties he is interested in using <strong>SUBSCRIBE PROPERTY</strong> <span class="circle">&nbsp;5&nbsp;</span> frames.
     For simplicity the client in the sequence diagram only subscribes to one singe property.</p>
-<p class="center response">For each property subscribe request, the gateway responds with a <strong>PROPERTY SUBSCRIBED</strong> <span class="circle">&nbsp;6&nbsp;</span> message.</p>
+<p class="center response">For each property subscribe request, the gateway responds with a <strong>PROPERTY SUBSCRIBED</strong> <span class="circle">&nbsp;6&nbsp;</span> frame.</p>
 <p class="center indication">Every time the subscribed property changes, the gateway sends a <strong>PROPERTY UPDATE</strong> <span class="circle">&nbsp;7&nbsp;</span>,
-    <span class="circle">&nbsp;9&nbsp;</span>, <span class="circle">&nbsp;C&nbsp;</span>, <span class="circle">&nbsp;D&nbsp;</span> message to the client.</p>
-<p class="center indication">In the case a device connected to the gateway publishes a message, the message will be forwarded to all connected clients (authorized) using the <strong>DEVICE MESSAGE</strong>
-    <span class="circle">&nbsp;8&nbsp;</span> message.</p>
-<p class="center request">If a client wants to change the value of a property, he has to send a <strong>WRITE PROPERTY</strong> <span class="circle">&nbsp;A&nbsp;</span> message to tge gateway.</p>
-<p class="center response">The gateway responds to the property write request using the <strong>PROPERTY WRITTEN</strong> <span class="circle">&nbsp;B&nbsp;</span> message.</p>
-<p class="center request">The client sends an <strong>UNSUBSCRIBE PROPERTY</strong> <span class="circle">&nbsp;E&nbsp;</span> message to the gateway to stop periodic updates for the given property.</p>
-<p class="center response">The gateway acknowledges the unsubscribe request by sending a <strong>PROPERTY UNSUBSCRIBED</strong> <span class="circle">&nbsp;F&nbsp;</span> message back to the client.</p>
+    <span class="circle">&nbsp;9&nbsp;</span>, <span class="circle">&nbsp;C&nbsp;</span>, <span class="circle">&nbsp;D&nbsp;</span> frame to the client.</p>
+<p class="center indication">In the case a device connected to the gateway publishes a frame, the frame will be forwarded to all connected clients (authorized) using the <strong>DEVICE MESSAGE</strong>
+    <span class="circle">&nbsp;8&nbsp;</span> frame.</p>
+<p class="center request">If a client wants to change the value of a property, he has to send a <strong>WRITE PROPERTY</strong> <span class="circle">&nbsp;A&nbsp;</span> frame to tge gateway.</p>
+<p class="center response">The gateway responds to the property write request using the <strong>PROPERTY WRITTEN</strong> <span class="circle">&nbsp;B&nbsp;</span> frame.</p>
+<p class="center request">The client sends an <strong>UNSUBSCRIBE PROPERTY</strong> <span class="circle">&nbsp;E&nbsp;</span> frame to the gateway to stop periodic updates for the given property.</p>
+<p class="center response">The gateway acknowledges the unsubscribe request by sending a <strong>PROPERTY UNSUBSCRIBED</strong> <span class="circle">&nbsp;F&nbsp;</span> frame back to the client.</p>
 <p class="center ">The client can disconnect from the gateway at any time.</p>
 
-## Messages
+## Frames
 
 <p>
-    All messages that can be exchanged with the OpenStuder gateway Bluetooth API are defined in the following sections.
+    All frames that can be exchanged with the OpenStuder gateway Bluetooth API are defined in the following sections.
 </p>
 <p>Four types of frames exists and are differentiated using colors:</p>
 
 <ul>
-    <li><strong class="request">Request messages</strong> send from the client to the gateway.</li>
-    <li><strong class="response">Response messages</strong> send from the gateway to the client as response to request messages.</li>
-    <li><strong class="indication">Indication messages</strong> send from the gateway to the client spontaneous, subscribed properties and device message for example.</li>
-    <li><strong class="error">Error message</strong> send from the gateway to the client on severe errors.</li>
+    <li><strong class="request">Request frames</strong> send from the client to the gateway.</li>
+    <li><strong class="response">Response frames</strong> send from the gateway to the client as response to request frames.</li>
+    <li><strong class="indication">Indication frames</strong> send from the gateway to the client spontaneous, subscribed properties and device frame for example.</li>
+    <li><strong class="error">Error frames</strong> send from the gateway to the client on severe errors.</li>
 </ul>
 
 ### User authorization
 
-<p>A client initiates the connection to the gateway by sending the <strong>AUTHORIZE</strong> message:</p>
+<p>A client initiates the connection to the gateway by sending the <strong>AUTHORIZE</strong> frame:</p>
 
 <div class="bt-api-doc request">
     <button class="accordion-toggle">AUTHORIZE</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>AUTHORIZE</strong> message has to be send as the <strong>very first</strong> by a client to the gateway after the Bluetooth connection has been established. Any other message
+            The <strong>AUTHORIZE</strong> frame has to be send as the <strong>very first</strong> by a client to the gateway after the Bluetooth connection has been established. Any other frame
             will be rejected as long as the authorization has not been completed.<br/>
             It serves basically two purposes:
         </p>
@@ -470,14 +470,14 @@
     </div>
 </div>
 
-<p>If the gateway accepts the connection attempt it will respond with a <strong class="response">AUTHORIZED</strong> message:</p>
+<p>If the gateway accepts the connection attempt it will respond with a <strong class="response">AUTHORIZED</strong> frame:</p>
 
 <div class="bt-api-doc response">
     <button class="accordion-toggle">AUTHORIZED</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>AUTHORIZED</strong> message is send by the gateway as a response to the <strong class="request">AUTHORIZE</strong> message if the authentication was successful. in the case
-            of an error, the gateway responds with an <strong class="error">ERROR</strong> message instead.
+            The <strong>AUTHORIZED</strong> frame is send by the gateway as a response to the <strong class="request">AUTHORIZE</strong> frame if the authentication was successful. in the case
+            of an error, the gateway responds with an <strong class="error">ERROR</strong> frame instead.
         </p>
         <h6>parameters</h6>
         <table>
@@ -490,7 +490,7 @@
                 <td>access_level</td>
                 <td>1 <em>(Basic)</em>,<br/>2 <em>(Installer)</em>,<br/>3 <em>(Expert)</em>,<br/> 4 <em>(QSP)</em></td>
                 <td><strong>Access level granted to authorized user</strong>. <br/>
-                    This access level has been granted by the gateway to the user (or guest) that was authorized using the optional credentials in the AUTHORIZE message.
+                    This access level has been granted by the gateway to the user (or guest) that was authorized using the optional credentials in the AUTHORIZE frame.
                 </td>
             </tr>
             <tr>
@@ -512,18 +512,18 @@
     </div>
 </div>
 
-<p>The gateway can reject any connection attempt due to protocol version mismatch or failed authorization. The server responds back with an <strong class="error">ERROR</strong> message explaining why
+<p>The gateway can reject any connection attempt due to protocol version mismatch or failed authorization. The server responds back with an <strong class="error">ERROR</strong> frame explaining why
     the authorization was rejected. The connection remains open.</p>
 
 ### Device enumeration
 
-<p>A client can request a gateway to enumerates all connected devices by sending an <strong>ENUMERATE</strong> message.</p>
+<p>A client can request a gateway to enumerates all connected devices by sending an <strong>ENUMERATE</strong> frame.</p>
 
 <div class="bt-api-doc request">
     <button class="accordion-toggle">ENUMERATE</button>
     <div class="accordion-content" hidden>
         <p>
-            An <strong>ENUMERATE</strong> message triggers a device enumeration on the gateway.<br/>
+            An <strong>ENUMERATE</strong> frame triggers a device enumeration on the gateway.<br/>
             The gateway basically scans every configured and functional device access driver for new devices and removes devices that do not respond anymore.
         </p>
         <h6>parameters</h6>
@@ -532,14 +532,14 @@
     </div>
 </div>
 
-<p>If the gateway accepts the request it will respond with a <strong class="response">ENUMERATED</strong> message:</p>
+<p>If the gateway accepts the request it will respond with a <strong class="response">ENUMERATED</strong> frame:</p>
 
 <div class="bt-api-doc response">
     <button class="accordion-toggle">ENUMERATED</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>ENUMERATED</strong> message is send by the gateway as a response to an <strong class="request">ENUMERATE</strong> that was accepted by the gateway. The only reason an
-            <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+            The <strong>ENUMERATED</strong> frame is send by the gateway as a response to an <strong class="request">ENUMERATE</strong> that was accepted by the gateway. The only reason an
+            <strong class="error">ERROR</strong> frame is send back by the gateway instead of this frame is if the request frame was malformed or the client is not yet authorized.
         </p>
         <h6>parameters</h6>
         <table>
@@ -567,17 +567,17 @@
     </div>
 </div>
 
-<p>Should the <strong class="request">ENUMERATE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">ENUMERATE</strong> frame be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> frame instead.</p>
 
 ### Read property
 
-<p>A client can query the actual value of any property by sending the <strong class="request">READ PROPERTY</strong> message.</p>
+<p>A client can query the actual value of any property by sending the <strong class="request">READ PROPERTY</strong> frame.</p>
 
 <div class="bt-api-doc request">
     <button class="accordion-toggle">READ PROPERTY</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>READ PROPERTY</strong> message is send to a gateway to retrieve the actual value of a given property. The property is identified by the <strong>id</strong> parameter.
+            The <strong>READ PROPERTY</strong> frame is send to a gateway to retrieve the actual value of a given property. The property is identified by the <strong>id</strong> parameter.
         </p>
         <h6>parameters</h6>
         <table>
@@ -602,14 +602,14 @@
     </div>
 </div>
 
-<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY READ</strong> message:</p>
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY READ</strong> frame:</p>
 
 <div class="bt-api-doc response">
     <button class="accordion-toggle">PROPERTY READ</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>PROPERTY READ</strong> message is send by the gateway as a response to an <strong class="request">READ PROPERTY</strong> that was accepted by the gateway. The only reason an
-            <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+            The <strong>PROPERTY READ</strong> frame is send by the gateway as a response to an <strong class="request">READ PROPERTY</strong> that was accepted by the gateway. The only reason an
+            <strong class="error">ERROR</strong> frame is send back by the gateway instead of this frame is if the request frame was malformed or the client is not yet authorized.
         </p>
         <h6>parameters</h6>
         <table>
@@ -631,7 +631,7 @@
                 <td>id</td>
                 <td>string</td>
                 <td><strong>ID of the property</strong>. <br/>
-                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">READ PROPERTY</strong> message.
+                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">READ PROPERTY</strong> frame.
                 </td>
             </tr>
             <tr>
@@ -646,17 +646,17 @@
     </div>
 </div>
 
-<p>Should the <strong class="request">READ PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">READ PROPERTY</strong> frame be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> frame instead.</p>
 
 ### Write property
 
-<p>A client can ask the gateway to write to a property by sending the <strong class="request">WRITE PROPERTY</strong> message.</p>
+<p>A client can ask the gateway to write to a property by sending the <strong class="request">WRITE PROPERTY</strong> frame.</p>
 
 <div class="bt-api-doc request">
     <button class="accordion-toggle">WRITE PROPERTY</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>WRITE PROPERTY</strong> message is send to a gateway to change the actual value of a given property. The property is identified by the <strong>id</strong> parameter and the new
+            The <strong>WRITE PROPERTY</strong> frame is send to a gateway to change the actual value of a given property. The property is identified by the <strong>id</strong> parameter and the new
             value is passed by the <strong>value</strong> parameter.
         </p>
         <h6>parameters</h6>
@@ -707,14 +707,14 @@
     </div>
 </div>
 
-<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY WRITTEN</strong> message:</p>
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY WRITTEN</strong> frame:</p>
 
 <div class="bt-api-doc response">
     <button class="accordion-toggle">PROPERTY WRITTEN</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>PROPERTY WRITTEN</strong> message is send by the gateway as a response to an <strong class="request">WRITE PROPERTY</strong> that was accepted by the gateway. The only reason
-            an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+            The <strong>PROPERTY WRITTEN</strong> frame is send by the gateway as a response to an <strong class="request">WRITE PROPERTY</strong> that was accepted by the gateway. The only reason
+            an <strong class="error">ERROR</strong> frame is send back by the gateway instead of this frame is if the request frame was malformed or the client is not yet authorized.
         </p>
         <h6>parameters</h6>
         <table>
@@ -736,7 +736,7 @@
                 <td>id</td>
                 <td>string</td>
                 <td><strong>ID of the property</strong>. <br/>
-                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">WRITE PROPERTY</strong> message.
+                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">WRITE PROPERTY</strong> frame.
                 </td>
             </tr>
         </table>
@@ -744,17 +744,17 @@
     </div>
 </div>
 
-<p>Should the <strong class="request">WRITE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">WRITE PROPERTY</strong> frame be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> frame instead.</p>
 
 ### Subscribe to properties
 
-<p>A client can subscribe to a property for changes by sending the <strong class="request">SUBSCRIBE PROPERTY</strong> message.</p>
+<p>A client can subscribe to a property for changes by sending the <strong class="request">SUBSCRIBE PROPERTY</strong> frame.</p>
 
 <div class="bt-api-doc request">
     <button class="accordion-toggle">SUBSCRIBE PROPERTY</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>SUBSCRIBE PROPERTY</strong> message is send to a gateway to subscribe to a property and receive indications whenever the property has changed. The property is identified by
+            The <strong>SUBSCRIBE PROPERTY</strong> frame is send to a gateway to subscribe to a property and receive indications whenever the property has changed. The property is identified by
             the <strong>id</strong> header.
         </p>
         <h6>parameters</h6>
@@ -780,14 +780,14 @@
     </div>
 </div>
 
-<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY SUBSCRIBED</strong> message:</p>
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY SUBSCRIBED</strong> frame:</p>
 
 <div class="bt-api-doc response">
     <button class="accordion-toggle">PROPERTY SUBSCRIBED</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>PROPERTY SUBSCRIBED</strong> message is send by the gateway as a response to an <strong class="request">SUBSCRIBE PROPERTY</strong> that was accepted by the gateway. The only
-            reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+            The <strong>PROPERTY SUBSCRIBED</strong> frame is send by the gateway as a response to an <strong class="request">SUBSCRIBE PROPERTY</strong> that was accepted by the gateway. The only
+            reason an <strong class="error">ERROR</strong> frame is send back by the gateway instead of this frame is if the request frame was malformed or the client is not yet authorized.
         </p>
         <h6>parameters</h6>
         <table>
@@ -808,7 +808,7 @@
                 <td>id</td>
                 <td>string</td>
                 <td><strong>ID of the property</strong>. <br/>
-                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">SUBSCRIBE PROPERTY</strong> message.
+                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">SUBSCRIBE PROPERTY</strong> frame.
                 </td>
             </tr>
         </table>
@@ -816,15 +816,15 @@
     </div>
 </div>
 
-<p>Should the <strong class="request">SUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">SUBSCRIBE PROPERTY</strong> frame be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> frame instead.</p>
 
-<p>For all property subscriptions of a given client, the gateway sends a <strong class="request">PROPERTY UPDATE</strong> message when the property has changed.</p>
+<p>For all property subscriptions of a given client, the gateway sends a <strong class="request">PROPERTY UPDATE</strong> frame when the property has changed.</p>
 
 <div class="bt-api-doc">
     <button class="accordion-toggle">PROPERTY UPDATE</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>PROPERTY UPDATE</strong> message is send by the gateway to a client whenever a property the client has subscribed to has changed (or read). The property is identified by
+            The <strong>PROPERTY UPDATE</strong> frame is send by the gateway to a client whenever a property the client has subscribed to has changed (or read). The property is identified by
             the <strong>id</strong> header and the value is in the <strong>value</strong> parameter.
         </p>
         <h6>parameters</h6>
@@ -853,13 +853,13 @@
     </div>
 </div>
 
-<p>A client can unsubscribe from a property by sending the <strong class="request">UNSUBSCRIBE PROPERTY</strong> message.</p>
+<p>A client can unsubscribe from a property by sending the <strong class="request">UNSUBSCRIBE PROPERTY</strong> frame.</p>
 
 <div class="bt-api-doc request">
     <button class="accordion-toggle">UNSUBSCRIBE PROPERTY</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>UNSUBSCRIBE PROPERTY</strong> message is send to a gateway to remove a subscription to a property. The property is identified by the <strong>id</strong> header.
+            The <strong>UNSUBSCRIBE PROPERTY</strong> frame is send to a gateway to remove a subscription to a property. The property is identified by the <strong>id</strong> header.
         </p>
         <h6>parameters</h6>
         <table>
@@ -884,14 +884,14 @@
     </div>
 </div>
 
-<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY UNSUBSCRIBED</strong> message:</p>
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTY UNSUBSCRIBED</strong> frame:</p>
 
 <div class="bt-api-doc response">
     <button class="accordion-toggle">PROPERTY UNSUBSCRIBED</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>PROPERTY UNSUBSCRIBED</strong> message is send by the gateway as a response to an <strong class="request">UNSUBSCRIBE PROPERTY</strong> that was accepted by the gateway. The
-            only reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+            The <strong>PROPERTY UNSUBSCRIBED</strong> frame is send by the gateway as a response to an <strong class="request">UNSUBSCRIBE PROPERTY</strong> that was accepted by the gateway. The
+            only reason an <strong class="error">ERROR</strong> frame is send back by the gateway instead of this frame is if the request frame was malformed or the client is not yet authorized.
         </p>
         <h6>parameters</h6>
         <table>
@@ -912,7 +912,7 @@
                 <td>id</td>
                 <td>string</td>
                 <td><strong>ID of the property</strong>. <br/>
-                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">UNSUBSCRIBE PROPERTY</strong> message.
+                    Copy of the parameter <strong>id</strong> of the corresponding <strong class="request">UNSUBSCRIBE PROPERTY</strong> frame.
                 </td>
             </tr>
         </table>
@@ -920,17 +920,17 @@
     </div>
 </div>
 
-<p>Should the <strong class="request">UNSUBSCRIBE PROPERTY</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+<p>Should the <strong class="request">UNSUBSCRIBE PROPERTY</strong> frame be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> frame instead.</p>
 
 ### Device messages
 
-<p>Devices can publish broadcast messages and the gateway will forward those messages to all connected clients using the <strong class="indication">DEVICE MESSAGE</strong> message.</p>
+<p>Devices can publish broadcast messages and the gateway will forward those messages to all connected clients using the <strong class="indication">DEVICE MESSAGE</strong> frame.</p>
 
 <div class="bt-api-doc">
     <button class="accordion-toggle">DEVICE MESSAGE</button>
     <div class="accordion-content" hidden>
         <p>
-            The <strong>DEVICE MESSAGE</strong> message is send by the gateway to all connected clients whenever a device has broadcast a message.
+            The <strong>DEVICE MESSAGE</strong> frame is send by the gateway to all connected clients whenever a device has broadcast a message.
         </p>
         <h6>parameters</h6>
         <table>
