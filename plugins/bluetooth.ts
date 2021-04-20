@@ -316,6 +316,17 @@ const bluetoothProblemHtml = `
 		border-radius: 12px;
 		padding: 4px 12px;
 	}
+	
+	.bluetooth-copy-button {
+		position: absolute;
+		top: 18px;
+		right: 8px;
+		outline:none;
+		-webkit-appearance: none;
+		border: none;
+		color: var(--accentBackground);
+		background: none;
+	}
 </style>
 <div id="bluetooth">
 	<i class="material-icons">error</i>
@@ -334,19 +345,34 @@ class SIBluetoothTestConnection {
 		hook.doneEach(() => {
 			if (docsifyWM.route.path.indexOf('/bluetooth') == 0) {
 				//if (window.location.protocol == 'http:') {
-					document.body.insertAdjacentHTML('beforeend', bluetoothProblemHtml);
-					return;
-				//}
+				document.body.insertAdjacentHTML('beforeend', bluetoothProblemHtml);
+				//} else {
 
 				//document.body.insertAdjacentHTML('beforeend', bluetoothTestHtml);
 
 				// TOOD...
+				// }
 
+				const requests = document.querySelectorAll('pre[data-bt-try]');
+				for (let i = 0; i < requests.length; ++i) {
+					const editButton = document.createElement('button') as HTMLButtonElement;
+					editButton.title = 'Copy to clipboard.';
+					editButton.className = 'bluetooth-copy-button';
+					editButton.innerHTML = '<i class="material-icons" style="font-size: 24px;">content_copy</i>';
+					editButton.onclick = this.onCopyButtonClicked;
+					requests[i].appendChild(editButton);
+				}
 			} else {
 				const wsElement = document.getElementById('bluetooth');
 				if (wsElement != null) wsElement.remove();
 			}
 		});
+	}
+
+	private onCopyButtonClicked = (event: MouseEvent) => {
+		const value = (event.target as HTMLElement).parentElement.parentElement.querySelector<HTMLElement>('code').innerHTML.split('<br>').join('\n');
+		navigator.clipboard.writeText(value);
+		console.log(value);
 	}
 
 	private docsifyWM_: any;

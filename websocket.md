@@ -1857,7 +1857,7 @@ from the gateway or the list of properties that are logged.</p>
             </tr>
             <tr>
                 <td>id</td>
-                <td>number<br/><em>(optional)</em></td>
+                <td>string<br/><em>(optional)</em></td>
                 <td><strong>Property ID</strong>.<br/>
                 Global ID of the property for which the logged data will be requested. <br/>
                 It has to be in the form <strong>&lt;device access ID&gt;.&lt;device ID&gt;.&lt;property ID&gt;</strong>.<br/>
@@ -1929,7 +1929,8 @@ from the gateway or the list of properties that are logged.</p>
                 <td>id</td>
                 <td>string<br/><em>(optional)</em></td>
                 <td><strong>ID of the property</strong>. <br/>
-                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">READ DATALOG</strong> message.
+                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">READ DATALOG</strong> message. If not present, the list of logged properties is returned instead
+                    of logged values.
                 </td>
             </tr>
             <tr>

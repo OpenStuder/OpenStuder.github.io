@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="947 808.931 847.5973 211.06905" width="847.5973" height="211.06905">
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="947 808.931 847.5973 211.06905" width="847.5973" height="211.06905">
   <defs>
     <font-face font-family="Avenir" font-size="20" panose-1="2 0 6 3 2 0 0 2 0 3" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="474" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="500">
       <font-face-src>
@@ -18,8 +18,8 @@
       </font-face-src>
     </font-face>
   </defs>
-  <metadata> Produced by OmniGraffle 7.18\n2021-04-16 11:45:53 +0000</metadata>
-  <g id="Bluetooth_Characteristics" stroke-opacity="1" fill="none" fill-opacity="1" stroke="none" stroke-dasharray="none">
+  <metadata> Produced by OmniGraffle 7.18\n2021-04-19 13:41:47 +0000</metadata>
+  <g id="Bluetooth_Characteristics" fill="none" stroke="none" stroke-opacity="1" stroke-dasharray="none" fill-opacity="1">
     <title>Bluetooth Characteristics</title>
     <g id="Bluetooth_Characteristics_Ebene_1">
       <title>Ebene 1</title>
@@ -37,8 +37,8 @@
       <g id="Group_40">
         <title>End</title>
         <g id="Graphic_42">
-          <text transform="translate(1717.246 894.2679)" fill="gray">
-            <tspan font-family="Avenir" font-size="16" font-weight="500" fill="gray" x="11723955e-20" y="16">RX</tspan>
+          <text transform="translate(1717.542 894.2679)" fill="gray">
+            <tspan font-family="Avenir" font-size="16" font-weight="500" fill="gray" x="0" y="16">TX</tspan>
           </text>
         </g>
         <g id="Graphic_41">
@@ -48,8 +48,8 @@
       <g id="Group_46">
         <title>End</title>
         <g id="Graphic_48">
-          <text transform="translate(1717.542 952.268)" fill="gray">
-            <tspan font-family="Avenir" font-size="16" font-weight="500" fill="gray" x="0" y="16">TX</tspan>
+          <text transform="translate(1717.246 952.268)" fill="gray">
+            <tspan font-family="Avenir" font-size="16" font-weight="500" fill="gray" x="11723955e-20" y="16">RX</tspan>
           </text>
         </g>
         <g id="Graphic_47">
