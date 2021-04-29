@@ -1090,6 +1090,116 @@ status:Success
 
 <p>Should the <strong class="request">DESCRIBE</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
+<p>A client can query for specific properties (using wildcards in the search ID) by using the <strong class="request">FIND PROPERTIES</strong> message.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">FIND PROPERTIES</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>FIND PROPERTIES</strong> message is used to retrieve a list of existing properties that match the given property ID search query. <br/>
+            The wildcard character <strong>*</strong> is supported for device access ID and device ID fields of the search query.
+            <br/><br/>
+            For example <strong>*.inv.3136</strong> represents all properties with ID <em>3136</em> on the device with ID <em>inv</em> connected through any device access, <strong>demo.*.3136</strong>
+            represents all properties with ID <em>3136</em> on any device that disposes that property connected through the device access <em>demo</em> and finally <strong>*.*.3136</strong>> 
+            represents all properties with ID <em>3136</em> on any device that disposes that property connected through any device access.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>Search ID query</strong>. <br/>
+                    The property search ID query.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>No body</em></p>
+        <pre data-ws-try><code data-ws-preview="FIND PROPERTIES"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">PROPERTIES FOUND</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">PROPERTIES FOUND</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>PROPERTIES FOUND</strong> message is send by the gateway as a response to a <strong class="request">FIND PROPERTIES</strong> that was accepted by the gateway. The only reason 
+            an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status</strong>. <br/>
+                    <strong>Success</strong> if the properties could be successfully searched for. For all other errors, the general status <strong>Error</strong> is set.
+                </td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>string</td>
+                <td><strong>Search ID query</strong>. <br/>
+                    Copy of the header <strong>id</strong> of the corresponding <strong class="request">FIND PROPERTIES</strong> message.
+                </td>
+            </tr>
+            <tr>
+                <td>count</td>
+                <td>number<br/></td>
+                <td><strong>Properties count</strong>. <br/>
+                    Number of properties matching the search criteria.
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+         <p>The body of the <strong>PROPERTIES FOUND</strong> message is a JSON array representation of the requested list of device IDs.
+<div class="ws-api-doc json-schema">
+<button class="accordion-toggle">JSON schema</button>
+<div class="accordion-content" hidden>
+
+[property_found_body](json/properties_found_body.json ':include :type=code')
+
+Download the JSON schema: <a href="json/properties_found_body.json" download>properties_found_body.json</a>
+
+</div>
+</div>
+
+<div class="ws-api-doc json-example">
+<button class="accordion-toggle">Property JSON example</button>
+<div class="accordion-content" hidden>
+
+```json
+["demo.inv.3136", "demo.inv2.3136"]
+```
+
+</div>
+</div>
+<pre data-ws-example="PROPERTIES FOUND"><code>PROPERTIES FOUND
+status:Success
+id:*.*.3136
+count:2
+&nbsp;
+["demo.inv.3136", "demo.inv2.3136"]</code></pre>
+    </div>
+</div>
+
+<p>Should the <strong class="request">FIND PROPERTIES</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
 ### Read property
 
 <p>A client can query the actual value of any property by sending the <strong class="request">READ PROPERTY</strong> message.</p>
