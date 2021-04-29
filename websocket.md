@@ -2311,10 +2311,4 @@ reason:authorization required
     </div>
 </div>
 
-## EBNF grammar
-
-[websocket-api-grammar](bnf/websocket-api-grammar.bnf ':include :type=code')
-
-The grammar of the different messages can be downloaded from here: <a href="bnf/websocket-api-grammar.bnf" download>websocket-api-grammar.bnf</a>.
-
 <div style="height:60vh"></div>
