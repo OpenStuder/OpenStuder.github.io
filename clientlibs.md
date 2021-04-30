@@ -168,6 +168,42 @@ except SIProtocolError as error:
     print(f'Error: {error.reason()}')
 ```
 
+##### Finding properties - *find_properties()*
+
+This method is used to retrieve a list of existing properties that match the given property ID in the form `<device access ID>.<device ID>.<property ID>`. The wildcard
+character * is supported for *&lt;device access ID&lt;* and *&lt;device ID&lt;* fields.
+
+For example `*.inv.3136` represents all properties with ID 3136 on the device with ID *inv* connected through any device access, `demo.*.3136` represents all properties
+with ID *3136* on any device that disposes that property connected through the device access *demo* and finally `*.*.3136` represents all properties with ID *3136* on any
+device that disposes that property connected through any device access.
+
+**Parameters**:
+- `property_id`: The search wildcard ID. *Required*.
+
+**Returns**:
+1. Status of the find operation.
+2. The searched ID (including wildcard character).
+3. The number of properties found.
+4. List of the property IDs (as strings).
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol or framing error.
+
+*Example:*
+```python
+from openstuder import SIGatewayClient, SIProtocolError
+
+try:
+    client = SIGatewayClient()
+    client.connect('localhost')
+    status, id_, count, properties = client.find_properties('*.*.3136')
+    print(f'Found properties for {id_}, status = {status}, count = {count} : {properties}')
+
+except SIProtocolError as error:
+    print(f'Error: {error.reason()}')
+```
+
+
 ##### Reading properties - *read_property()*
 
 This method is used to retrieve the actual value of a given property from the connected gateway. The property is identified by the property_id parameter.
@@ -177,7 +213,7 @@ This method is used to retrieve the actual value of a given property from the co
   
 **Returns**:
 1. Status of the read operation. 
-2. The ID of the property read
+2. The ID of the property read.
 3. The value read.
 
 **Exceptions raised**:
@@ -527,6 +563,56 @@ client = SIAsyncGatewayClient()
 client.on_error = on_error
 client.on_connected = on_connected
 client.on_description = on_description
+client.connect('localhost', background=False)
+```
+
+##### Finding properties - *find_properties()*
+
+This method is used to retrieve a list of existing properties that match the given property ID in the form `<device access ID>.<device ID>.<property ID>`. The wildcard
+character * is supported for *&lt;device access ID&gt;* and *&lt;device ID&gt;* fields.
+
+For example `*.inv.3136` represents all properties with ID *3136* on the device with ID *inv* connected through any device access, `demo.*.3136` represents all properties
+with ID *3136* on any device that disposes that property connected through the device access *demo* and finally `*.*.3136` represents all properties with ID *3136* on any
+device that disposes that property connected through any device access.
+
+The status of the read operation and the actual value of the property are reported using the `on_properties_found()` callback.
+
+**Parameters**:
+- `property_id`: The search wildcard ID. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_properties_found()`
+1. Status of the find operation.
+2. The searched ID (including wildcard character)
+3. The number of properties found.
+4. List of the property IDs.
+
+*Example:*
+```python
+from openstuder import SIAsyncGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.find_properties('*.*.3136')
+
+
+def on_properties_found(status: SIStatus, id_: str, count: int, properties: list):
+    print(f'Found properties for {id_}, status = {status}, count = {count} : {properties}')
+    client.disconnect()
+
+
+client = SIAsyncGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_properties_found = on_properties_found
 client.connect('localhost', background=False)
 ```
 
