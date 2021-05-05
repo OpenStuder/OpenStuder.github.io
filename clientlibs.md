@@ -1327,6 +1327,82 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 }
 ```
 
+##### Finding properties - *findProperties()*
+
+This method is used to retrieve a list of existing properties that match the given property ID in the form `<device access ID>.<device ID>.<property ID>`. The wildcard
+character * is supported for *&lt;device access ID&gt;* and *&lt;device ID&gt;* fields.
+
+For example `*.inv.3136` represents all properties with ID 3136 on the device with ID *inv* connected through any device access, `demo.*.3136` represents all properties
+with ID *3136* on any device that disposes that property connected through the device access *demo* and finally `*.*.3136` represents all properties with ID *3136* on any
+device that disposes that property connected through any device access.
+
+**Parameters**:
+- `propertyId`: The searched wildcard ID. *Required*.
+
+**Returns**:
+1. Status of the find operation.
+2. The searched ID (including wildcard character).
+3. The number of properties found.
+4. List of the property IDs (as strings).
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol or framing error.
+
+*Example:*
+```python
+import React from 'react';
+
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
+
+type AppState={
+    propertiesFound:string;
+}
+
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
+
+    sigc:SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new SIGatewayClient();
+        this.state={propertiesFound:""};
+    }
+
+    public componentDidMount() {
+        this.sigc.setCallback(this);
+        this.sigc.connect("localhost");
+    }
+
+    public render() {
+        return (
+            <div>
+                <p>{this.state.propertiesFound}</p>
+            </div>
+        );
+    }
+
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+        this.sigc.findProperties("*.*.3137");
+    }
+
+    onPropertiesFound(status: SIStatus, id: string, count: number, properties: string[]) {
+        let propertyFound:string="";
+        if (status === SIStatus.SUCCESS) {
+            properties.map(property =>{
+                propertyFound+="Property found: "+property+"\n";
+            });
+            this.setState({propertiesFound: propertyFound});
+        }
+    }
+}
+
+export default App;
+```
+
 ##### Reading properties - *readProperty()*
 
 This method is used to retrieve the actual value of a given property from the connected gateway. The property is identified by the propertyId parameter.
