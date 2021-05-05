@@ -171,14 +171,14 @@ except SIProtocolError as error:
 ##### Finding properties - *find_properties()*
 
 This method is used to retrieve a list of existing properties that match the given property ID in the form `<device access ID>.<device ID>.<property ID>`. The wildcard
-character * is supported for *&lt;device access ID&lt;* and *&lt;device ID&lt;* fields.
+character * is supported for *&lt;device access ID&gt;* and *&lt;device ID&gt;* fields.
 
 For example `*.inv.3136` represents all properties with ID 3136 on the device with ID *inv* connected through any device access, `demo.*.3136` represents all properties
 with ID *3136* on any device that disposes that property connected through the device access *demo* and finally `*.*.3136` represents all properties with ID *3136* on any
 device that disposes that property connected through any device access.
 
 **Parameters**:
-- `property_id`: The search wildcard ID. *Required*.
+- `property_id`: The searched wildcard ID. *Required*.
 
 **Returns**:
 1. Status of the find operation.
