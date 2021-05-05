@@ -1095,7 +1095,7 @@ You can install the **OpenstuderClient** package using **npm**:
 ```
 
 As the client code is all in one single file, another possibility to use the client is to add a source file 
-[openstuder](https://github.com/OpenStuder/openstuder-client-web/tree/main/src/OpenStuder) to your project.
+[openstuder](https://github.com/OpenStuder/openstuder-client-web/blob/main/OpenStuder.ts) to your project.
 
 ### Usage
 
