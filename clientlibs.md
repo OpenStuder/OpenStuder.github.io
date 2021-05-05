@@ -1704,6 +1704,76 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 }
 ```
 
+##### Reading available properties in datalog - *readDatalogProperties()*
+
+This method is used to retrieve the list of IDs of all properties for whom data is logged on the gateway. If a time window is given using from and to, only data in this time windows is considered.
+
+**Parameters**:
+- `dateFrom`: Optional date and time of the start of the time window to be considered.
+- `dateTo`: Optional date and time of the end of the time window to be considered.
+
+**Returns**:
+1. Status of the operation. 
+2. List of all properties for whom data is logged on the gateway in the optional time window.
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol or framing error.
+
+*Example:*
+```python
+import React from 'react';
+
+import {
+    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@marcocrettena/openstuder"
+
+type AppState={
+    propertyLogged:string;
+}
+
+class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
+
+    sigc:SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new SIGatewayClient();
+        this.state={propertyLogged:""};
+    }
+
+    public componentDidMount() {
+        this.sigc.setCallback(this);
+        this.sigc.connect("ws://153.109.24.113", 1987, "basic","basic");
+    }
+
+    public render() {
+        return (
+            <div>
+                <p>test: {this.state.propertyLogged}</p>
+            </div>
+        );
+    }
+
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+        this.sigc.readDatalogProperties(new Date(2021,5,4));
+    }
+
+    onDatalogPropertiesRead(status: SIStatus, properties: string[]): void {
+        let propertyFound:string="";
+        if (status === SIStatus.SUCCESS) {
+            properties.map(property =>{
+                propertyFound+="Property logged: "+property+"\n";
+            });
+            this.setState({propertyLogged: propertyFound});
+        }
+    }
+}
+
+export default App;
+```
+
 ##### Reading datalog - *readDatalog()*
 
 This method is used to retrieve all, or a subset of logged data of a given property from the gateway.
