@@ -25,13 +25,13 @@ git gcc g++ gdb cmake ninja-build \
 ### Clone the repository
 
 ```
-> git clone https://github.com/OpenStuder/gateway.git
+> git clone https://github.com/OpenStuder/openstuder-gateway.git
 ```
 
 ### Build the gateway software
 
 ```
-> cd gateway
+> cd openstuder-gateway
 > cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 > cmake --build build --target all
 ```

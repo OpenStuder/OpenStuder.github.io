@@ -458,7 +458,7 @@ As a first step, we need to install the dependencies of the software. Basically 
 #### Clone the repository
 
 ```
-> git clone https://github.com/OpenStuder/gateway.git
+> git clone https://github.com/OpenStuder/openstuder-gateway.git
 ```
 
 ##### Branches
@@ -477,7 +477,7 @@ To switch to another branch, you can use your favorite git gui client or use the
 #### Build the gateway software
 
 ```
-> cd gateway
+> cd openstuder-gateway
 > cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 > cmake --build build --target all
 ```
