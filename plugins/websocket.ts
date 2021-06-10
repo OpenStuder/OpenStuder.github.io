@@ -321,7 +321,7 @@ const websocketProblemHtml = `
 	<span>
 		<b>WebSocket connection testing not available when using HTTPS!</b>
 	</span>
-	<button onclick="window.location = 'http:'; window.location.reload();">Fix...</button>
+	<button onclick="window.location.protocol = 'http'">Fix...</button>
 </div>
 `
 
