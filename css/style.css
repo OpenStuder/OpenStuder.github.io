@@ -97,6 +97,7 @@ img {
 
 h1.app-name img {
 	margin: 0 auto;
+	padding: 0 16px;
 }
 
 a[disabled] {
@@ -260,7 +261,7 @@ main.hidden {
 }
 
 .sidebar {
-	border-right: 1px solid var(--borderColor);
+	border-right: 2px solid rgba(127, 127, 127, 0.25);
 	overflow-y: auto;
 	padding: 40px 0 0;
 	position: absolute;
