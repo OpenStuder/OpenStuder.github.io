@@ -302,7 +302,7 @@ interval 86400
 ```
 
 The example configuration instructs the gateway to read all properties with ids *3136*, *3137*, *11004*, *15010*, *7002* and *7003* from **any** device that disposes those connected by **any** device
-access each *600* seconds (5 minutes). The property with the ID *3083* is read and saved every *86400* seconds (once a day).
+access each *300* seconds (5 minutes). The property with the ID *3083* is read and saved every *86400* seconds (once a day).
 
 ## Start and stop daemon
 
