@@ -296,15 +296,10 @@
 </style>
 
 ## Introduction
-<br/>
-<br/>
 
 > [!ATTENTION]
-> The **Bluetooth API** is still in **early development**, so it is only available in this form in the actual develop branch of the gateway software, it can change at any time, and the documentation
-> here is far from complete. Additionally, no official clients exist yet.
+> **Bluetooth** is disabled by default. In order to connect to gateway using bluetooth, you need to enable Bluetooth in the configuration file `/etc/openstuder/gateway.conf`.
 
-<br/>
-<br/>
 <p>
     The OpenStuder Bluetooth protocol is a frame based protocol, where all frames are encoded as <a href="https://tools.ietf.org/html/draft-ietf-cbor-sequence-01">CBOR sequences</a>. 
     A frame consists of a command and a variable set of parameters depending the actual command. All data, including the command is encoded using <a href="http://cbor.io">CBOR</a>.
@@ -698,11 +693,7 @@
                 </td>
             </tr>
         </table>
-        <pre data-bt-example="131"><label>id=null:</label><code>188300f6a16464656d6f6444656d6f</code></pre>
-        <pre data-bt-example="131"><label>id="demo":</label><code>1883006464656d6fa3636261746844656d6f2042535063696e766d44656d6f20696e76657274657263736f6c6944656d6f204d505054</code></pre>
-        <pre data-bt-example="131"><label>id="demo.inv":</label><code>001883006864656d6f2e696e768a190bd8190c41190c40190be9190c09190c08190c0b190c0a190587190577</code></pre>
-        <pre data-bt-example="131"><label>id="demo.inv.3136":</label><code>1883006d64656d6f2e696e762e33313336a46b6465736372697074696f6e734f75747075742061637469766520706f77657265666c6167730164747970650164756e6974626b57</code></pre>
-        <pre data-bt-example="131"><label>id="demo.inv.3132":</label><code>1883006d64656d6f2e696e762e33303332a46b6465736372697074696f6e781a5374617465206f6620617578696c696172792072656c6179203265666c616773016474797065026676616c756573a266436c6f736564fb3ff0000000000000664f70656e6564fb0000000000000000</code></pre>
+        <pre data-bt-example="131"><code>188300f6a16464656d6f6444656d6f</code></pre>
     </div>
 </div>
 
@@ -957,7 +948,7 @@
 
 <p>Should the <strong class="request">SUBSCRIBE PROPERTY</strong> frame be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> frame instead.</p>
 
-<p>For all property subscriptions of a given client, the gateway sends a <strong class="request">PROPERTY UPDATE</strong> frame when the property has changed.</p>
+<p>For all property subscriptions of a given client, the gateway sends a <strong>PROPERTY UPDATE</strong> frame when the property has changed.</p>
 
 <div class="bt-api-doc">
     <button class="accordion-toggle">PROPERTY UPDATE</button>
@@ -1315,6 +1306,38 @@ from the gateway or the list of properties that are logged.</p>
             </tr>
         </table>
         <pre data-bt-example="137"><code>18880001851b00000178da82bb406464656d6f63696e7618d175415558322072656c61792061637469766174696f6e</code></pre>
+    </div>
+</div>
+
+### Error
+
+If a client sends a malformed message to the gateway, or the gateway is in an invalid state (mostly because of missing authorization), the gateway sends an <strong class="error">Error</strong>
+message to the client.
+
+<div class="bt-api-doc error">
+    <button class="accordion-toggle">ERROR</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>Error</strong> message is send from the gateway to the client as a response to an invalid message or when the gateway
+            <received></received>
+            a message in the wrong state.
+        </p>
+        <h6>parameters</h6>
+        <table>
+            <tr>
+                <th>name</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>reason</td>
+                <td>string</td>
+                <td><strong>Reason for the error.</strong>. <br/>
+                    Textual representation of the error.
+                </td>
+            </tr>
+        </table>
+        <pre data-bt-example="255"><code>18FF76617574686F72697A6174696F6E207265717569726564</code></pre>
     </div>
 </div>
 
