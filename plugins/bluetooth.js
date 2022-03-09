@@ -7,7 +7,14 @@ var SIBluetoothTestConnection = /** @class */ (function () {
         this.onDiscoverButtonClicked = function (_mouseEvent) {
             if (_this.device_ == null) {
                 _this.discoverButton.disabled = true;
-                navigator.bluetooth.requestDevice({ filters: [{ services: ["f3c2d800-8421-44b1-9655-0951992f313b"] }] }).then(function (device) {
+                navigator.bluetooth.requestDevice({ filters: [
+                        { services: ["f3c2d800-8421-44b1-9655-0951992f313b"] },
+                        { manufacturerData: [{
+                                    companyIdentifier: 0x025A,
+                                    dataPrefix: hexToBytes('4F534757'),
+                                    mask: hexToBytes('FFFFFFFF')
+                                }] }
+                    ] }).then(function (device) {
                     _this.discoverButton.innerHTML = '<img width="70" height="20" style="margin: 0; padding: 0" src="images/loading.svg">';
                     _this.device_ = device;
                     device.addEventListener('gattserverdisconnected', _this.onDeviceDisconnected);
