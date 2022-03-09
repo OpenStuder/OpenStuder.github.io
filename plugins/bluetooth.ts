@@ -378,7 +378,7 @@ const bluetoothProblemHtml = `
 	<span>
 		<b>Bluetooth testing not available when using HTTP!</b>
 	</span>
-	<button onclick="window.location = 'https:'; window.location.reload();">Fix...</button>
+	<button onclick="window.location.protocol = 'https'">Fix...</button>
 </div>
 `
 
@@ -573,10 +573,8 @@ class SIBluetoothTestConnection {
 		let fragment = new Uint8Array(event.target.value.buffer);
 		let remainingFragments = fragment[0];
 		this.receivingFrame_ = appendUInt8Arrays(this.receivingFrame_, fragment.subarray(1));
-
-		console.log("RX: " + bytesToHex(fragment));
-
 		if (remainingFragments != 0) return;
+
 		let payload = this.receivingFrame_;
 		this.receivingFrame_ = new Uint8Array(0);
 
