@@ -6,10 +6,14 @@
 <img style="display: inline-block; margin: 0" alt="GitHub" src="https://img.shields.io/github/license/openstuder/openstuder-client-python">
 <a target="_blank" href="https://github.com/OpenStuder/openstuder-client-python/issues"><img style="display: inline-block; margin: 0" alt="GitHub issues" src="https://img.shields.io/github/issues-raw/openstuder/openstuder-client-python"></a>
 
-The python client allows connecting to and interacting with an OpenStuder gateway. It offers a synchronous and asynchronous API to connect to a gateway and use the gateway's WebSocket API.
+The python client allows connecting to and interacting with an OpenStuder gateway. It offers a synchronous and asynchronous API to connect to a gateway and use the gateway's WebSocket API and an
+asynchronous Bluetooth Low Energy client for communication over Bluetooth.
 
-The library has only one dependency: **websocket-client 0.57 or newer** which itself has one single dependency (**six**), so the python environment needed to communicate with a Studer Innotec 
-installation via the OpenStuder gateway is very lightweight.
+The library only has the following dependencies:
+
+- [**websocket-client**](https://pypi.org/project/websocket-client/), version 1.3.1 or newer.
+- [**cbor2**](https://pypi.org/project/cbor2/), version 5.4.2.post1 or newer.
+- [**bleak**](https://pypi.org/project/bleak/), version 0.14.2 or newer.
 
 ### Installation
 
@@ -31,7 +35,7 @@ You can install the **openstuder-client** package using **pip**:
 &nbsp;
 
 As the client code is all in one single file, another possibility to use the client is to add the source file 
-[openstuder.py](https://github.com/OpenStuder/openstuder-client-python/raw/main/openstuder.py) to your project, but you would still have to add the **websocket-client** library by yourself.
+[openstuder.py](https://github.com/OpenStuder/openstuder-client-python/raw/main/openstuder.py) to your project, but you would still have to add the required Python packages manually.
 
 ### Usage
 
@@ -1080,6 +1084,556 @@ client.on_error = on_error
 client.on_connected = on_connected
 client.on_device_message = on_device_message
 client.connect('localhost', background=False)
+```
+
+
+#### SIBluetoothGatewayClient - *Bluetooth client*
+
+Complete, asynchronous (non-blocking) OpenStuder gateway client using a Bluetooth LE connection to the gateway instead of a WebSocket connection. This has the advantage that there is no manual WiFi
+setup required. This client uses an asynchronous model.
+
+>[!Note]
+> Some examples set the `background` parameter to `False` in order to keep the scripts running, if you use the asynchronous client along with a GUI framework or there is a main thread that continues
+> to run, you should not provide this parameter and use the default behavior which runs in the background.
+
+##### Discover OpenStuder gateways  - *discover()*
+
+Discovers local OpenStuder gateways to whom a Bluetooth LE connection can be established.
+
+**Parameters**: *None*
+
+**Returns**: 
+1. List of Bluetooth addresses (or UUIDs on macOS) that implement the OpenStuder BLE service.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient
+
+client = SIBluetoothGatewayClient()
+gateways = client.discover()
+for gateway in gateways:
+    print(f'Found gateway with address/UUID: {gateway}')
+```
+
+The example above shows how to discover near OpenStuder gateways and print out the list of them.
+
+##### Establish connection - *connect()*
+
+Establishes the Bluetooth LE connection to the OpenStuder gateway and executes the user authorization process
+once the connection has been established in the background. This method returns immediately and does not block
+the current thread.
+
+The status of the connection attempt is reported either by the on_connected() callback on success or the
+on_error() callback if the connection could not be established or the authorisation for the given user was
+rejected by the gateway.
+
+**Parameters**:
+- `address`: Bluetooth address (or UUID on macOS) to connect to. Use the discover() method to find devices.
+- `user`: (Optional) Username send to the gateway used for authorization.
+- `password`: (Optional) Password send to the gateway used for authorization.
+- `background`: If true, the handling of the WebSocket connection is done in the background, if false the current thread is taken over.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If there was an error initiating the Bluetooth connection.
+
+**Callback parameters**: `on_connected()`
+1. The access level that was granted to the user during authorization.
+2. The version of the OpenStuder software running on the gateway.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    print(f'Connected, access level = {access_level}, gateway runs version {gateway_version}')
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+````
+
+The example above connects to the first OpenStuder gateway that was discovered. 
+
+##### Enumerate devices - *enumerate()*
+
+Instructs the gateway to scan every configured and functional device access driver for new devices and remove
+devices that do not respond anymore.
+
+The status of the operation and the number of devices present are reported using the on_enumerated() callback.
+
+**Parameters**: *None*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_enumerated()`
+1. Operation status.
+2. Number of devices present.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    print(f'Connected, access level = {access_level}, gateway runs version {gateway_version}')
+    client.enumerate()
+
+
+def on_enumerated(status: SIStatus, device_count: int):
+    print(f'Enumerated, status = {status}, device count = {device_count}')
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_enumerated = on_enumerated
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+```
+
+##### Describe - *describe()*
+
+This method can be used to retrieve information about the available devices and their properties from the
+connected gateway. Using the optional device_access_id, device_id and property_id parameters, the method can
+either request information about the whole topology, a particular device access instance, a device or a
+property.
+
+The description is reported using the on_description() callback.
+
+**Parameters**:
+- `device_access_id`: Device access ID for which the description should be retrieved. *Optional*.
+- `device_id`: Device ID for which the description should be retrieved. *Optional*, note that device_access_id must be present too.
+- `property_id`: Property ID for which the description should be retrieved. *Optional*, note that device_access_id and device_id must be present too.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_description()`
+1. Status of the operation.
+2. The subject's ID.
+3. The description object/list.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.describe('demo')
+
+
+def on_description(status: SIStatus, id_: str, description: object):
+    print(f'Description for {id_}, status = {status}')
+    print(description)
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_description = on_description
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+````
+
+##### Reading properties - *read_property()*
+
+This method is used to retrieve the actual value of a given property from the connected gateway. The property is identified by the property_id parameter.
+
+The status of the read operation and the actual value of the property are reported using the `on_property_read()` callback.
+
+**Parameters**:
+- `property_id`: The ID of the property to read in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_property_read()`
+1. Status of the read operation.
+2. The ID of the property read.
+3. The value read.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.read_property('demo.sol.11004')
+
+
+def on_property_read(status: SIStatus, id_: str, value: any):
+    print(f'Property read, status = {status}, id = {id_}, value = {value}')
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_property_read = on_property_read
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+```
+
+##### Writing properties - *write_property()*
+
+The write_property method is used to change the actual value of a given property. The property is identified by
+the property_id parameter and the new value is passed by the optional value parameter.
+
+This value parameter is optional as it is possible to write to properties with the data type "Signal" where
+there is no actual value written, the write operation rather triggers an action on the device.
+
+The status of the write operation is reported using the `on_property_written()` callback.
+
+**Parameters**:
+- `property_id`: The ID of the property to write in the form '{device access ID}.{<device ID}.{<property ID}'. *Required*
+- `value`: *Optional* value to write.
+- `flags`: *Optional* write flags, See SIWriteFlags for details, if not provided the flags are not send by the client and the gateway uses the default flags (SIWriteFlags.PERMANENT).
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_property_written()`
+1. Status of the write operation.
+2. The ID of the property written.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.write_property('demo.inv.1415')
+    print("*")
+
+
+def on_property_written(status: SIStatus, id_: str):
+    print(f'Property written, status = {status}, id = {id_}')
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_property_written = on_property_written
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+```
+
+##### Subscribing to properties - *subscribe_property(), unsubscribe_property()*
+
+The method `subscribe_to_property()` can be used to subscribe to a property on the connected gateway. The property is identified by the property_id parameter.
+
+The status of the subscribe request is reported using the `on_property_subscribed()` callback.
+
+**Parameters**:
+- `property_id`: The ID of the property to subscribe to in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_property_subscribed()`
+1. The status of the subscription.
+2. The ID of the property.
+
+The callback `on_property_updated()` is called whenever the gateway did send a property update.
+
+**Callback parameters**: `on_property_updated()`
+1. The ID of the property that has updated.
+2. The actual value.
+
+The method `unsubscribe_from_property()` can be used to unsubscribe from a property on the connected gateway. The property is identified by the property_id parameter.
+
+The status of the unsubscribe request is reported using the `on_property_unsubscribed()` callback.
+
+**Parameters**:
+- `property_id`: The ID of the property to unsubscribe from in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_property_unsubscribed()`
+1. The status of the unsubscription.
+2. The ID of the property.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.subscribe_to_property('demo.sol.11004')
+
+
+def on_property_subscribed(status: SIStatus, id_: str):
+    print(f'Subscribed to {id_}, status = {status}')
+
+
+def on_property_updated(id_: str, value: any):
+    print(f'Property {id_} updated, value = {value}')
+    client.unsubscribe_from_property('demo.sol.11004')
+
+
+def on_property_unsubscribed(status: SIStatus, id_: str):
+    print(f'Unsubscribed from {id_}, status = {status}')
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_property_subscribed = on_property_subscribed
+client.on_property_updated = on_property_updated
+client.on_property_unsubscribed = on_property_unsubscribed
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+```
+
+##### Reading available properties in datalog - *read_datalog_properties()*
+
+This method is used to retrieve the list of IDs of all properties for whom data is logged on the gateway. If a time window is given using from and to, only data in this time windows is considered.
+
+The status of the operation is the list of properties for whom logged data is available are reported using the `on_datalog_properties_read()` callback.
+
+**Parameters**:
+- `from_`: Optional date and time of the start of the time window to be considered.
+- `to`: Optional date and time of the end of the time window to be considered.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_datalog_properties_read()`
+1. Status of the operation.
+2. List of the IDs of the properties for whom data is available in the data log.
+
+*Example:*
+```python
+from typing import List
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.read_datalog_properties()
+
+
+def on_datalog_properties_read(status: SIStatus, properties: List[str]):
+    print(f'Read datalog properties, status = {status}:')
+    for property in properties:
+        print(f'  - {property}')
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_datalog_properties_read = on_datalog_properties_read
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+```
+
+##### Reading datalog - *read_datalog()*
+
+This method is used to retrieve all, or a subset of logged data of a given property from the gateway.
+
+The status of this operation and the respective values are reported using the `on_datalog_read()` callback.
+
+**Parameters**:
+- `property_id`: Global ID of the property for which the logged data should be retrieved. It has to be in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+- `from_`: *Optional* date and time from which the data has to be retrieved, defaults to the oldest value logged.
+- `to`: *Optional* date and time to which the data has to be retrieved, defaults to the current time on the gateway.
+- `limit`: Using this optional parameter you can limit the number of results retrieved in total. *Optional*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_datalog_read()`
+1. Status of the operation.
+2. ID of the property.
+3. Number of entries.
+4. List of timestamp and value tuplets of the actual data.
+
+*Example:*
+```python
+import datetime
+from typing import List, Tuple
+
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.read_datalog('demo.inv.3136', limit=50)
+
+
+def on_datalog_read(status: SIStatus, id_: str, entries: int, data: List[Tuple[datetime.datetime, any]]):
+    print(f'Read datalog for {id_}, status = {status}, entries = {entries}')
+    for entry in data:
+        print(f'  |- timestamp = {entry[0]}, value = {entry[1]}')
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_datalog_read = on_datalog_read
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+```
+
+##### Reading device messages - *read_messages()*
+
+The `read_messages()` method can be used to retrieve all or a subset of stored messages send by devices on all buses in the past from the gateway.
+
+The status of this operation and the retrieved messages are reported using the `on_messages_read()` callback.
+
+**Parameters**:
+- `from_`: *Optional* date and time from which the messages have to be retrieved, defaults to the oldest message saved.
+- `to`: *Optional* date and time to which the messages have to be retrieved, Defaults to the current time on the gateway.
+- `limit`: Using this optional parameter you can limit the number of messages retrieved in total.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_messages_read()`
+1. The status of the operation.
+2. The number of messages retrieved.
+3. The list of retrieved messages.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIStatus
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    client.read_messages()
+
+
+def on_messages_read(status: SIStatus, count: int, messages: list):
+    print(f'Read messages, status = {status}, messages = {count}')
+    if status == SIStatus.SUCCESS:
+        for message in messages:
+            print(f'{message.timestamp}: [{message.access_id}.{message.device_id}] {message.message} ({message.message_id})')
+    client.disconnect()
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_messages_read = on_messages_read
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
+```
+
+##### Device message indications
+
+Once connected to the gateway, the gateway will send device messages to the client automatically. This callback is called whenever a device message was received from the gateway.
+
+**Callback parameters**: `on_device_message()`
+1. The device message object received.
+
+*Example:*
+```python
+from openstuder import SIBluetoothGatewayClient, SIProtocolError, SIDeviceMessage
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    print(f'Connected, access level = {access_level}, gateway runs version {client.gateway_version()}')
+
+
+def on_device_message(message: SIDeviceMessage):
+    print(f'{message.timestamp}: [{message.access_id}.{message.device_id}] {message.message} ({message.message_id})')
+
+
+client = SIBluetoothGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_device_message = on_device_message
+
+gateways = client.discover()
+if len(gateways) > 0:
+    client.connect(gateways[0], background=False)
 ```
 
 ## Web Client
