@@ -1121,6 +1121,43 @@ status:Success
                     <input type="text" placeholder="required" data-ws-header="id" data-ws-required/>
                 </td>
             </tr>
+            <tr>
+                <td>virtual</td>
+                <td>boolean<br/><em>(optional)</em></td>
+                <td><strong>Virtual device filter</strong>. <br/>
+                    Optional to filter for virtual devices (true) or non-virtual devices (false, default).
+                </td>
+                <td>
+                    <select data-ws-header="virtual">
+                        <option value="">-</option>
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                    </select>
+                </td>
+            </tr>
+            tr>
+                <td>functions</td>
+                <td>Inverter |<br/>Charger |<br/>Solar |<br/>Transfer |<br/>Battery |<br/>All<br/><em>(optional)</em></td>
+                <td><strong>Device function filter</strong>. <br/>
+                    An optional comma-separate list (without spaces) of each filter for device functions. Defaults to all functions<br/><br/>
+                    <strong>Inverter</strong>: Inverter function.<br/>
+                    <strong>Charger</strong>: Battery charger function.<br/>
+                    <strong>Solar</strong>: Solar charger function.<br/>
+                    <strong>Transfer</strong>: AC charger function.<br/>
+                    <strong>Battery</strong>: Battery monitor function.
+                    strong>All</strong>: All functions.
+                </td>
+                <td>
+                    <select data-ws-header="functions" multiple>
+                        <option value="inverter">Inverter</option>
+                        <option value="charger">Charger</option>
+                        <option value="solar">Solar</option>
+                        <option value="transfer">Transfer</option>
+                        <option value="battery">Battery</option>
+                        <option value="all">All</option>
+                    </select>
+                </td>
+            </tr>
         </table>
         <h6>body</h6>
         <p><em>No body</em></p>
