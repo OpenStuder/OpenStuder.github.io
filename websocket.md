@@ -1135,9 +1135,9 @@ status:Success
                     </select>
                 </td>
             </tr>
-            tr>
+            <tr>
                 <td>functions</td>
-                <td>Inverter |<br/>Charger |<br/>Solar |<br/>Transfer |<br/>Battery |<br/>All<br/><em>(optional)</em></td>
+                <td>inverter |<br/>charger |<br/>solar |<br/>transfer |<br/>battery |<br/>all<br/><em>(optional)</em></td>
                 <td><strong>Device function filter</strong>. <br/>
                     An optional comma-separate list (without spaces) of each filter for device functions. Defaults to all functions<br/><br/>
                     <strong>Inverter</strong>: Inverter function.<br/>
@@ -1202,6 +1202,26 @@ status:Success
                     Number of properties matching the search criteria.
                 </td>
             </tr>
+            <tr>
+                <td>virtual</td>
+                <td>boolean</td>
+                <td><strong>Virtual device filter</strong>. <br/>
+                    Optional to filter for virtual devices (true) or non-virtual devices (false, default).
+                </td>
+            </tr>
+            <tr>
+                <td>functions</td>
+                <td>inverter |<br/>charger |<br/>solar |<br/>transfer |<br/>battery |<br/>all</td>
+                <td><strong>Device function filter</strong>. <br/>
+                    An optional comma-separate list (without spaces) of each filter for device functions. Defaults to all functions<br/><br/>
+                    <strong>Inverter</strong>: Inverter function.<br/>
+                    <strong>Charger</strong>: Battery charger function.<br/>
+                    <strong>Solar</strong>: Solar charger function.<br/>
+                    <strong>Transfer</strong>: AC charger function.<br/>
+                    <strong>Battery</strong>: Battery monitor function.
+                    strong>All</strong>: All functions.
+                </td>
+            </tr>
         </table>
         <h6>body</h6>
          <p>The body of the <strong>PROPERTIES FOUND</strong> message is a JSON array representation of the requested list of device IDs.
@@ -1230,6 +1250,8 @@ Download the JSON schema: <a href="json/properties_found_body.json" download>pro
 status:Success
 id:*.*.3136
 count:2
+virtual:false
+functions:all
 &nbsp;
 ["demo.inv.3136", "demo.inv2.3136"]</code></pre>
     </div>
