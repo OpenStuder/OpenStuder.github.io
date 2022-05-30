@@ -1704,47 +1704,65 @@ the given user was rejected by the gateway.
 ```typescript
 import React from 'react';
 import {
-    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
-    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
-    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+    SIGatewayClient, SIGatewayClientCallbacks, SIAccessLevel, SIStatus, SIDeviceMessage, SIDeviceFunctions, SIPropertyReadResult, SISubscriptionsResult
 } from "@openstuder/openstuder"
 
-type AppState={
-    isConnected:boolean;
-    accessLevel:SIAccessLevel
+type AppState = {
+    isConnected: boolean;
+    accessLevel: SIAccessLevel
 }
 
-class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
+class App extends React.Component<{}, AppState> implements SIGatewayClientCallbacks {
+    client: SIGatewayClient;
 
-    sigc:SIGatewayClient;
-
-    constructor(props:any){
+    constructor(props: any) {
         super(props);
-        this.sigc=new SIGatewayClient();
-        this.state={isConnected:false, accessLevel:SIAccessLevel.NONE};
+        this.client = new SIGatewayClient();
+        this.state = {isConnected: false, accessLevel: SIAccessLevel.NONE};
     }
 
     public componentDidMount() {
-        this.sigc.setCallback(this);
-        this.sigc.connect("localhost");
+        this.client.setCallback(this);
+        this.client.connect("localhost");
     }
 
     public render() {
-        let str:string = this.state.isConnected ? "true":"false";
+        let str: string = this.state.isConnected ? "true" : "false";
         return (
             <div>
                 <p>Connected : {str}</p>
-                <p>Access Level : {this.state.accessLevel}</p>
-            </div>
-        );
+        <p>Access Level : {this.state.accessLevel}</p>
+        </div>
+    );
     }
+
     onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
-        this.setState({isConnected:true, accessLevel:accessLevel});
+        this.setState({isConnected: true, accessLevel: accessLevel});
     }
+
     public onDisconnected(): void {
-        this.setState({isConnected:false, accessLevel:SIAccessLevel.NONE});
+        this.setState({isConnected: false, accessLevel: SIAccessLevel.NONE});
     }
+
+    onDatalogPropertiesRead(status: SIStatus, properties: string[]): void {}
+    onDatalogRead(status: SIStatus, propertyId: string, count: number, values: string): void {}
+    onDescription(status: SIStatus, description: string, id?: string): void {}
+    onDeviceMessage(message: SIDeviceMessage): void {}
+    onEnumerated(status: SIStatus, deviceCount: number): void {}
+    onError(reason: string): void {}
+    onMessageRead(status: SIStatus, count: number, messages: SIDeviceMessage[]): void {}
+    onPropertiesFound(status: SIStatus, id: string, count: number, virtual: boolean, functions: Set<SIDeviceFunctions>, properties: string[]): void {}
+    onPropertiesRead(results: SIPropertyReadResult[]): void {}
+    onPropertiesSubscribed(statuses: SISubscriptionsResult[]): void {}
+    onPropertiesUnsubscribed(statuses: SISubscriptionsResult[]): void {}
+    onPropertyRead(status: SIStatus, propertyId: string, value?: string | number | boolean): void {}
+    onPropertySubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUnsubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUpdated(propertyId: string, value: any): void {}
+    onPropertyWritten(status: SIStatus, propertyId: string): void {}
 }
+
+export default App;
 ```
 
 The example above establishes a connection to **localhost** using the guest account. If the client has to authorize using a username and password, you have to provide them in the `connect()` method.
@@ -1754,7 +1772,7 @@ The example above establishes a connection to **localhost** using the guest acco
     public componentDidMount() {
             let user = "Garfield";
             let password = "lasagne";
-            this.sigc.connect("localhost", 1987, user, password);
+            this.client.connect("localhost", 1987, user, password);
     }
 ```
 
@@ -1779,41 +1797,62 @@ The status of the operation and the number of devices present are reported using
 ```typescript
 import React from 'react';
 import {
-    SIGatewayClient, SIGatewayCallback, SIWriteFlags,
-    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
-    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+    SIGatewayClient, SIGatewayClientCallbacks, SIStatus, SIAccessLevel, SIDeviceMessage, SIDeviceFunctions, SIPropertyReadResult, SISubscriptionsResult
 } from "@openstuder/openstuder"
-type AppState={
-    numberOfDevice:number;
+
+type AppState = {
+    numberOfDevice: number;
 }
 
-class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
+class App extends React.Component<{}, AppState> implements SIGatewayClientCallbacks {
+    client: SIGatewayClient;
 
-    sigc:SIGatewayClient;
-
-    constructor(props:any){
+    constructor(props: any) {
         super(props);
-        this.sigc=new SIGatewayClient();
-        this.state={numberOfDevice:-1};
+        this.client = new SIGatewayClient();
+        this.state = {numberOfDevice: -1};
     }
+
     public componentDidMount() {
-        this.sigc.setCallback(this);
-        this.sigc.connect("localhost");
+        this.client.setCallback(this);
+        this.client.connect("localhost");
     }
+
     public render() {
         return (
             <div>
-                <p>Number of device : {this.state.numberOfDevice}</p>
-            </div>
-        );
+                <p>Number of devices : {this.state.numberOfDevice}</p>
+        </div>
+    );
     }
+
     onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
-        this.sigc.enumerate();
+        this.client.enumerate();
     }
+
     onEnumerated(status: SIStatus, deviceCount: number): void {
-                this.setState({numberOfDevice:deviceCount});
+        this.setState({numberOfDevice: deviceCount});
     }
+
+    onDatalogPropertiesRead(status: SIStatus, properties: string[]): void {}
+    onDatalogRead(status: SIStatus, propertyId: string, count: number, values: string): void {}
+    onDescription(status: SIStatus, description: string, id?: string): void {}
+    onDeviceMessage(message: SIDeviceMessage): void {}
+    onDisconnected(): void {}
+    onError(reason: string): void {}
+    onMessageRead(status: SIStatus, count: number, messages: SIDeviceMessage[]): void {}
+    onPropertiesFound(status: SIStatus, id: string, count: number, virtual: boolean, functions: Set<SIDeviceFunctions>, properties: string[]): void {}
+    onPropertiesRead(results: SIPropertyReadResult[]): void {}
+    onPropertiesSubscribed(statuses: SISubscriptionsResult[]): void {}
+    onPropertiesUnsubscribed(statuses: SISubscriptionsResult[]): void {}
+    onPropertyRead(status: SIStatus, propertyId: string, value?: string | number | boolean): void {}
+    onPropertySubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUnsubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUpdated(propertyId: string, value: any): void {}
+    onPropertyWritten(status: SIStatus, propertyId: string): void {}
 }
+
+export default App;
 ```
 
 ##### Describe - *describe()*
@@ -2642,9 +2681,9 @@ for the given user was rejected by the gateway.
 ```typescript
 import React from 'react';
 import {
-    SIBluetoothGatewayClient, SIBluetoothGatewayCallback, SIWriteFlags,
-    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
-    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+    SIAccessLevel,
+    SIBluetoothGatewayClient,
+    SIBluetoothGatewayClientCallbacks, SIDataLogEntry, SIDeviceMessage, SIStatus
 } from "@openstuder/openstuder"
 
 type AppState = {
@@ -2652,49 +2691,52 @@ type AppState = {
     accessLevel: SIAccessLevel
 }
 
-class App extends React.Component<{}, AppState> implements SIGatewayCallback {
-
-    sigc: SIGatewayClient;
+class App extends React.Component<{}, AppState> implements SIBluetoothGatewayClientCallbacks {
+    client: SIBluetoothGatewayClient;
 
     constructor(props: any) {
         super(props);
-        this.sigc = new SIGatewayClient();
+        this.client = new SIBluetoothGatewayClient();
         this.state = {isConnected: false, accessLevel: SIAccessLevel.NONE};
     }
 
     public componentDidMount() {
-        this.sigc.setCallback(this);
-        this.sigc.connect();
+        this.client.setCallback(this);
     }
 
     public render() {
-        let str: string = this.state.isConnected ? "true" : "false";
         return (
             <div>
-                <p>Connected
-    :
-        {
-            str
-        }
-        </p>
-        < p > Access
-        Level : {
-            this.state.accessLevel
-        }
-        </p>
-        < /div>
-    )
-        ;
+                <p>Connected : {this.state.isConnected ? "true" : "false"}</p>
+        <p>Access Level : {this.state.accessLevel}</p>
+        {!this.state.isConnected && <button onClick={() => this.client.connect()}>connect...</button>}
+        </div>
+        );
     }
 
     onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
         this.setState({isConnected: true, accessLevel: accessLevel});
     }
 
-    public onDisconnected(): void {
+    onDisconnected(): void {
         this.setState({isConnected: false, accessLevel: SIAccessLevel.NONE});
     }
+
+    onDatalogPropertiesRead(status: SIStatus, properties: Array<string>): void {}
+    onDatalogRead(status: SIStatus, propertyId: string, count: number, values: Array<SIDataLogEntry>): void {}
+    onDescription(status: SIStatus, description: any, id?: string): void {}
+    onDeviceMessage(message: SIDeviceMessage): void {}
+    onEnumerated(status: SIStatus, deviceCount: number): void {}
+    onError(reason: string): void {}
+    onMessagesRead(status: SIStatus, count: number, messages: SIDeviceMessage[]): void {}
+    onPropertyRead(status: SIStatus, propertyId: string, value?: any): void {}
+    onPropertySubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUnsubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUpdated(propertyId: string, value: any): void {}
+    onPropertyWritten(status: SIStatus, propertyId: string): void {}
 }
+
+export default App;
 ```
 
 The example above establishes a connection to a Bluetooth device selected by the user using the guest account. If the client has to authorize using a username and password, you have to provide them 
@@ -2702,7 +2744,7 @@ in the `connect()` method.
 
 *Example:*
 ```typescript
-TODO
+    {!this.state.isConnected && <button onClick={() => this.client.connect("Garfield", "Lasagne")}>connect...</button>}
 ```
 
 ##### Enumerate devices - *enumerate()*
@@ -2723,7 +2765,65 @@ The status of the operation and the number of devices present are reported using
 
 *Example:*
 ```typescript
-TODO
+import React from 'react';
+import {
+    SIAccessLevel,
+    SIBluetoothGatewayClient,
+    SIBluetoothGatewayClientCallbacks, SIDataLogEntry, SIDeviceMessage, SIStatus
+} from "@openstuder/openstuder"
+
+type AppState = {
+    isConnected: boolean;
+    numberOfDevice: number;
+}
+
+class App extends React.Component<{}, AppState> implements SIBluetoothGatewayClientCallbacks {
+    client: SIBluetoothGatewayClient;
+
+    constructor(props: any) {
+        super(props);
+        this.client = new SIBluetoothGatewayClient();
+        this.state = {isConnected: false, numberOfDevice: -1};
+    }
+
+    public componentDidMount() {
+        this.client.setCallback(this);
+    }
+
+    public render() {
+        return (
+            <div>
+                <p>Number of devices : {this.state.numberOfDevice}</p>
+        {!this.state.isConnected && <button onClick={() => this.client.connect()}>connect...</button>}
+        </div>
+        );
+    }
+
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+        this.client.enumerate();
+    }
+
+    onEnumerated(status: SIStatus, deviceCount: number): void {
+        this.setState({
+            numberOfDevice: deviceCount
+        })
+    }
+
+    onDisconnected(): void {}
+    onDatalogPropertiesRead(status: SIStatus, properties: Array<string>): void {}
+    onDatalogRead(status: SIStatus, propertyId: string, count: number, values: Array<SIDataLogEntry>): void {}
+    onDescription(status: SIStatus, description: any, id?: string): void {}
+    onDeviceMessage(message: SIDeviceMessage): void {}
+    onError(reason: string): void {}
+    onMessagesRead(status: SIStatus, count: number, messages: SIDeviceMessage[]): void {}
+    onPropertyRead(status: SIStatus, propertyId: string, value?: any): void {}
+    onPropertySubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUnsubscribed(status: SIStatus, propertyId: string): void {}
+    onPropertyUpdated(propertyId: string, value: any): void {}
+    onPropertyWritten(status: SIStatus, propertyId: string): void {}
+}
+
+export default App;
 ```
 
 ##### Describe - *describe()*
