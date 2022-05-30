@@ -1638,27 +1638,30 @@ if len(gateways) > 0:
 
 ## Web Client
 
-The web client allows connecting and interacting with an OpenStuder gateway. It offers an asynchronous API to connect to a gateway and use the gateway's WebSocket API.
-This library is written in javascript but allows typescript implementation.
+The web client allows connecting and interacting with an OpenStuder gateway. It offers an asynchronous API to connect to a gateway and use the gateway's WebSocket API or Bluetooth API.
+This library is written in Typescript.
 
 ### Installation
 You can install the **OpenstuderClient** package using **npm**:
 
 ```
-# npm i @marcocrettena/openstuder
+# npm i @openstuder/openstuder
 ```
 
 As the client code is all in one single file, another possibility to use the client is to add a source file 
-[openstuder](https://github.com/OpenStuder/openstuder-client-web/blob/main/OpenStuder.ts) to your project.
+[openstuder.ts](https://github.com/OpenStuder/openstuder-client-web/blob/main/OpenStuder.ts) to your project.
 
 ### Usage
 
-To use the API, the user needs to implement the `OpenStuderInterface` interface to one class to accede to the different provided callbacks.
-The second implementation needed is to create an instance of `SIGatewayClient` which permits the user to connect and communicate with the gateway.
+To use the **WebSocket API**, you need to implement the `SIGatewayClientCallbacks` interface to receive callback events from the client. Then you can use the API of the `SIGatewayClient` class to
+communicate with the openstuder gateway.
+
+To use the **Bluetooth API**, you need to implement the `SIBluetoothGatewayClientCallbacks` interface to receive callback events from the client. Then you can use the API of the 
+`SIBluetoothGatewayClient` class to  communicate with the openstuder gateway.
 
 The client is documented using JSDoc. In addition to that, the documentation here gives an overview on the different functions.
 
-#### SIGatewayClient - *Asynchronous client*
+#### SIGatewayClient - *WebSocket client*
 
 This client is asynchronous which permits the use of subscription process and so the different update of some properties can be caught.
 
@@ -1666,7 +1669,7 @@ The strategy with this class is to create a SIGatewayClient instance and use the
 
 ##### Set callback - *setCallback()*
 
-This function set the different callback for the SIGatewayClient instance. This allows the main class (if he implements the SIGatewayCallback interface) to treat by himself the information provided by the gateway.
+This function set the different callback for the SIGatewayClient instance. This allows the main class (if he implements the SIGatewayCallbacks interface) to treat by himself the information provided by the gateway.
 
 **Parameters**:
 - `siGatewayCallback`: Instance of the class who implements the SIGatewayCallback *Required*
@@ -1697,13 +1700,14 @@ the given user was rejected by the gateway.
 2. The version of the OpenStuder software running on the gateway. 
 
 *Example:*
-```python
+*Example:*
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     isConnected:boolean;
@@ -1746,7 +1750,7 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 The example above establishes a connection to **localhost** using the guest account. If the client has to authorize using a username and password, you have to provide them in the `connect()` method.
 
 *Example:*
-```python
+```typescript
     public componentDidMount() {
             let user = "Garfield";
             let password = "lasagne";
@@ -1772,13 +1776,13 @@ The status of the operation and the number of devices present are reported using
 2. Number of devices present.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 type AppState={
     numberOfDevice:number;
 }
@@ -1838,13 +1842,13 @@ The description is reported using the `onDescription()` callback.
 3. The description object.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     jsonDescription:string;
@@ -1903,14 +1907,14 @@ device that disposes that property connected through any device access.
 - `SIProtocolError`: On a connection, protocol or framing error.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     propertiesFound:string;
@@ -1977,13 +1981,13 @@ The status of the read operation and the actual value of the property are report
 3. The value read.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     value:string;
@@ -2029,13 +2033,13 @@ This method is used to retrieve the actual value of multiple properties at once 
 1. List of statuses and values of all read properties.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     valueProperty11004:string;
@@ -2096,13 +2100,13 @@ The status of the write operation is reported using the `onPropertyWritten()` ca
 2. The ID of the property written.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     status:string;
@@ -2178,13 +2182,13 @@ The status of the unsubscribe request is reported using the `onPropertyUnsubscri
 2. The ID of the property.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     status:string;
@@ -2267,14 +2271,14 @@ The status of the multiple unsubscribe request is reported using the `onProperti
 1. List of SIPropertySubscriptionResult objects containing the id and status for each property subscription.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     subscribed:boolean;
@@ -2350,14 +2354,14 @@ This method is used to retrieve the list of IDs of all properties for whom data 
 - `SIProtocolError`: On a connection, protocol or framing error.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     propertyLogged:string;
@@ -2428,13 +2432,13 @@ The status of this operation and the respective values are reported using the `o
 4. Property log data in CSV format whereas the first column is the date and time in ISO 8601 extended format and the second column contains the actual values.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     countDatalogMessages:string;
@@ -2491,13 +2495,13 @@ The status of this operation and the retrieved messages are reported using the `
 3. The list of retrieved messages.
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     readMessage:string;
@@ -2554,13 +2558,13 @@ Once connected to the gateway, the gateway will send device messages to the clie
 5. The timestamp when the message was received by the gateway. 
 
 *Example:*
-```python
+```typescript
 import React from 'react';
 import {
     SIGatewayClient, SIGatewayCallback, SIWriteFlags,
     SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
     SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
-} from "@marcocrettena/openstuder"
+} from "@openstuder/openstuder"
 
 type AppState={
     readMessage:string;
@@ -2593,11 +2597,4 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
     }
 }
 ```
-
-
-
-
-
-
-
 
