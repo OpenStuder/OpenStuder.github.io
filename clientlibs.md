@@ -2598,3 +2598,349 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 }
 ```
 
+#### SIBluetoothGatewayClient - *Bluetooth client*
+
+This client is asynchronous which permits the use of subscription process and so the different update of some properties can be caught.
+
+The strategy with this class is to create a SIBluetoothGatewayClient instance and use the different function described below.
+
+>[!Warning]
+> The Bluetooth client can only work on browsers that support the [Web Bluetooth API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API). This excludes Apple Safari and older versions
+> of Internet Explorer. You can use the function `Bluetooth.getAvailability()` to check if the browser supports the Web Bluetooth API.
+>  
+> The UI to choose the Bluetooth device to connect to is provided by the browser and the library has no control over the UI's look and feel nor the behavoir.
+
+##### Set callback - *setCallback()*
+
+This function set the different callback for the SIBluetoothGatewayClient instance. This allows the main class (if he implements the SIBluetoothGatewayCallbacks interface) to treat by himself the information provided by the gateway.
+
+**Parameters**:
+- `siGatewayCallback`: Instance of the class who implements the SIBluetoothGatewayCallback *Required*
+
+**Returns**: *None*
+
+##### Establish connection - *connect()*
+
+Discovers OpenStuder Bluetooth devices and establishes the connection to the user-selected gateway and executes the user authorization process once the connection has been established.
+The status of the connection attempt is reported either by the on_connected() callback on success or the on_error() callback if the connection could not be established or the authorization
+for the given user was rejected by the gateway.
+
+**Parameters**:
+- `user`: Username send to the gateway used for authorization.
+- `password`: Password send to the gateway used for authorization.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If there was an error initiating the Bluetooth connection.
+
+**Callback parameters**: `onConnected()`
+1. The access level that was granted to the user during authorization.
+2. The version of the OpenStuder software running on the gateway.
+
+*Example:*
+```typescript
+import React from 'react';
+import {
+    SIBluetoothGatewayClient, SIBluetoothGatewayCallback, SIWriteFlags,
+    SIDescriptionFlags, SISubscriptionsResult, SIPropertyReadResult,
+    SIStatus, SIAccessLevel, SIDeviceMessage, SIConnectionState
+} from "@openstuder/openstuder"
+
+type AppState = {
+    isConnected: boolean;
+    accessLevel: SIAccessLevel
+}
+
+class App extends React.Component<{}, AppState> implements SIGatewayCallback {
+
+    sigc: SIGatewayClient;
+
+    constructor(props: any) {
+        super(props);
+        this.sigc = new SIGatewayClient();
+        this.state = {isConnected: false, accessLevel: SIAccessLevel.NONE};
+    }
+
+    public componentDidMount() {
+        this.sigc.setCallback(this);
+        this.sigc.connect();
+    }
+
+    public render() {
+        let str: string = this.state.isConnected ? "true" : "false";
+        return (
+            <div>
+                <p>Connected
+    :
+        {
+            str
+        }
+        </p>
+        < p > Access
+        Level : {
+            this.state.accessLevel
+        }
+        </p>
+        < /div>
+    )
+        ;
+    }
+
+    onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+        this.setState({isConnected: true, accessLevel: accessLevel});
+    }
+
+    public onDisconnected(): void {
+        this.setState({isConnected: false, accessLevel: SIAccessLevel.NONE});
+    }
+}
+```
+
+The example above establishes a connection to a Bluetooth device selected by the user using the guest account. If the client has to authorize using a username and password, you have to provide them 
+in the `connect()` method.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Enumerate devices - *enumerate()*
+
+Instructs the gateway to scan every configured and functional device access driver for new devices and remove devices that do not respond anymore.
+The status of the operation and the number of devices present are reported using the `onEnumerated()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**: *None*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol of framing error.
+
+**Callback parameters**: `onEnumerated()`
+1. Operation status.
+2. Number of devices present.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Describe - *describe()*
+
+This method can be used to retrieve information about the available devices and their properties from the connected gateway. Using the optional deviceAccessId, deviceId and propertyId
+parameters, the method can either request information about the whole topology, a particular device access instance, a device or a property.
+
+The description is reported using the `onDescription()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `deviceAccessId`: Device access ID for which the description should be retrieved. *Optional*.
+- `deviceId`: Device ID for which the description should be retrieved. *Optional*, note that deviceAccessId must be present too.
+- `propertyId`: Property ID for which the description should be retrieved. *Optional*, note that deviceAccessId and deviceId must be present too.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol of framing error.
+
+**Callback parameters**: `onDescription()`
+1. Status of the operation.
+2. The description object.
+3. The subject's ID.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Reading properties - *readProperty()*
+
+This method is used to retrieve the actual value of a given property from the connected gateway. The property is identified by the propertyId parameter.
+The status of the read operation and the actual value of the property are reported using the `onPropertyRead()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `propertyId`: The ID of the property to read in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol of framing error.
+
+**Callback parameters**: `onPropertyRead()`
+1. Status of the read operation.
+2. The ID of the property read.
+3. The value read.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Writing properties - *writeProperty()*
+
+The writeProperty() method is used to change the actual value of a given property. The property is identified by the propertyId parameter and the new value is passed by the optional value
+parameter.
+
+This value parameter is optional as it is possible to write to properties with the data type "Signal" where there is no actual value written, the write operation rather triggers an action
+on the device.
+
+The status of the write operation is reported using the `onPropertyWritten`() method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `propertyId`: The ID of the property to write in the form '{device access ID}.{<device ID}.{<property ID}'. *Required*
+- `value`: *Optional* value to write.
+- `flags`: *Optional* write flags, See SIWriteFlags for details, if not provided the flags are not send by the client and the gateway uses the default flags (SIWriteFlags.PERMANENT).
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol of framing error.
+
+**Callback parameters**: `onPropertyWritten()`
+1. Status of the write operation.
+2. The ID of the property written.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Subscribing to properties - *subscribeProperty(), unsubscribeProperty()*
+
+The method `subscribeToProperty()` can be used to subscribe to a property on the connected gateway. The property is identified by the `propertyId` parameter.
+
+The status of the subscribe request is reported using the `onPropertySubscribed()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `propertyId`: The ID of the property to subscribe to in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`:  On a connection, protocol of framing error.
+
+**Callback parameters**: `onPropertySubscribed()`
+1. The status of the subscription.
+2. The ID of the property.
+
+The callback `onPropertyUpdated()` of the `SIBluetoothGatewayClientCallbacks` interface is called whenever the gateway did send a property update.
+
+**Callback parameters**: `onPropertyUpdated()`
+1. The ID of the property that has updated.
+2. The actual value.
+
+The method `unsubscribeFromProperty()` can be used to unsubscribe from a property on the connected gateway. The property is identified by the propertyId parameter.
+
+The status of the unsubscribe request is reported using the `onPropertyUnsubscribed()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `propertyId`: The ID of the property to unsubscribe from in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol of framing error.
+
+**Callback parameters**: `onPropertyUnsubscribed()`
+1. The status of the unsubscription.
+2. The ID of the property.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Reading available properties in datalog - *readDatalogProperties()*
+
+This method is used to retrieve the list of IDs of all properties for whom data is logged on the gateway. If a time window is given using from and to, only data in this time windows is
+considered.
+
+The status of the operation is the list of properties for whom logged data is available are reported using the `onDatalogPropertiesRead()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `dateFrom`: Optional date and time of the start of the time window to be considered.
+- `dateTo`: Optional date and time of the end of the time window to be considered.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol or framing error.
+
+**Callback parameters**: `onDatalogPropertiesRead()`
+1. Status of the operation.
+2. List of all properties for whom data is logged on the gateway in the optional time window.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Reading datalog - *readDatalog()*
+
+This method is used to retrieve all or a subset of logged data of a given property from the gateway.
+
+The status of this operation and the respective values are reported using the `onDatalogRead()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `propertyId`: Global ID of the property for which the logged data should be retrieved. It has to be in the form `{device access ID}.{device ID}.{property ID}`. *Required*
+- `dateFrom`: *Optional* date and time from which the data has to be retrieved, defaults to the oldest value logged.
+- `dateTo`: *Optional* date and time to which the data has to be retrieved, defaults to the current time on the gateway.
+- `limit`: Using this optional parameter you can limit the number of results retrieved in total. *Optional*
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`:  On a connection, protocol of framing error.
+
+**Callback parameters**: `onDatalogRead()`
+1. Status of the operation.
+2. ID of the property.
+3. Number of entries.
+4. The values with their timestamps.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Reading device messages - *readMessages()*
+
+The `readMessages()` method can be used to retrieve all or a subset of stored messages send by device on all buses in the past from the gateway.
+
+The status of this operation and the retrieved messages are reported using the `onMessagesRead()` method of the `SIBluetoothGatewayClientCallbacks` interface.
+
+**Parameters**:
+- `dateFrom`: *Optional* date and time from which the messages have to be retrieved, defaults to the oldest message saved.
+- `dateTo`: *Optional* date and time to which the messages have to be retrieved, Defaults to the current time on the gateway.
+- `limit`: Using this optional parameter you can limit the number of messages retrieved in total.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: On a connection, protocol of framing error.
+
+**Callback parameters**: `onMessagesRead()`
+1. The status of the operation.
+2. The number of messages retrieved.
+3. The list of retrieved messages.
+
+*Example:*
+```typescript
+TODO
+```
+
+##### Device message indications
+
+Once connected to the gateway, the gateway will send device messages to the client automatically. This callback is called whenever a device message was received from the gateway.
+
+**Callback parameters**: `onDeviceMessage()`
+1. The access ID of the device access instance that received the message.
+2. The message ID
+3. The message
+4. The device ID that send the message
+5. The timestamp when the message was received by the gateway.
+
+*Example:*
+```typescript
+TODO
+```
