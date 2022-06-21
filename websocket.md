@@ -514,12 +514,21 @@ body
                     Version of the gateway OpenStuder software actually runing on the gateway.
                 </td>
             </tr>
+            <tr>
+                <td>extensions</td>
+                <td>string</td>
+                <td><strong>Available protocol extensions</strong>. <br/>
+                    Comma-seperated list of all available protocol extensions.
+                </td>
+            </tr>
         </table>
         <h6>body</h6>
         <p><em>No body</em></p>
         <pre data-ws-example="AUTHORIZED"><code>AUTHORIZED
 access_level:Basic
 protocol_version:1
+gateway_version:0.1.5
+extensions:
  </code></pre>
     </div>
 </div>
@@ -2333,6 +2342,132 @@ status:Success
 ]</code></pre>
     </div>
 </div>
+
+### Protocol Extensions
+
+<p>Protocol extension can be installed on the gateway. These can offer various additional functionality like for example
+Key-Value storage for web-sites, user management or WiFi setup. 
+</p>
+
+<p>A client can call a protocol extension's command by sending the <strong class="request">CALL EXTENSION</strong> message.</p>
+
+<div class="ws-api-doc request">
+    <button class="accordion-toggle">CALL EXTENSION</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>CALL EXTENSION</strong> message is send to a gateway to execute a command of a protocol extensoion. 
+            The extension is identified by the <strong>extension</strong> header and the command by the <strong>command</strong>
+            header.
+        </p>
+        <p>
+            Depending on the actual extension command called, additional headers have to be provided or a body can be 
+            given. Refer to the documentation of the different protocol extensions for details on these headers.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>extension</td>
+                <td>string</td>
+                <td><strong>ID of the extension</strong>. <br/>
+                    The ID of the protocol extension to run a command on.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="extension" data-ws-required/>
+                </td>
+            <tr>
+                <td>command</td>
+                <td>string</td>
+                <td><strong>Name of the command</strong>. <br/>
+                    The name of the command to run.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-ws-header="command" data-ws-required/>
+                </td>
+            </tr>
+            <tr>
+                <td><i>Additional headers</i></td>
+                <td><i>Depends command</i></td>
+                <td colspan="2">
+                    <textarea rows="5" placeholder="optional" data-ws-headers></textarea>
+                </td>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <textarea style="border:none;" rows="8" placeholder="optional" data-ws-body></textarea>
+        <pre data-ws-try><code data-ws-preview="CALL EXTENSION"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">EXTENSION CALLED</strong> message:</p>
+
+<div class="ws-api-doc response">
+    <button class="accordion-toggle">EXTENSION CALLED</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>EXTENSION CALLED</strong> message is send by the gateway as a response to an <strong class="request">CALL EXTENSION</strong> that was accepted by the gateway. The
+            only reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>headers</h6>
+        <table>
+            <tr>
+                <th>key</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>extension</td>
+                <td>string</td>
+                <td><strong>ID of the extension</strong>. <br/>
+                    The ID of the protocol extension that did run the command.
+                </td>
+            </tr>
+            <tr>
+                <td>command</td>
+                <td>string</td>
+                <td><strong>Name of the command</strong>. <br/>
+                    The name of the command that was run.
+                </td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status of the extension command execution</strong>. <br/>
+                    Can be one of:<br/><br/>
+                    <ul>
+                        <li>Success</li>
+                        <li>UnsupportedExtension</li>
+                        <li>UnsupportedCommand</li>
+                        <li>InvalidHeaders</li>
+                        <li>InvalidBody</li>
+                        <li>Forbidden</li>
+                        <li>Error</li>
+                    </ul>
+                </td>
+            <tr>
+                <td><i>Additional headers</i></td>
+                <td><i>Depends command</i></td>
+                <td colspan="2">
+                </td>
+            </tr>
+            </tr>
+        </table>
+        <h6>body</h6>
+        <p><em>depends command</em></p>
+        <pre data-ws-example="EXTENSION CALLED"><code>EXTENSION CALLED
+extension:UserManagement
+command:add
+status:Forbidden
+ </code></pre>
+    </div>
+</div>
+
+<p>Should the <strong class="request">CALL EXTENSION</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
 
 ### Error
 

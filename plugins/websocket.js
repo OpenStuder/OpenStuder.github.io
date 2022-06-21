@@ -238,6 +238,7 @@ function docsifyWebSocketPlugin(hook, vm) {
             var preview = docElement.querySelector('code[data-ws-preview]');
             if (preview) {
                 var headers_1 = docElement.querySelectorAll('[data-ws-header]');
+                var additionalHeaders_1 = docElement.querySelector('[data-ws-headers]');
                 var body_1 = docElement.querySelector('[data-ws-body]');
                 var renderPreview_1 = function () {
                     var msg = String(preview.dataset.wsPreview) + '\n';
@@ -280,6 +281,12 @@ function docsifyWebSocketPlugin(hook, vm) {
                             }
                         }
                     });
+                    if (additionalHeaders_1) {
+                        msg += additionalHeaders_1.value;
+                        if (msg[msg.length - 1] != '\n') {
+                            msg += '\n';
+                        }
+                    }
                     msg += '\n';
                     if (body_1) {
                         msg += body_1.value;
@@ -290,6 +297,10 @@ function docsifyWebSocketPlugin(hook, vm) {
                     element.onchange = renderPreview_1;
                     element.onkeyup = renderPreview_1;
                 });
+                if (additionalHeaders_1) {
+                    additionalHeaders_1.onchange = renderPreview_1;
+                    additionalHeaders_1.onkeyup = renderPreview_1;
+                }
                 if (body_1) {
                     body_1.onchange = renderPreview_1;
                     body_1.onkeyup = renderPreview_1;

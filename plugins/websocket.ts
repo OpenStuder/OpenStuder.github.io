@@ -593,6 +593,7 @@ function docsifyWebSocketPlugin(hook: any, vm: any) {
 			const preview = docElement.querySelector<HTMLElement>('code[data-ws-preview]');
 			if (preview) {
 				const headers = docElement.querySelectorAll<HTMLElement>('[data-ws-header]');
+				const additionalHeaders =  docElement.querySelector<HTMLAreaElement>('[data-ws-headers]');
 				const body = docElement.querySelector<HTMLTextAreaElement>('[data-ws-body]');
 
 				const renderPreview = () => {
@@ -634,6 +635,12 @@ function docsifyWebSocketPlugin(hook: any, vm: any) {
 						}
 
 					});
+					if (additionalHeaders) {
+						msg += additionalHeaders.value;
+						if (msg[msg.length - 1] != '\n') {
+							msg += '\n';
+						}
+					}
 					msg += '\n';
 
 					if (body) {
@@ -647,6 +654,11 @@ function docsifyWebSocketPlugin(hook: any, vm: any) {
 					element.onchange = renderPreview;
 					element.onkeyup = renderPreview;
 				});
+
+				if (additionalHeaders) {
+					additionalHeaders.onchange = renderPreview;
+					additionalHeaders.onkeyup = renderPreview;
+				}
 
 				if (body) {
 					body.onchange = renderPreview;

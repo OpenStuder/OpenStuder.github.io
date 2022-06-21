@@ -511,8 +511,15 @@
                     Version of the gateway OpenStuder software actually runing on the gateway.
                 </td>
             </tr>
+            <tr>
+                <td>extensions</td>
+                <td>string</td>
+                <td><strong>Available protocol extensions</strong>. <br/>
+                    Comma-seperated list of all available protocol extensions.
+                </td>
+            </tr>
         </table>
-        <pre data-bt-example="129"><code>18810165302E312E30</code></pre>
+        <pre data-bt-example="129"><code>1881010165302E312E3060</code></pre>
     </div>
 </div>
 
