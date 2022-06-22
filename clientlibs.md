@@ -1638,6 +1638,10 @@ if len(gateways) > 0:
 
 ## Web Client
 
+<a target="_blank" href="https://www.npmjs.com/package/@openstuder/openstuder"><img style="display: inline-block; margin: 0" alt="GitHub" src="https://img.shields.io/npm/v/@openstuder/openstuder.svg"></a>
+<img style="display: inline-block; margin: 0" alt="GitHub" src="https://img.shields.io/github/license/openstuder/openstuder-client-web">
+<a target="_blank" href="https://github.com/OpenStuder/openstuder-client-web/issues"><img style="display: inline-block; margin: 0" alt="GitHub issues" src="https://img.shields.io/github/issues-raw/openstuder/openstuder-client-web"></a>
+
 The web client allows connecting and interacting with an OpenStuder gateway. It offers an asynchronous API to connect to a gateway and use the gateway's WebSocket API or Bluetooth API.
 This library is written in Typescript.
 
