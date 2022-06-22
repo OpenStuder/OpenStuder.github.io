@@ -717,11 +717,20 @@ class SIBluetoothTestConnection {
 					"\nto: " + sequence[2] +
 					"\nlimit: " + sequence[3];
 			}
-			else if (command == 0x81 && sequence.length == 4) {
+			else if (command == 0x0B && sequence.length >= 3) {
+				decoded = "CALL EXTENSION" +
+					"\nextension: " + sequence[1]+
+					"\ncommand: " + sequence[2];
+				for (let i = 3; i < sequence.length; ++i) {
+					decoded += `\nparameter ${i - 2}: ${sequence[i]}`;
+				}
+			}
+			else if (command == 0x81 && sequence.length == 5) {
 				decoded = "AUTHORIZED" +
 					"\naccess_level: " + this.accessLevelToString(sequence[1]) +
 					"\nprotocol_version: " + sequence[2] +
-					"\ngateway_version: " + sequence[3];
+					"\ngateway_version: " + sequence[3] +
+					"\nextensions: " + sequence[4];
 			}
 			else if (command == 0x82 && sequence.length == 3) {
 				decoded = "ENUMERATED" +
@@ -766,6 +775,15 @@ class SIBluetoothTestConnection {
 					"\nid: " + sequence[2] +
 					"\ncount: " + sequence[3] +
 					"\nresults:\n" + JSON.stringify(sequence[4], null, '  ');
+			}
+			else if (command == 0x8B && sequence.length >= 4) {
+				decoded = "CALL EXTENSION" +
+					"\nextension: " + sequence[1] +
+					"\ncommand: " + sequence[2] +
+					"\nstatus: " + this.extensionStatusToString(sequence[3]);
+				for (let i = 4; i < sequence.length; ++i) {
+					decoded += `\nparameter ${i - 3}: ${sequence[i]}`;
+				}
 			}
 			else if (command == 0xFD && sequence.length == 6) {
 				decoded = "DEVICE MESSAGE" +
@@ -837,6 +855,19 @@ class SIBluetoothTestConnection {
 			case -4: return "No device access";
 			case -5: return "Timeout";
 			case -6: return "Invalid value";
+			default: return "Unknown error";
+		}
+	}
+
+	private extensionStatusToString(status: number): string {
+		switch (status) {
+			case 0: return "Success";
+			case -1: return "UnsupportedExtension";
+			case -2: return "UnsupportedCommand";
+			case -3: return "InvalidHeaders";
+			case -4: return "InvalidBody";
+			case -5: return "Forbidden";
+			case -6: return "Error";
 			default: return "Unknown error";
 		}
 	}
@@ -915,7 +946,7 @@ function docsifyBluetoothPlugin(hook: any, vm: any) {
 			const preview = docElement.querySelector<HTMLElement>('code[data-bt-preview]');
 			if (preview) {
 				const params = docElement.querySelectorAll<HTMLElement>('[data-bt-index]');
-				//params.sort();
+				const additionalData = docElement.querySelector<HTMLTextAreaElement>('[data-bt-append]')
 
 				const renderPreview = () => {
 					let msg = CBOR.encode(parseInt(preview.dataset.btPreview))
@@ -997,6 +1028,10 @@ function docsifyBluetoothPlugin(hook: any, vm: any) {
 
 					});
 
+					if (additionalData) {
+						msg = appendBuffer(msg, hexToBytes(additionalData.value));
+					}
+
 					preview.innerText = bytesToHex(new Uint8Array(msg));
 				};
 
@@ -1004,6 +1039,11 @@ function docsifyBluetoothPlugin(hook: any, vm: any) {
 					element.onchange = renderPreview;
 					element.onkeyup = renderPreview;
 				});
+
+				if (additionalData) {
+					additionalData.onchange = renderPreview;
+					additionalData.onkeyup = renderPreview;
+				}
 
 				renderPreview();
 			}

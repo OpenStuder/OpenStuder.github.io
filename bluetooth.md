@@ -1316,6 +1316,125 @@ from the gateway or the list of properties that are logged.</p>
     </div>
 </div>
 
+### Protocol Extensions
+
+<p>Protocol extension can be installed on the gateway. These can offer various additional functionality like for example
+Key-Value storage for web-sites, user management or WiFi setup. 
+</p>
+
+<p>A client can call a protocol extension's command by sending the <strong class="request">CALL EXTENSION</strong> message.</p>
+
+<div class="bt-api-doc request">
+    <button class="accordion-toggle">CALL EXTENSION</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>CALL EXTENSION</strong> message is send to a gateway to execute a command of a protocol extension. 
+            The extension is identified by the <strong>extension</strong> header and the command by the <strong>command</strong>
+            header.
+        </p>
+        <p>
+            Depending on the actual extension command called, additional parameters have to be provided. 
+            Refer to the documentation of the different protocol extensions for details on these headers.
+        </p>
+        <h6>parameters</h6>
+        <table>
+            <tr>
+                <th>name</th>
+                <th>data type</th>
+                <th>description</th>
+                <th>use value</th>
+            </tr>
+            <tr>
+                <td>extension</td>
+                <td>string</td>
+                <td><strong>ID of the extension</strong>. <br/>
+                    The ID of the protocol extension to run a command on.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-bt-index="0" data-bt-type="string"/>
+                </td>
+            <tr>
+                <td>command</td>
+                <td>string</td>
+                <td><strong>Name of the command</strong>. <br/>
+                    The name of the command to run.
+                </td>
+                <td>
+                    <input type="text" placeholder="required" data-bt-index="1" data-bt-type=""string"/>
+                </td>
+            </tr>
+            <tr>
+                <td><i>Additional parameters</i></td>
+                <td><i>Depends command</i></td>
+                <td colspan="2">
+                    <small>CBOR encoded hex:</small>
+                    <textarea rows="1" placeholder="optional" data-bt-append></textarea>
+                </td>
+            </tr>
+        </table>
+        <pre data-bt-try><code data-bt-preview="11"></code></pre>
+    </div>
+</div>
+
+<p>If the gateway accepts the request it will respond with a <strong class="response">EXTENSION CALLED</strong> message:</p>
+
+<div class="bt-api-doc response">
+    <button class="accordion-toggle">EXTENSION CALLED</button>
+    <div class="accordion-content" hidden>
+        <p>
+            The <strong>EXTENSION CALLED</strong> message is send by the gateway as a response to an <strong class="request">CALL EXTENSION</strong> that was accepted by the gateway. The
+            only reason an <strong class="error">ERROR</strong> message is send back by the gateway instead of this message is if the request message was malformed or the client is not yet authorized.
+        </p>
+        <h6>parameters</h6>
+        <table>
+            <tr>
+                <th>name</th>
+                <th>data type</th>
+                <th>description</th>
+            </tr>
+            <tr>
+                <td>extension</td>
+                <td>string</td>
+                <td><strong>ID of the extension</strong>. <br/>
+                    The ID of the protocol extension that did run the command.
+                </td>
+            </tr>
+            <tr>
+                <td>command</td>
+                <td>string</td>
+                <td><strong>Name of the command</strong>. <br/>
+                    The name of the command that was run.
+                </td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>string</td>
+                <td><strong>Status of the extension command execution</strong>. <br/>
+                    Can be one of:<br/><br/>
+                    <ul>
+                        <li>0: Success</li>
+                        <li>-1: UnsupportedExtension</li>
+                        <li>-2: UnsupportedCommand</li>
+                        <li>-3: InvalidHeaders</li>
+                        <li>-4: InvalidBody</li>
+                        <li>-5: Forbidden</li>
+                        <li>-6: Error</li>
+                    </ul>
+                </td>
+            <tr>
+                <td><i>Additional parameters</i></td>
+                <td><i>Depends command</i></td>
+                <td colspan="2">
+                </td>
+            </tr>
+            </tr>
+        </table>
+        <pre data-bt-example="139"><code>188B6E557365724D616E6167656D656E746361646400</code></pre>
+    </div>
+</div>
+
+<p>Should the <strong class="request">CALL EXTENSION</strong> message be malformed or the client is not yet authorized, the gateway responds with an <strong class="error">ERROR</strong> message instead.</p>
+
 ### Error
 
 If a client sends a malformed message to the gateway, or the gateway is in an invalid state (mostly because of missing authorization), the gateway sends an <strong class="error">Error</strong>

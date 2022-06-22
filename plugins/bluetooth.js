@@ -258,11 +258,20 @@ var SIBluetoothTestConnection = /** @class */ (function () {
                     "\nto: " + sequence[2] +
                     "\nlimit: " + sequence[3];
             }
-            else if (command == 0x81 && sequence.length == 4) {
+            else if (command == 0x0B && sequence.length >= 3) {
+                decoded = "CALL EXTENSION" +
+                    "\nextension: " + sequence[1] +
+                    "\ncommand: " + sequence[2];
+                for (var i = 3; i < sequence.length; ++i) {
+                    decoded += "\nparameter ".concat(i - 2, ": ").concat(sequence[i]);
+                }
+            }
+            else if (command == 0x81 && sequence.length == 5) {
                 decoded = "AUTHORIZED" +
                     "\naccess_level: " + this.accessLevelToString(sequence[1]) +
                     "\nprotocol_version: " + sequence[2] +
-                    "\ngateway_version: " + sequence[3];
+                    "\ngateway_version: " + sequence[3] +
+                    "\nextensions: " + sequence[4];
             }
             else if (command == 0x82 && sequence.length == 3) {
                 decoded = "ENUMERATED" +
@@ -307,6 +316,15 @@ var SIBluetoothTestConnection = /** @class */ (function () {
                     "\nid: " + sequence[2] +
                     "\ncount: " + sequence[3] +
                     "\nresults:\n" + JSON.stringify(sequence[4], null, '  ');
+            }
+            else if (command == 0x8B && sequence.length >= 4) {
+                decoded = "CALL EXTENSION" +
+                    "\nextension: " + sequence[1] +
+                    "\ncommand: " + sequence[2] +
+                    "\nstatus: " + this.extensionStatusToString(sequence[3]);
+                for (var i = 4; i < sequence.length; ++i) {
+                    decoded += "\nparameter ".concat(i - 3, ": ").concat(sequence[i]);
+                }
             }
             else if (command == 0xFD && sequence.length == 6) {
                 decoded = "DEVICE MESSAGE" +
@@ -376,6 +394,18 @@ var SIBluetoothTestConnection = /** @class */ (function () {
             default: return "Unknown error";
         }
     };
+    SIBluetoothTestConnection.prototype.extensionStatusToString = function (status) {
+        switch (status) {
+            case 0: return "Success";
+            case -1: return "UnsupportedExtension";
+            case -2: return "UnsupportedCommand";
+            case -3: return "InvalidHeaders";
+            case -4: return "InvalidBody";
+            case -5: return "Forbidden";
+            case -6: return "Error";
+            default: return "Unknown error";
+        }
+    };
     SIBluetoothTestConnection.prototype.writeFlagsToString = function (writeFlags) {
         switch (writeFlags) {
             case 0:
@@ -424,7 +454,7 @@ function docsifyBluetoothPlugin(hook, vm) {
             var preview = docElement.querySelector('code[data-bt-preview]');
             if (preview) {
                 var params_1 = docElement.querySelectorAll('[data-bt-index]');
-                //params.sort();
+                var additionalData_1 = docElement.querySelector('[data-bt-append]');
                 var renderPreview_1 = function () {
                     var msg = CBOR.encode(parseInt(preview.dataset.btPreview));
                     params_1.forEach(function (paramElement) {
@@ -503,12 +533,19 @@ function docsifyBluetoothPlugin(hook, vm) {
                             }
                         }
                     });
+                    if (additionalData_1) {
+                        msg = appendBuffer(msg, hexToBytes(additionalData_1.value));
+                    }
                     preview.innerText = bytesToHex(new Uint8Array(msg));
                 };
                 params_1.forEach(function (element) {
                     element.onchange = renderPreview_1;
                     element.onkeyup = renderPreview_1;
                 });
+                if (additionalData_1) {
+                    additionalData_1.onchange = renderPreview_1;
+                    additionalData_1.onkeyup = renderPreview_1;
+                }
                 renderPreview_1();
             }
         });
