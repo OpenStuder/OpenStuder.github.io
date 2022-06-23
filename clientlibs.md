@@ -397,6 +397,46 @@ except SIProtocolError as error:
     print(f'Error: {error.reason()}')
 ```
 
+##### Protocol extensions
+
+Protocol extensions enable new functionality on the gateway without the need to modify any core code. Those are plugins
+that can be dynamically loaded by the gateway daemon. This means that extensions can be enabled or not. The method
+`available_extensions()` returns a list of all extensions supported by the connected gateway.
+
+The `call_extension()` runs an extension command on the gateway and returns the result of that operation. The function
+`available_extensions()` can be user to get the list of extensions that are available on the connected gateway.
+
+**Parameters**:
+- `extension`: Extension to use.
+- `command`: Command to run on that extension.
+- `parameters`: *Optional* parameters (key/value) to pass to the command, see extension documentation for details.
+- `body`: *Optional* Body to pass to the command, see extension documentation for details.
+
+**Returns**:
+1. Extension that did run the command.
+2. The command.
+3. Status of the command run.
+4. Key/value pairs returned by the command, see extension documentation for details.
+5. Optional body (output) returned by the command, see extension documentation for details.
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+*Example:*
+```python
+from openstuder import SIGatewayClient, SIProtocolError
+
+try:
+    client = SIGatewayClient()
+    client.connect('localhost', 1987, 'expert', 'expert')
+    print(f'Available extensions: {client.available_extensions()}')
+    status, params, body = client.call_extension('WifiConfig', 'scan')
+    print(f'Extension called, status = {status}, params = {params}, body = {body}')
+
+except SIProtocolError as error:
+    print(f'Error: {error.reason()}')
+```
+
 #### SIAsyncGatewayClient - *Asynchronous client*
 
 Complete, asynchronous (non-blocking) OpenStuder gateway client. This client uses an asynchronous model which has the disadvantage to be a bit harder to use than the synchronous version. The 
@@ -1634,6 +1674,67 @@ client.on_device_message = on_device_message
 gateways = client.discover()
 if len(gateways) > 0:
     client.connect(gateways[0], background=False)
+```
+
+##### Protocol extensions
+
+Protocol extensions enable new functionality on the gateway without the need to modify any core code. Those are plugins 
+that can be dynamically loaded by the gateway daemon. This means that extensions can be enabled or not. The method 
+`available_extensions()` returns a list of all extensions supported by the connected gateway.
+
+The `call_extension()` runs an extension command on the gateway and returns the result of that operation. The function
+available_extensions() can be user to get the list of extensions that are available on the connected gateway.
+
+The status of this operation and the command results are reported using the on_extension_called() callback. 
+
+**Parameters**:
+- `extension`: Extension to use.
+- `command`: Command to run on that extension.
+- `parameters`: *Optional* parameters (key/value) to pass to the command, see extension documentation for details.
+- `body`: *Optional* Body to pass to the command, see extension documentation for details.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `on_extension_called()`
+1. Extension that did run the command.
+2. The command.
+3. Status of the command run.
+4. Key/value pairs returned by the command, see extension documentation for details.
+5. Optional body (output) returned by the command, see extension documentation for details.
+
+*Example:*
+```python
+from openstuder import SIAsyncGatewayClient, SIProtocolError, SIExtensionStatus
+import json
+
+
+def on_error(error: SIProtocolError):
+    print(f'Unable to connect: {error.reason()}')
+
+
+def on_connected(access_level: str, gateway_version: str):
+    print(f'Connected, available extensions = {client.available_extensions()}')
+    if 'WifiConfig' in client.available_extensions():
+        client.call_extension('WifiConfig', 'scan')
+
+
+def on_extension_called(extension: str, command: str, status: SIExtensionStatus, parameters: dict, body: str):
+    print(f'WiFi scan, status = {status}')
+    if status == SIExtensionStatus.SUCCESS:
+        networks = json.loads(body)
+        for network in networks:
+            print(f'{network["ssid"]}, {network["signal"]}dBm, encrypted={network["encrypted"]}')
+    client.disconnect()
+
+
+client = SIAsyncGatewayClient()
+client.on_error = on_error
+client.on_connected = on_connected
+client.on_extension_called = on_extension_called
+client.connect('localhost', user='expert', password='expert', background=False)
 ```
 
 ## Web Client
