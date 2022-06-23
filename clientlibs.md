@@ -2742,6 +2742,91 @@ class App extends React.Component<{ }, AppState> implements SIGatewayCallback{
 }
 ```
 
+##### Protocol extensions
+
+Protocol extensions enable new functionality on the gateway without the need to modify any core code. Those are plugins
+that can be dynamically loaded by the gateway daemon. This means that extensions can be enabled or not. The method
+`getAvailableExtensions()` returns a list of all extensions supported by the connected gateway.
+
+The `callExtension()` runs an extension command on the gateway and returns the result of that operation. The function
+getAvailableExtensions() can be user to get the list of extensions that are available on the connected gateway.
+
+The status of this operation and the command results are reported using the onExtensionCalled() method.
+
+**Parameters**:
+- `extension`: Extension to use.
+- `command`: Command to run on that extension.
+- `parameters`: *Optional* parameters (key/value) to pass to the command, see extension documentation for details.
+- `body`: *Optional* Body to pass to the command, see extension documentation for details.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onExtensionCalled()`
+1. Extension that did run the command.
+2. The command.
+3. Status of the command run.
+4. Key/value pairs returned by the command, see extension documentation for details.
+5. Optional body (output) returned by the command, see extension documentation for details.
+
+*Example:*
+```typescript
+import React from 'react';
+import {
+    SIAccessLevel, SIDeviceFunctions,
+    SIDeviceMessage,
+    SIExtensionStatus,
+    SIGatewayClient,
+    SIGatewayClientCallbacks,
+    SIPropertyReadResult,
+    SIStatus,
+    SISubscriptionsResult
+} from "@openstuder/openstuder"
+
+type AppState={
+    wifiNetworks: Array<string>;
+}
+
+class App extends React.Component<{ }, AppState> implements SIGatewayClientCallbacks {
+
+    sigc:SIGatewayClient;
+
+    constructor(props:any){
+        super(props);
+        this.sigc=new SIGatewayClient();
+        this.state={wifiNetworks:[]};
+    }
+    public componentDidMount() {
+        this.sigc.setCallback(this);
+        this.sigc.setDebugEnabled(true);
+        this.sigc.connect("localhost");
+    }
+    public render() {
+        return (
+            <div className="App">
+                { this.state.wifiNetworks.map((it) => <p>{it}</p>) }
+                        </div>
+                    );
+                }
+
+        onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+            this.sigc.callExtension("WifiConfig", "scan");
+        }
+
+        onExtensionCalled(extension: string, command: string, status: SIExtensionStatus, parameters: Map<string, string>, body: string): void {
+            if (status === SIExtensionStatus.SUCCESS) {
+                this.setState({
+                    wifiNetworks: (JSON.parse(body) as Array<any>).map((it) => it["ssid"])  
+                });
+            }
+        }
+    }
+
+    export default App;
+```
+
 #### SIBluetoothGatewayClient - *Bluetooth client*
 
 This client is asynchronous which permits the use of subscription process and so the different update of some properties can be caught.
@@ -3689,6 +3774,111 @@ class App extends React.Component<{}, AppState> implements SIBluetoothGatewayCli
             });
         }
 
+            onMessagesRead(status: SIStatus, count: number, messages: SIDeviceMessage[]): void {}
+            onDatalogRead(status: SIStatus, propertyId: string, count: number, values: Array<SIDataLogEntry>): void {}
+            onDatalogPropertiesRead(status: SIStatus, properties: Array<string>): void {}
+            onPropertySubscribed(status: SIStatus, propertyId: string): void {}
+            onPropertyUpdated(propertyId: string, value: any): void {}
+            onPropertyUnsubscribed(status: SIStatus, propertyId: string): void {}
+            onPropertyWritten(status: SIStatus, propertyId: string): void {}
+            onPropertyRead(status: SIStatus, propertyId: string, value?: any): void {}
+            onDescription(status: SIStatus, description: any, id?: string): void {}
+            onEnumerated(status: SIStatus, deviceCount: number): void {}
+            onDisconnected(): void {}
+            onError(reason: string): void {}
+        }
+
+        export default App;
+```
+
+##### Protocol extensions
+
+Protocol extensions enable new functionality on the gateway without the need to modify any core code. Those are plugins
+that can be dynamically loaded by the gateway daemon. This means that extensions can be enabled or not. The method
+`getAvailableExtensions()` returns a list of all extensions supported by the connected gateway.
+
+The `callExtension()` runs an extension command on the gateway and returns the result of that operation. The function
+getAvailableExtensions() can be user to get the list of extensions that are available on the connected gateway.
+
+The status of this operation and the command results are reported using the onExtensionCalled() method.
+
+**Parameters**:
+- `extension`: Extension to use.
+- `command`: Command to run on that extension.
+- `parameters`: *Optional* list of parameters to pass to the command, see extension documentation for details.
+
+**Returns**: *None*
+
+**Exceptions raised**:
+- `SIProtocolError`: If the client is not connected or not yet authorized.
+
+**Callback parameters**: `onExtensionCalled()`
+1. Extension that did run the command.
+2. The command.
+3. Status of the command run.
+4. Parameters returned by the command, see extension documentation for details.
+
+*Example:*
+```typescript
+import React from 'react';
+import {
+    SIAccessLevel,
+    SIBluetoothGatewayClient,
+    SIBluetoothGatewayClientCallbacks,
+    SIDataLogEntry,
+    SIDeviceMessage,
+    SIExtensionStatus,
+    SIStatus
+} from "@openstuder/openstuder"
+
+type AppState = {
+    isConnected: boolean;
+    error: boolean;
+    wifiNetworks: Array<string>;
+}
+
+class App extends React.Component<{}, AppState> implements SIBluetoothGatewayClientCallbacks {
+    client: SIBluetoothGatewayClient;
+
+    constructor(props: any) {
+        super(props);
+        this.client = new SIBluetoothGatewayClient();
+        this.client.setDebugEnabled(true);
+        this.state = {isConnected: false, error: false, wifiNetworks: []};
+    }
+
+    public componentDidMount() {
+        this.client.setCallback(this);
+    }
+
+    public render() {
+        return (
+            <div>
+                {this.state.error && <p>ERROR!</p>}
+        {this.state.wifiNetworks.map((value: string) => <p>{value}</p>)}
+            {!this.state.isConnected && <button onClick={() => this.client.connect("expert", "expert")}>connect...</button>}
+            </div>
+            );
+            }
+
+            onConnected(accessLevel: SIAccessLevel, gatewayVersion: string): void {
+            this.setState({isConnected: true});
+            this.client.callExtension("WifiConfig", "scan");
+        }
+
+            onExtensionCalled(extension: string, command: string, status: SIExtensionStatus, parameters: Array<any>): void {
+            if (status == SIExtensionStatus.SUCCESS) {
+            this.setState({
+                wifiNetworks: parameters
+            });
+        } else {
+            this.setState({
+                error: true
+            });
+        }
+        }
+
+            onDeviceMessage(message: SIDeviceMessage): void {}
             onMessagesRead(status: SIStatus, count: number, messages: SIDeviceMessage[]): void {}
             onDatalogRead(status: SIStatus, propertyId: string, count: number, values: Array<SIDataLogEntry>): void {}
             onDatalogPropertiesRead(status: SIStatus, properties: Array<string>): void {}
