@@ -1,7 +1,10 @@
 - Introduction
     - [Quick start](README.md#main)
     - [Gateway](gateway.md#main)
-    - [Drivers](drivers.md)
+    - [Device access drivers](drivers.md)
+    - [Storage drivers](storage.md)
+    - [Authorize drivers](authorize.md)
+    - [Protocol extensions](extensions.md)
 <!--    - [Clients](clients.md) -->
   
 - Developer

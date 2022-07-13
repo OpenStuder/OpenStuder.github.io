@@ -1,8 +1,6 @@
-## Device access drivers
-
 **Device access drivers** abstract Studer Innotec installations by communicating with all connected devices using bus converters.
 
-### Xcom485i
+## Xcom485i
 
 Driver to connect to a Studer Innotec [Xcom-485i](https://www.studer-innotec.com/en/accessoires/variotrack-series/communication-module-xcom-485i-7397) bus converter.
 
@@ -26,15 +24,15 @@ Each device connected to the Xcom-485i bus converter will be made accessible by 
 
 Assuming you have configured a device access driver with the name "`xcom`", you would use the ID `xcom.11.3023` to read the property *3023* from the first inverter on the bus.
 
-#### Parameters
+### Parameters
 
 The driver can be configured using three parameters in the respective section inside the `drivers.conf` file:
 
-##### port
+#### port
 
 Determines the serial port (or virtual USB serial port) to which the Xcom-485i bus adapter is connected. This parameter is **required**.
 
-##### baudRate
+#### baudRate
 
 Baud rate to use for communication with the Xcom-485i. **Optional**, defaults to *9600* baud which is the default baud rate of the Xcom485i bus adapter. 
 
@@ -49,7 +47,7 @@ Theoretically the drivers allows any baud rate supported by the host, but the Xc
 - *38400*
 - *115200* <--(recommended)
 
-##### deviceAddressOffset
+#### deviceAddressOffset
 
 Modbus device offset. **Optional**, defaults to *0*.
 
@@ -69,7 +67,7 @@ the same whatever settings was choosen for this offset.
 > [!Tip]
 > If you connect to the Xcom-485i bus converter directly without other devices on the same RS485 bus, leave this at the default.
 
-##### forceSlowEnumeration
+#### forceSlowEnumeration
 
 The Xcom485i device access driver supports fast device enumeration using Modbus registers that are only present on newer versions of the Xcom-485i bus converter. Normally the driver detects if fast
 enumeration is not present and uses the slow enumeration mechanism as fallback. Should that fallback mechanism not work correctly, you can use disable the fast enumeration functionality using this
@@ -77,7 +75,7 @@ configuration parameter.
 
 The **optional** parameter can be either `true` or `false` and defaults to `false`.
 
-#### Example
+### Example
 
 ```ini
 [xcom]
@@ -91,7 +89,7 @@ forceSlowEnumeration = false
 Creates a device access instance with the ID `xcom` which connects to `/dev/ttyUSB0` using `115200` baud. An offset of 128 is added to all virtual device addresses. Slow enumeration of devices is not 
 forced.
 
-### Demo
+## Demo
 
 Using the **Demo** driver you can test the gateway functionality without the need of an actual installation. This Demo simulates a simple installation featuring solar panels, a solar MPPT 
 charger, a battery, a battery monitor and a sinus inverter as shown in the following illustration.
@@ -105,7 +103,7 @@ The solar charger can be accessed by the device ID `sol`, the inverter by `inv` 
 
 The **Demo** driver has not parameters. You can instantiate multiple demo instances if you like.
 
-#### Example
+### Example
 
 ```ini
 [demo0]
@@ -116,39 +114,3 @@ driver = Demo
 ```
 
 Instantiates two demo drivers, the first with the ID `demo0` and the second with ID `demo1`.
-
-## Storage drivers
-
-**Storage drivers** store and retrieve property log data and device messages.
-
-### SQLite
-
-The **SQLite** storage driver saves the property value time-series and the device messages into a local [SQLite](https://www.sqlite.org/index.html) database.
-
-#### Parameters
-
-The driver can be configured in the `[Storage]` section inside the `sigateway.conf` configuration file using the following parameters:
-
-##### file
-
-Path and filename of the SQLite database. **Optional**, defaults to */var/lib/openstuder/storage.sqlite*.
-
-##### cleanupInterval
-
-**Optional** interval in seconds at which the storage is cleaned up. This is the interval at which values and messages outside the storage time limit will be removed. The interval defaults to 86400 
-seconds which is a day (24 hours).
-
-##### maxStorageDays
-
-Maximal storage duration in days for values and messages. This is the maximal duration data is kept in the storage before deleted to save storage space. This **optional** parameter defaults to 730 
-days (about 2 years). 
-
-## Authorize drivers
-
-**Authorize drivers** return an access level based on the user credentials that were provided in the **AUTHORIZE** during client connection setup.
-
-### Internal
-
-The **Internal** authorization driver uses the file `/etc/openstuder/users.txt` to authorize users and `sigwctl` can be used to add, remove or modify users. 
-
-The **Internal** driver has no parameters.
