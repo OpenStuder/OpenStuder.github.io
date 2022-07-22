@@ -114,3 +114,45 @@ driver = Demo
 ```
 
 Instantiates two demo drivers, the first with the ID `demo0` and the second with ID `demo1`.
+
+
+## Develop your own device access driver
+
+In order to be able to develop and build your own device access driver, you need to install the required development
+packages first:
+
+```bash
+> sudo apt update
+> sudo apt install \
+gcc g++ gdb cmake ninja-build \
+qt5-default \
+libqt5serialport5-dev libqt5serialbus5-dev libqt5serialbus5-plugins \
+libqt5websockets5-dev \
+qtconnectivity5-dev
+```
+
+Then you have to setup a CMake-based project for the driver. The CMake file has to look as follows:
+
+```cmake
+cmake_minimum_required(VERSION 3.0)
+project(<DRIVER NAME>)
+find_package(SIDeviceAccess REQUIRED)
+si_add_device_access_driver(<DRIVER NAME> <SOURCE FILES...>)
+```
+
+Now you can build your driver as follows:
+
+```bash
+> cmake -B build .
+> cmake --build build
+```
+
+You can install your driver as follows after a successful build:
+
+```bash
+> sudo cmake --build build --target install
+```
+
+### Example
+
+You can find a basic example of a minimal device access driver [here](https://github.com/OpenStuder/driver-examples).
