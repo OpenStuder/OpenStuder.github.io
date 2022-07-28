@@ -10,19 +10,19 @@ You need a USB to RS485 cable in order to connect the Xcom-485i bus converter to
 [Euclide Innovation](https://www.euclide-innovation.com/product-category/cable-modbus-rj45-usb/), but any other USB to RS485 adapter with an RJ45 connector can be used. If you use another adapter
 please check the PIN configuration of the RJ45 connector and configure the Xcom485i bus adapter to match the pinout of the USB cable.
 
-Each device connected to the Xcom-485i bus converter will be made accessible by this driver. The device id matches the virtual Modbus addresses as in the following table:
+Each device connected to the Xcom-485i bus converter will be made accessible by this driver. The device ids are represented by the following table:
 
-| (Virtual) Modbus address / ID | Description |
-| --- | --- |
-| 10 | *Virtual address to access all XTH, XTM and XTS devices present.* |
-| 11..19 | A single XTH, XTM or XTS inverter/charger, ordered by the index displayed on the RCC. |
-| 20 | *Virtual address to access all VarioTrack devices present.* |
-| 21..35 | A single VarioTrack, ordered by the index displayed on the RCC. |
-| 40 | *Virtual address to access all VarioString devices present.* |
-| 41..55 | A single VarioString, ordered by the index displayed on the RCC. |
-| 61 | A single BSP or Xcom-CAN BMS, there can be only one per installation. |
+| (Virtual) ID | Description |
+|--------------| --- |
+| xts          | *Virtual address to access all XTH, XTM and XTS devices present.* |
+| xt1..xt9     | A single XTH, XTM or XTS inverter/charger, ordered by the index displayed on the RCC. |
+| vts          | *Virtual address to access all VarioTrack devices present.* |
+| vt1..vt15    | A single VarioTrack, ordered by the index displayed on the RCC. |
+| vss          | *Virtual address to access all VarioString devices present.* |
+| vs1..vs15    | A single VarioString, ordered by the index displayed on the RCC. |
+| bat          | A single BSP or Xcom-CAN BMS, there can be only one per installation. |
 
-Assuming you have configured a device access driver with the name "`xcom`", you would use the ID `xcom.11.3023` to read the property *3023* from the first inverter on the bus.
+Assuming you have configured a device access driver with the name "`xcom`", you would use the ID `xcom.xt1.3023` to read the property *3023* from the first inverter on the bus.
 
 ### Parameters
 
