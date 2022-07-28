@@ -57,8 +57,57 @@ The gateway has a build-in implementation that authorizes against a user text fi
 
 ## Installation
 
-> [!ATTENTION]
-> Currently are no pre-build packages available, so the software has to be compiled and installed manually as described in the [Build or develop](#build-or-develop) chapter.
+In order to be able to install the gateway software on your Raspberry Pi, you need to add the openstuder **PPA** (personal package archive):
+
+```bash
+> sudo apt update
+> sudo apt install ca-certificates
+> curl -s --compressed "https://www.openstuder.io/ppa/KEY.gpg" | sudo apt-key add -
+> sudo curl -s --compressed -o /etc/apt/sources.list.d/openstuder.list "https://www.openstuder.io/ppa/openstuder.list"
+```
+
+Now you can install the openstuder gateway software using:
+
+```bash
+> sudo apt update
+> sudo apt install openstuder-gateway
+```
+
+## Install web interface
+
+Using the **WebSocket API** you can easily develop your own web client for the openstuder gateway, however we provide a standard gateway that you can install pretty easily.
+
+You can install the default web frontend package using:
+
+```bash
+> sudo apt update
+> sudo apt install openstuder-web
+```
+
+The web frontend can be served by any HTTP server.
+
+>[!WARNING]
+> This will install the web frontend to `/var/www/html` and replace the files there. So if you want the web frontend
+> served from another location, you need to download the compressed archive from
+> [here](https://github.com/OpenStuder/openstuder-gateway-webui/releases) and expand it to the desired location.
+
+If installing the  web frontend manually you first need a web server. You can install the webserver of your choice, we will
+install [lighttpd](https://www.lighttpd.net) as we are serving just static content and lighttpd is very resource
+saving:
+
+```bash
+> sudo apt update
+> sudo apt install lighttpd
+```
+
+Now you can download the actual release of the web UI and extract it into the `/var/www/html` folder (or another folder, depending on your HTTP server configuration):
+
+```bash
+> cd /var/www/html
+> wget -qO- https://github.com/OpenStuder/openstuder-gateway-webui/releases/latest/download/openstuder-gateway-webui.tar.bz2 | tar xjv
+```
+
+Now you can connect to your Raspberry Pi via a web browser and use the web interface.
 
 ## Configuration
 
@@ -154,9 +203,6 @@ In this example, the WebSocket API is enabled and is listening on port 8080.
 #### Bluetooth section
 
 The `[Bluetooth]` section contains all settings for the Bluetooth LE API.
-
-> [!ATTENTION]
-> The Bluetooth LE API is still experimental and subject to change. No client libraries are provided yet.
 
 ##### enabled
 
