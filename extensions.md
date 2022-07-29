@@ -325,6 +325,333 @@ allowedUsers = admin,james
 
 This example section of a extension configuration file enables the UserManagement extensions and the users `admin` and `james` are allowed to use the extension.
 
+### Commands
+
+#### list
+
+The `list` command returns a list of all users along their access levels.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:UserManagement
+command:list
+```
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:UserManagement
+command:list
+status:Success
+
+{
+  "admin":"Expert",
+  "user1":"Basic",
+  "user2":"Installer",
+  "user3":"Expert"
+}
+```
+
+`status` is the status of the operation.
+
+The body of the response is a map of username to access level of all existing users.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "UserManagement", "list"
+```
+```Bluetooth request (CBOR encoded)
+0b6e557365724d616e6167656d656e74646c697374
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable) 
+139, "UserManagement", "list", <status:integer>, <users:map>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+The users are stored in the map `<users:map>'  where the username is the key and the access level is the value.
+
+#### add
+
+The `add` command can be used to add a new user.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:UserManagement
+command:add
+username:johndoe
+password:12345678
+access_level:Basic
+```
+
+`username` is the username for the new user, if a user with that username already exists, the command will fail. `password` is the 
+password the user has to use for login and `access_level` is the actual access level for that new user.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:UserManagement
+command:add
+status:Success
+```
+
+`status` is the status of the operation.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "UserManagement", "add", <username:string>, <password:string>, <access_level:AccessLevel>
+```
+```Bluetooth example request (CBOR encoded)
+0b6e557365724d616e6167656d656e7463616464f564746f746f683132333435363738
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable) 
+139, "UserManagement", "add", <status:integer>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+#### change_password
+
+The `change_password` command can be used to change the password of an  existing user.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:UserManagement
+command:change_password
+username:johndoe
+password:87654321
+```
+
+`username` is the username of the user for whom to change the password, if a user with that username does not exist, the command will fail. `password` is the
+new password the user has to use for login.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:UserManagement
+command:change_password
+status:Success
+```
+
+`status` is the status of the operation.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "UserManagement", "change_password", <username:string>, <password:string>
+```
+```Bluetooth example request (CBOR encoded)
+0b6e557365724d616e6167656d656e746f6368616e67655f70617373776f7264676a6f686e646f65683837363534333231
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable) 
+139, "UserManagement", "change_password", <status:integer>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+#### change_access_level
+
+The `change_access_level` command can be used to change the access level of an existing user.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:UserManagement
+command:change_access_level
+username:johndoe
+access_level:Expert
+```
+
+`username` is the username of the user for whom to change the access level, if a user with that username does not exist, the command will fail. `access_level` is the
+new access level to grant to the user.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:UserManagement
+command:change_access_level
+status:Success
+```
+
+`status` is the status of the operation.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "UserManagement", "change_access_level", <username:string>, <password:string>
+```
+```Bluetooth example request (CBOR encoded)
+0b6e557365724d616e6167656d656e74736368616e67655f6163636573735f6c6576656c676a6f686e646f6566457870657274
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable) 
+139, "UserManagement", "change_access_level", <status:integer>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+#### remove
+
+The `remove` command can be used to remove an existing user.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:UserManagement
+command:remove
+username:johndoe
+```
+
+`username` is the username of the user to remove, if a user with that username does not exist, the command will fail.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:UserManagement
+command:remove
+status:Success
+```
+
+`status` is the status of the operation.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "UserManagement", "remove", <username:string>
+```
+```Bluetooth example request (CBOR encoded)
+0b6e557365724d616e6167656d656e746672656d6f7665676a6f686e646f65
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable) 
+139, "UserManagement", "remove", <status:integer>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+## WebStorage
+
+The WebStorage extension allows to save key/value data. This is typically used by web clients to store state and configuration.
+
+### Configuration
+
+The WebStorage extension can be enabled by adding the `[WebStorage]` section to the extension configuration file at `/etc/openstuder/extensions.conf`.
+
+>[!INFO]
+> The WebStorage extension is enabled by default.
+
+#### file
+
+_Optional_ storage location for the web storage data file. If not provided, the default location will be used.
+
+### Example
+
+```ini
+[WebStorage]
+file = /usr/var/webstorage.data
+```
+
+This example section of an extension configuration file enables the WebStorage extension.
+The key/value storage file will be located at `/usr/var/webstorage.data`.
+
+### Commands
+
+#### read
+
+The `read` command can be used to read the value attributed to a given key.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:WebStorage
+command:read
+key:accent_color
+```
+
+`key` is the key of the value to read.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:WebStorage
+command:read
+status:Success
+key:accent_color
+
+#ACACAC 
+```
+
+`status` is the status of the operation, `key` is the requested key. The value for the given key is returned as the body.
+
+##### Bluetooth API
+
+_This protocol extension does not support Bluetooth._
+
+#### write
+
+The `write` command can be used to write the value for a given key.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:WebStorage
+command:write
+key:user_profile_johndoe
+
+{
+  "image": null,
+  "friendlyName": "John J. Doe"
+}
+```
+
+`key` is the key of the value to write, the value itself is given in the body of the message.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:WebStorage
+command:write
+key:user_profile_johndoe
+status:Success
+```
+
+`status` is the status of the operation, `key` is the requested key to write to.
+
+##### Bluetooth API
+
+_This protocol extension does not support Bluetooth._
 
 ## Develop your own protocol extension
 
