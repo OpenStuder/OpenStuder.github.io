@@ -56,6 +56,250 @@ accessPointInitialPassKey = mys3cr3t
 This example section of an extension configuration file enables the WifiConfig extensions and the users `admin` and `georges` are allowed to use the extension.
 The required packages and configuration files will be installed with the SSID "myhouse" and the passkey "mys3cr3t".
 
+### Commands
+
+#### status
+
+The `status` command returns the actual status of the WiFi client and access point.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:WifiConfig
+command:status
+```
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+extension:WifiConfig
+command:status
+status:Success
+client_enabled:false
+client_connected:false
+client_ssid:
+client_ip:
+ap_enabled:true
+ap_ssid:openstuder
+wired_connected:true
+wired_ip:192.168.1.129
+```
+
+`status` is the status of the operation.
+
+`client_enabled` is true if the WiFi client mode is activated, `client_connected` is true if the client could connect to an access point, the `client_ssid` will be the
+SSID of the WiFi access point the client is connected to and `client_ip` is the IP address that was attributed to the client.
+
+`ap_enabled` is true if the WiFi access point mode is activated, `ap_ssid` is the SSID that is used by the openstuder gateway.
+
+Additionally, the status of the wired ethernet connection is included where `wired_connected` is true if an ethernet cable is connected to the device and `wired_ip` is 
+the IP address used by that interface.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "WiFiConfig", "status"
+```
+```Bluetooth request (CBOR encoded)
+0b6a57694669436f6e66696766737461747573
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable) 
+139, "WifiConfig", "status", <status:integer>, 
+<client_enabled:bool>, <client_connected:bool>, <client_ssid:string>, <client_ip:string>, 
+<ap_enabled:bool>, <ap_ssid:string>, <wired_connected:bool>, <wired_ip:string>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+`<client_enabled:bool>` is true if the WiFi client mode is activated, `<client_connected:bool>` is true if the client could connect to an access point, the 
+`<client_ssid:string>` will be the SSID of the WiFi access point the client is connected to and `<client_ip:string>` is the IP address that was attributed to the client.
+
+`<ap_enabled:bool>` is true if the WiFi access point mode is activated, `<ap_ssid:string>` is the SSID that is used by the openstuder gateway.
+
+Additionally, the status of the wired ethernet connection is included where `<wired_connected:bool>` is true if an ethernet cable is connected to the device and 
+`<wired_ip:string>` is the IP address used by that interface.
+
+#### scan
+
+The `scan` command will scan for WiFi networks and returns a list of all detected WiFi access points.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:WifiConfig
+command:scan
+```
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+command:scan
+extension:WifiConfig
+status:Success
+
+[
+  {
+    "encrypted":true,
+    "signal":-26,
+    "ssid":"plzdt-247845"
+  },
+  {
+    "encrypted":true,
+    "signal":-60,
+    "ssid":"ezdhf-174956"
+  }
+]
+```
+
+`status` is the status of the operation.
+
+The response will contain the detected WiFi networks as a JSON array in the message body. Every network has three properties:
+
+- `ssid`: SSID of the network/access point.
+- `signal`: Signal level.
+- `encrypted`: `true` if the network is encrypted (private), `false` if the network is open.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "WiFiConfig", "scan"
+```
+```Bluetooth request (CBOR encoded)
+0b6a57694669436f6e666967647363616e
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable)
+139, "WifiConfig", "scan", <status:integer>, <ssids:stringlist>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+`<ssids:stringlist` is the list of all detected SSIDs.
+
+#### cliconf
+
+This command can be used to modify the client configuration.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:WifiConfig
+command:cliconf
+enabled:true
+ssid:my-ap
+passkey:12345678
+```
+
+The parameter `enabled` is required. If `true` the WiFi client will be enabled, if `false` the WiFi client  will be disabled. 
+
+The parameter `ssid` is the SSID of the access point/wireless network to connect to and is only required if `enabled` is `true`.
+
+The parameter `passkey` is the password/key to be used to connect to the access point/wireless network and is only required if `enabled` is `true`.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+command:scan
+extension:WifiConfig
+status:Success
+```
+
+`status` is the status of the operation.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "WiFiConfig", "cliconf", <enabled:bool>, <ssid:string>, <passkey:string>
+```
+
+`<enabled:bool>` is required and enables or disabled the WiFi client functionality.
+
+`<ssid:string>` is the SSID of the WiFi network to connect to and is only required of enabled is true.
+
+`<passkey:string>` is the password/key to use to connect to the secured wireless network and is only required of enabled is true.
+
+```Bluetooth example request (CBOR encoded)
+0b6a57694669436f6e66696767636c69636f6e66f564746f746f683132333435363738
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable)
+139, "WifiConfig", "scan", <status:integer>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
+#### apconf
+
+This command can be used to modify the access point configuration.
+
+##### WebSocket API
+
+_The request has to be as follows:_
+```WebSocket request
+CALL EXTENSION
+extension:WifiConfig
+command:apconf
+enabled:true
+channel:5
+ssid:openstuder
+passkey:12345678
+```
+
+The header `enabled` is required. If `true` the WiFi access point will be enabled, if `false` the WiFi access point will be disabled.
+
+The header `channel` is optional and defaults to `1`.
+
+The header `ssid` is the SSID of the access point and is only required if `enabled` is `true`.
+
+The header `passkey` is the password/key to be used to connect secure the wireless network and is only required if `enabled` is `true`.
+
+_The gateway will respond as follows._
+```WebSocket response
+EXTENSION CALLED
+command:scan
+extension:WifiConfig
+status:Success
+```
+
+`status` is the status of the operation.
+
+##### Bluetooth API
+
+_The request has to be as follows:_
+```Bluetooth request (human readable)
+11, "WiFiConfig", "apconf", <enabled:bool>, <ssid:string>, <passkey:string>
+```
+
+`<enabled:bool>` is required and enables or disabled the WiFi access point functionality.
+
+`<ssid:string>` is the SSID of the WiFi access point and is only required of enabled is true.
+
+`<passkey:string>` is the password/key for the secured wireless network of the AP and is only required of enabled is true.
+
+```Bluetooth example request (CBOR encoded)
+0b6a57694669436f6e666967666170636f6e66f564746f746f683132333435363738
+```
+
+_The gateway will respond as follows._
+```Bluetooth response (human readable)
+139, "WifiConfig", "scan", <status:integer>
+```
+
+`<status:integer>` is the status of the operation where `0` means success and all other values represent an error.
+
 ## UserManagement
 
 The UserManagement extension allows to manage users over the openstuder WebSocket or Bluetooth protocol.
