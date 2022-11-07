@@ -183,12 +183,18 @@ device that disposes that property connected through any device access.
 
 **Parameters**:
 - `property_id`: The searched wildcard ID. *Required*.
+- `virtual`: Include virtual devices (for example Xtender multicast device) or not. *Optional*, defaults to false.
+- `functions_mask`: Mask for specific device types to search properties for. Possible values are 
+  ['SIDeviceFunction.NONE', 'SIDeviceFunction.INVERTER', 'SIDeviceFunction.CHARGER', 'SIDeviceFunction.SOLAR',
+  'SIDeviceFunction.TRANSFER', 'SIDeviceFunction.BATTERY', 'SIDeviceFunction.ALL']. *Optional*, defaults to `ALL`.
 
 **Returns**:
 1. Status of the find operation.
 2. The searched ID (including wildcard character).
 3. The number of properties found.
-4. List of the property IDs (as strings).
+4. True if virtual devices are included or not (False).
+5. Functions mask.
+6. List of the property IDs (as strings).
 
 **Exceptions raised**:
 - `SIProtocolError`: On a connection, protocol or framing error.
@@ -200,8 +206,9 @@ from openstuder import SIGatewayClient, SIProtocolError
 try:
     client = SIGatewayClient()
     client.connect('localhost')
-    status, id_, count, properties = client.find_properties('*.*.3136')
-    print(f'Found properties for {id_}, status = {status}, count = {count} : {properties}')
+    status, id_, count, virtual, functions, properties = client.find_properties('*.*.3136')
+    print(f'Found properties for {id_}, status = {status}, count = {count}, virtual = {virtual}, '
+          f'functions = {functions} : {properties}')
 
 except SIProtocolError as error:
     print(f'Error: {error.reason()}')
@@ -623,6 +630,10 @@ The status of the read operation and the actual value of the property are report
 
 **Parameters**:
 - `property_id`: The search wildcard ID. *Required*
+- `virtual`: Include virtual devices (for example Xtender multicast device) or not. *Optional*, defaults to false.
+- `functions_mask`: Mask for specific device types to search properties for. Possible values are
+  ['SIDeviceFunction.NONE', 'SIDeviceFunction.INVERTER', 'SIDeviceFunction.CHARGER', 'SIDeviceFunction.SOLAR',
+  'SIDeviceFunction.TRANSFER', 'SIDeviceFunction.BATTERY', 'SIDeviceFunction.ALL']. *Optional*, defaults to `ALL`.
 
 **Returns**: *None*
 
@@ -633,7 +644,9 @@ The status of the read operation and the actual value of the property are report
 1. Status of the find operation.
 2. The searched ID (including wildcard character)
 3. The number of properties found.
-4. List of the property IDs.
+4. True if virtual devices are included or not (False).
+5. Functions mask.
+6. List of the property IDs (as strings).
 
 *Example:*
 ```python
